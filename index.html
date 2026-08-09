@@ -49,8 +49,6 @@ nav{position:sticky;top:0;z-index:80;background:rgba(10,19,34,.74);backdrop-filt
 .nav-links a{color:var(--txt3);font-size:.85rem;font-weight:500;padding:8px 13px;border-radius:8px;transition:color .15s,background .15s}
 .nav-links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
 @media(max-width:780px){.nav-links{display:none}}
-.mnote{display:none}
-@media(max-width:760px){.mnote{display:flex;align-items:center;gap:11px;justify-content:flex-start;text-align:left;background:rgba(212,168,67,.1);border-bottom:1px solid var(--line-gold);color:var(--txt2);font-size:.8rem;padding:11px 20px;line-height:1.45}.mnote .ic{width:19px;height:19px;color:var(--gold);flex-shrink:0}.mnote b{color:var(--txt);font-weight:600}}
 
 /* hero */
 .hero{padding:66px 0 78px;text-align:center;
@@ -172,7 +170,6 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
     <a class="btn btn-gold btn-sm" href="demo.html" target="_blank" rel="noopener">Open the demo</a>
   </div>
 </nav>
-<div class="mnote"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>You're on your phone — this is DAAS's <b>focused view</b>. Open it on a desktop to see the full CRM.</span></div>
 
 <!-- HERO -->
 <header class="hero" id="top">
@@ -250,7 +247,7 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
 <section class="crmfirst">
   <div class="wrap band">
     <div class="kicker reveal">Relationship CRM first</div>
-    <h2 class="reveal">Fundraising is built in — but it's never the point.</h2>
+    <h2 class="reveal">Powerful fundraising and Prospect Finder — built in.</h2>
     <div class="chips reveal">
       <span class="chip"><svg class="ic" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Track giving history</span>
       <span class="chip"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Surface new prospects</span>
@@ -308,26 +305,20 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
         <summary>Is DAAS a fundraising CRM?<svg class="ic tw" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></summary>
         <div class="faq-body">
           <p>It's a <b>relationship CRM with fundraising built in.</b> Healthy fundraising grows out of healthy relationships, so donor management is part of the system — but the point is helping you know your community and care for people more consistently, not chasing gifts.</p>
-          <p>The morning list proves it: it ranks by who's been waiting longest, never by net worth. A board member and a once-a-year Purim guest stand in the same line.</p>
+          <p>The morning list proves it: it ranks by who's been waiting longest, not by net worth.</p>
         </div>
       </details>
       <details class="reveal">
         <summary>Do I need AI to use DAAS?<svg class="ic tw" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></summary>
         <div class="faq-body">
           <p><b>No.</b> The Daily Five and the relationship engine work without it — plain, explainable logic, no key and no per-question cost. Every card can tell you exactly why it chose someone.</p>
-          <p>AI is there for the moments it truly helps: searching your history, drafting an email, building an event, reading a handwritten note. It's the upgrade, never the entry fee.</p>
+          <p>AI is there for the moments it truly helps: searching your history, drafting an email, building an event, reading a handwritten note. It's an upgrade, not the main feature — we recommend adding an API key to unlock the upgraded features.</p>
         </div>
       </details>
       <details class="reveal">
         <summary>What happens to all my existing contacts?<svg class="ic tw" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></summary>
         <div class="faq-body">
           <p><b>Bring them with you.</b> DAAS imports your existing contacts and history, so you can finally run everything from one relationship CRM instead of juggling a database here and a spreadsheet there.</p>
-        </div>
-      </details>
-      <details class="reveal">
-        <summary>Who built DAAS?<svg class="ic tw" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></summary>
-        <div class="faq-body">
-          <p><b>A fellow shliach.</b> DAAS wasn't drawn up in a boardroom — it was built to solve the everyday reality of running a Chabad house, and it keeps evolving through real daily use. Built on shlichus, for shluchim.</p>
         </div>
       </details>
       <details class="reveal">
@@ -351,7 +342,8 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
       <input type="email" id="notifyEmail" placeholder="you@chabadofanywhere.org" required>
       <button class="btn btn-ghost" type="submit">Keep me posted</button>
     </form>
-    <div class="email-note">Optional — the demo doesn't need it. Only if you'd like to hear when DAAS opens up.</div>
+    <div class="email-note">Enter your email so you'll know when DAAS goes live.</div>
+    <div class="email-note" style="margin-top:5px;font-size:.72rem">Or email <a href="mailto:admin@daascrm.app" style="color:var(--gold)">admin@daascrm.app</a> with any questions.</div>
   </div>
 </section>
 
@@ -371,8 +363,8 @@ function scaleFrames(){
 }
 window.addEventListener('resize',scaleFrames);window.addEventListener('load',scaleFrames);scaleFrames();
 document.querySelectorAll('.device-toggle button').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.device-toggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.frames .hideable').forEach(x=>x.classList.remove('showing'));document.getElementById(b.dataset.show).classList.add('showing');requestAnimationFrame(scaleFrames);});});
-const FORM_ENDPOINT='';
-document.getElementById('notifyForm').addEventListener('submit',async ev=>{ev.preventDefault();const email=document.getElementById('notifyEmail').value.trim();if(!email)return;if(FORM_ENDPOINT){try{await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});ev.target.innerHTML='<span style=\"font-weight:600;color:#5fd6a0\">You\'re on the list. We\'ll be in touch.</span>';}catch(e){alert('Something went wrong — try again later.');}}else{location.href='mailto:hello@daascrm.app?subject=Keep me posted about DAAS&body='+encodeURIComponent('Please add me to the list: '+email);}});
+const FORM_ENDPOINT='https://formsubmit.co/ajax/admin@daascrm.app';
+document.getElementById('notifyForm').addEventListener('submit',async ev=>{ev.preventDefault();const email=document.getElementById('notifyEmail').value.trim();if(!email)return;const btn=ev.target.querySelector('button');if(btn){btn.disabled=true;btn.textContent='Sending…';}try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:email,_subject:'New DAAS launch-list signup',_captcha:'false',_template:'table'})});const j=await r.json().catch(()=>({}));if(!r.ok||j.success==='false')throw new Error('fail');ev.target.innerHTML='<span style=\"font-weight:600;color:#5fd6a0\">You\'re on the list — we\'ll email you when DAAS is live.</span>';}catch(e){location.href='mailto:admin@daascrm.app?subject='+encodeURIComponent('Notify me when DAAS is live')+'&body='+encodeURIComponent('Please add me to the DAAS launch list: '+email);}});
 </script>
 </body>
 </html>

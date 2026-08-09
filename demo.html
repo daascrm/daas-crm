@@ -912,9 +912,16 @@ html.force-desktop #mobileShell{display:none!important}
 .kpi .s{font-size:10.5px;color:var(--txt3);margin-top:1px}
 .kpi .s.up{color:var(--green)}
 .pager{display:flex;align-items:center;gap:6px;padding:8px 18px;font-size:11.5px;color:var(--txt2);background:var(--surf2);border-top:1px solid var(--border)}
+#daasFocusNote{position:fixed;left:10px;right:10px;top:10px;z-index:100000;display:none;align-items:flex-start;gap:10px;background:#0f1e33;color:#dde3ea;border:1px solid rgba(212,168,67,.45);border-radius:12px;padding:11px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:12.5px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#daasFocusNote b{color:#d4a843;font-weight:600}
+#daasFocusNote .x{margin-left:auto;background:none;border:none;color:#9aa7b8;font-size:20px;line-height:1;cursor:pointer;padding:0 2px;flex-shrink:0}
+@media(max-width:768px){#daasFocusNote.show{display:flex}}
 </style>
 </head>
 <body>
+<div id="daasFocusNote"><span>You're in DAAS's <b>focused view</b> — the Daily Five and quick actions. Open on a desktop for the full CRM.</span><button class="x" onclick="this.parentNode.style.display='none'" aria-label="Dismiss">&times;</button></div>
+<script>try{if(window.top===window.self){document.getElementById('daasFocusNote').classList.add('show');}}catch(e){}</script>
+
 
 <!-- ADD CONTACT MODAL -->
 <div class="modal-bg" id="addContactModal" style="display:none">
