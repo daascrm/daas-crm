@@ -167,7 +167,8 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
       <a href="#demo">Live demo</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a class="btn btn-gold btn-sm" href="demo.html" target="_blank" rel="noopener">Open the demo</a>
+    <a class="btn btn-ghost btn-sm" href="/crm/">Log in</a>
+    <a class="btn btn-gold btn-sm" href="#request">Get DAAS</a>
   </div>
 </nav>
 
@@ -179,10 +180,10 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
     <h1>Your CRM remembers everyone.<br><span class="l2">DAAS makes sure no one is forgotten.</span></h1>
     <p class="spine">Every CRM stores the names, the notes, the donations, the conversations. The hard part was never collecting the information — <b>it's knowing who needs you today.</b> Every morning, DAAS reads across your whole community and hands you five people to reach out to, each with a reason.</p>
     <div class="hero-ctas">
-      <a class="btn btn-gold" href="demo.html" target="_blank" rel="noopener">Open the live demo</a>
-      <a class="btn btn-ghost" href="#demo">See it in action</a>
+      <a class="btn btn-gold" href="#request">Get DAAS for your community</a>
+      <a class="btn btn-ghost" href="demo.html" target="_blank" rel="noopener">Open the live demo</a>
     </div>
-    <div class="hero-note">No signup, no email — it opens right in your browser.</div>
+    <div class="hero-note">Already using DAAS? <a href="/crm/">Log in to your CRM.</a></div>
   </div>
 </header>
 
@@ -338,12 +339,14 @@ footer .fmeaning{max-width:54ch;margin:0 auto;line-height:1.5}
     <h2 class="reveal">No relationship should disappear because nobody remembered.</h2>
     <p class="promise reveal">That's what DAAS is built to prevent.</p>
     <a class="btn btn-gold reveal" href="demo.html" target="_blank" rel="noopener" style="font-size:1rem;padding:15px 34px">Open the live demo</a>
-    <form class="email-row reveal" id="notifyForm">
-      <input type="email" id="notifyEmail" placeholder="you@chabadofanywhere.org" required>
-      <button class="btn btn-ghost" type="submit">Keep me posted</button>
+    <form class="email-row reveal" id="accountForm" style="max-width:760px;margin-left:auto;margin-right:auto" aria-label="Request a DAAS account">
+      <input type="text" id="accountName" placeholder="Your name" autocomplete="name" required>
+      <input type="text" id="accountOrg" placeholder="Your Chabad or organization" autocomplete="organization" required>
+      <input type="email" id="accountEmail" placeholder="you@chabadofanywhere.org" autocomplete="email" required>
+      <button class="btn btn-ghost" type="submit">Request an account</button>
     </form>
-    <div class="email-note">Enter your email so you'll know when DAAS goes live.</div>
-    <div class="email-note" style="margin-top:5px;font-size:.72rem">Or email <a href="mailto:admin@daascrm.app" style="color:var(--gold)">admin@daascrm.app</a> with any questions.</div>
+    <div class="email-note" id="request">Tell us where DAAS will be used. We’ll set up your private workspace and send your sign-in link.</div>
+    <div class="email-note" style="margin-top:5px;font-size:.72rem">Already have an account? <a href="/crm/" style="color:var(--gold)">Log in to DAAS.</a></div>
   </div>
 </section>
 
@@ -364,7 +367,7 @@ function scaleFrames(){
 window.addEventListener('resize',scaleFrames);window.addEventListener('load',scaleFrames);scaleFrames();
 document.querySelectorAll('.device-toggle button').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.device-toggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.frames .hideable').forEach(x=>x.classList.remove('showing'));document.getElementById(b.dataset.show).classList.add('showing');requestAnimationFrame(scaleFrames);});});
 const FORM_ENDPOINT='https://formsubmit.co/ajax/admin@daascrm.app';
-document.getElementById('notifyForm').addEventListener('submit',async ev=>{ev.preventDefault();const email=document.getElementById('notifyEmail').value.trim();if(!email)return;const btn=ev.target.querySelector('button');if(btn){btn.disabled=true;btn.textContent='Sending…';}try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:email,_subject:'New DAAS launch-list signup',_captcha:'false',_template:'table'})});const j=await r.json().catch(()=>({}));if(!r.ok||j.success==='false')throw new Error('fail');ev.target.innerHTML='<span style=\"font-weight:600;color:#5fd6a0\">You\'re on the list — we\'ll email you when DAAS is live.</span>';}catch(e){location.href='mailto:admin@daascrm.app?subject='+encodeURIComponent('Notify me when DAAS is live')+'&body='+encodeURIComponent('Please add me to the DAAS launch list: '+email);}});
+document.getElementById('accountForm').addEventListener('submit',async ev=>{ev.preventDefault();const name=document.getElementById('accountName').value.trim(),organization=document.getElementById('accountOrg').value.trim(),email=document.getElementById('accountEmail').value.trim();if(!name||!organization||!email)return;const btn=ev.target.querySelector('button');if(btn){btn.disabled=true;btn.textContent='Sending…';}try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name,organization,email,_subject:'New DAAS account request',_captcha:'false',_template:'table'})});const j=await r.json().catch(()=>({}));if(!r.ok||j.success==='false')throw new Error('fail');ev.target.innerHTML='<span style=\"font-weight:600;color:#5fd6a0\">We got it. We’ll be in touch to set up your private DAAS workspace.</span>';}catch(e){location.href='mailto:admin@daascrm.app?subject='+encodeURIComponent('DAAS account request')+'&body='+encodeURIComponent('Name: '+name+'\\nOrganization: '+organization+'\\nEmail: '+email);}});
 </script>
 </body>
 </html>
