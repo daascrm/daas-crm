@@ -1964,6 +1964,7 @@ console.log('DAAS build '+BUILD_STAMP);
 let SB_URL='';
 let SB_KEY='';
 const TENANT_RESOLVER_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/resolve-tenant';
+const CENTRAL_ZILLOW_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/zillow-proxy';
 const TENANT_CACHE_KEY='daas_tenant';
 // ── NO PROVIDER KEYS, AND NO MODEL NAMES, IN THE BROWSER (2026-08-17) ────
 // ANTHROPIC_KEY / OPENAI_KEY / RAPIDAPI_KEY and their localStorage entries
@@ -1972,7 +1973,7 @@ const TENANT_CACHE_KEY='daas_tenant';
 // a server-side secret:
 //     ai-router     → Anthropic or OpenAI, decided server-side by JOB TYPE
 //     openai-proxy  → OpenAI      (pgvector embeddings + transcription)
-//     data-proxy    → RapidAPI    (Zillow property lookup)
+//     zillow-proxy  → RapidAPI    (central Zillow property lookup)
 // Client entry points: _ai() / _openaiProxy() / _dataProxy().
 //
 // A CALL SITE DECLARES A JOB TYPE, NEVER A MODEL. `_ai('deep'|'fast'|'search')`
@@ -2040,6 +2041,7 @@ async function resolveWorkspace(){
 }
 function changeWorkspace(){
   _sb=null;SB_URL='';SB_KEY='';_authToken=null;_setLoginStage('email');
+  try{localStorage.removeItem(TENANT_CACHE_KEY);}catch(_){}
   document.getElementById('loginPassword').value='';document.getElementById('loginEmail').focus();
 }
 async function resetPassword(){
@@ -2101,7 +2103,7 @@ async function sbInChunks(buildPath,ids,chunk=100){
 // repeat. This matters most for Research Chat: one message ships the whole
 // roster — roughly 32k tokens at 615 households — so a quick back-and-forth can
 // trip a tokens-per-minute ceiling that a single retry rides straight over.
-const _FN_LABEL={'ai-router':'The AI','openai-proxy':'OpenAI','data-proxy':'the property lookup'};
+const _FN_LABEL={'ai-router':'The AI','openai-proxy':'OpenAI','data-proxy':'the property lookup','zillow-proxy':'the property lookup'};
 function _fnRetryDelayMs(d,attempt){
   // Some providers name their own backoff in the 429 body — honour it when it
   // is there rather than guessing shorter.
@@ -2120,15 +2122,19 @@ function _fnRetryDelayMs(d,attempt){
 }
 async function _fnPost(fnName,payload,opts={}){
   const tries=(opts.retries==null?2:opts.retries);
-  const token=_authToken||SB_KEY;
+  const token=opts.requireAuth?_authToken:(_authToken||SB_KEY);
+  if(opts.requireAuth&&!token)throw new Error('Sign in before using '+(_FN_LABEL[fnName]||fnName)+'.');
+  const endpoint=opts.url||SB_URL+'/functions/v1/'+fnName;
+  const requestHeaders={'Authorization':'Bearer '+token,'Content-Type':'application/json'};
+  if(opts.apikey!==false)requestHeaders.apikey=SB_KEY;
   for(let attempt=0;;attempt++){
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),opts.timeoutMs||45000);
     let res,txt;
     try{
-      res=await fetch(SB_URL+'/functions/v1/'+fnName,{
+      res=await fetch(endpoint,{
         method:'POST',
-        headers:{'apikey':SB_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+        headers:requestHeaders,
         body:JSON.stringify(payload),
         signal:controller.signal
       });
@@ -2225,7 +2231,9 @@ function _jsonFromReply(txt){
 async function _openaiProxy(payload,opts={}){ return _fnPost('openai-proxy',payload,opts); }
 
 // ── RAPIDAPI (Zillow) ───────────────────────────────────────────────────
-async function _dataProxy(payload,opts={}){ return _fnPost('data-proxy',payload,opts||{timeoutMs:25000}); }
+async function _dataProxy(payload,opts={}){
+  return _fnPost('zillow-proxy',payload,{timeoutMs:25000,...opts,url:CENTRAL_ZILLOW_URL,apikey:false,requireAuth:true});
+}
 
 async function sbAll(path,pageSize=1000){
   const sep=path.includes('?')?'&':'?';
