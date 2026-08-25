@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up your DAAS workspace</title>
+<meta name="description" content="Set up your own DAAS CRM. Enter your access code, tell us about your shul, and we build your private workspace in a few minutes.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1322;--bg2:#0c1830;--navy:#0f1e33;--panel:#122540;
+  --line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.05);--line-gold:rgba(212,168,67,.24);
+  --gold:#d4a843;--gold-hi:#e8c46a;--gold-soft:rgba(212,168,67,.09);
+  --txt:#eef2f8;--txt2:#aab6c8;--txt3:#74839a;
+  --ok:#4ea67a;--err:#e2705f;
+  --font-ui:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  --font-display:'Fraunces','Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  --sh:0 24px 60px rgba(0,0,0,.5),0 4px 14px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--font-ui);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--gold)}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.15;letter-spacing:-.008em;margin:0}
+.heb{font-family:var(--font-display);color:var(--gold);font-weight:500}
+
+nav{position:sticky;top:0;z-index:80;background:rgba(10,19,34,.74);backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);border-bottom:1px solid var(--line-2)}
+.nav-in{max-width:720px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:baseline;gap:7px;text-decoration:none;color:var(--txt);font-weight:700;letter-spacing:.02em}
+.brand b{font-size:1.05rem}
+.nav-sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-ui);font-weight:600;font-size:.94rem;padding:13px 26px;border-radius:10px;cursor:pointer;border:1px solid transparent;transition:transform .16s ease,box-shadow .16s ease,background .16s,border-color .16s;text-decoration:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-gold{background:var(--gold);color:#1a1204;box-shadow:0 6px 20px rgba(212,168,67,.22)}
+.btn-gold:not(:disabled):hover{background:var(--gold-hi);transform:translateY(-2px);box-shadow:0 12px 28px rgba(212,168,67,.32)}
+.btn-ghost{background:rgba(255,255,255,.03);border-color:var(--line);color:var(--txt2)}
+.btn-ghost:not(:disabled):hover{border-color:var(--gold);color:var(--txt);background:rgba(212,168,67,.06)}
+.btn-sm{padding:9px 18px;font-size:.84rem}
+
+main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px 64px}
+.wrap{width:100%;max-width:600px}
+.card{background:linear-gradient(180deg,var(--panel),var(--navy));border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);padding:34px 34px 30px}
+@media(max-width:560px){.card{padding:26px 20px}}
+
+.steps{display:flex;gap:8px;margin-bottom:26px}
+.steps .dot{flex:1;height:4px;border-radius:3px;background:var(--line)}
+.steps .dot.on{background:var(--gold)}
+.steps .dot.done{background:var(--gold-soft);background:rgba(212,168,67,.5)}
+
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:10px}
+h1.title{font-size:1.6rem;margin-bottom:8px}
+.lede{color:var(--txt2);font-size:.98rem;margin:0 0 24px}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px}
+.field .hint{color:var(--txt3);font-size:.82rem;margin:5px 0 0}
+.field.optional label::after{content:' — optional';color:var(--txt3);font-weight:400;font-size:.82rem}
+input,select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;color:var(--txt);font-family:var(--font-ui);font-size:1rem;padding:12px 14px;outline:none;transition:border-color .14s,background .14s}
+input:focus,select:focus{border-color:var(--gold);background:rgba(212,168,67,.05)}
+input::placeholder{color:var(--txt3)}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2374839a' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.row2{display:flex;gap:14px}
+.row2 .field{flex:1}
+@media(max-width:460px){.row2{flex-direction:column;gap:0}}
+
+.actions{display:flex;gap:12px;align-items:center;margin-top:26px}
+.actions .btn{flex:1}
+.actions .btn-ghost{flex:0 0 auto}
+
+.note{background:rgba(212,168,67,.06);border:1px solid var(--line-gold);border-radius:12px;padding:14px 16px;color:var(--txt2);font-size:.88rem;margin:0 0 4px}
+.note b{color:var(--txt)}
+
+.msg{border-radius:10px;padding:12px 14px;font-size:.9rem;margin-bottom:18px;display:none}
+.msg.show{display:block}
+.msg.error{background:rgba(226,112,95,.1);border:1px solid rgba(226,112,95,.3);color:#f0b6ac}
+.msg .do{color:var(--txt2);display:block;margin-top:3px;font-size:.85rem}
+.msg .tech{color:var(--txt3);display:block;margin-top:6px;font-size:.76rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+
+/* Building screen */
+.checklist{list-style:none;margin:22px 0 0;padding:0}
+.checklist li{display:flex;align-items:center;gap:12px;padding:9px 0;color:var(--txt3);font-size:.93rem;border-bottom:1px solid var(--line-2)}
+.checklist li:last-child{border-bottom:0}
+.checklist .mark{flex:0 0 22px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.checklist li.active{color:var(--txt)}
+.checklist li.active .mark{border-color:var(--gold)}
+.checklist li.done{color:var(--txt2)}
+.checklist li.done .mark{border-color:var(--ok);background:rgba(78,166,122,.15);color:var(--ok)}
+.spin{width:11px;height:11px;border:2px solid rgba(212,168,67,.3);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.live{margin-top:20px;color:var(--txt2);font-size:.92rem;min-height:1.4em}
+.live .dots::after{content:'';animation:el 1.4s steps(4,end) infinite}
+@keyframes el{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+
+/* Claim screen */
+.creds{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0}
+.creds .lbl{font-size:.76rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:3px}
+.creds .val{display:flex;align-items:center;gap:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.02rem;color:var(--txt);word-break:break-all}
+.creds .val + .lbl{margin-top:14px}
+.copy{flex:0 0 auto;background:rgba(212,168,67,.1);border:1px solid var(--line-gold);color:var(--gold);border-radius:7px;padding:5px 11px;font-size:.76rem;font-family:var(--font-ui);cursor:pointer;font-weight:600}
+.copy:hover{background:rgba(212,168,67,.18)}
+ol.guide{margin:14px 0 0;padding-left:20px;color:var(--txt2);font-size:.9rem}
+ol.guide li{margin-bottom:6px}
+ol.guide b{color:var(--txt)}
+.chkline{display:flex;align-items:flex-start;gap:10px;margin:18px 0 4px;color:var(--txt2);font-size:.9rem}
+.chkline input{width:auto;margin-top:3px}
+.done-badge{width:56px;height:56px;border-radius:50%;background:rgba(78,166,122,.15);border:1.5px solid var(--ok);color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 16px}
+
+.screen{display:none}
+.screen.on{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+footer{background:#081020;border-top:1px solid var(--line-2);color:var(--txt3);padding:26px 0;text-align:center;font-size:.82rem}
+footer .heb{font-size:.9rem}
+.privacy{color:var(--txt3);font-size:.82rem;margin-top:18px;text-align:center}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-in">
+    <a class="brand" href="/"><b>DAAS</b><span class="heb">דעת</span></a>
+    <div class="nav-sp"></div>
+    <a class="btn btn-ghost btn-sm" href="/crm/">Log in</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+  <div class="card">
+    <div class="steps" id="steps">
+      <div class="dot" data-s="1"></div><div class="dot" data-s="2"></div><div class="dot" data-s="3"></div>
+    </div>
+
+    <!-- 1 · Access code -->
+    <section class="screen" id="s1">
+      <div class="eyebrow">Step 1 of 3</div>
+      <h1 class="title">Set up your DAAS workspace</h1>
+      <p class="lede">You need an access code to begin. It came with your invitation.</p>
+      <div class="msg error" id="s1msg"></div>
+      <div class="field">
+        <label for="code">Access code</label>
+        <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. TEMPLE-BETH-EL" maxlength="64">
+      </div>
+      <div class="actions">
+        <button class="btn btn-gold" id="s1next">Continue</button>
+      </div>
+    </section>
+
+    <!-- 2 · About your shul -->
+    <section class="screen" id="s2">
+      <div class="eyebrow">Step 2 of 3</div>
+      <h1 class="title">About your shul</h1>
+      <p class="lede">This sets up your workspace. You can change any of it later.</p>
+      <div class="msg error" id="s2msg"></div>
+      <div class="field">
+        <label for="org">Organization name</label>
+        <input id="org" type="text" autocomplete="organization" placeholder="Temple Beth El" maxlength="120">
+      </div>
+      <div class="field">
+        <label for="email">Your email</label>
+        <input id="email" type="email" autocomplete="email" placeholder="rabbi@your-shul.org" maxlength="180">
+        <p class="hint">This is your sign-in. Use the address you check.</p>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city" type="text" autocomplete="address-level2" placeholder="Boulder" maxlength="100">
+        </div>
+        <div class="field">
+          <label for="state">State</label>
+          <select id="state"><option value="">Choose…</option></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="tz">Time zone</label>
+        <select id="tz"></select>
+        <p class="hint">Your dates and daily list follow this zone.</p>
+      </div>
+      <div class="field optional">
+        <label for="logo">Logo link</label>
+        <input id="logo" type="url" placeholder="https://…/logo.png" maxlength="500">
+        <p class="hint">Paste a link to your logo, or skip and add it later.</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" data-back="1">Back</button>
+        <button class="btn btn-gold" id="s2next">Continue</button>
+      </div>
+    </section>
+
+    <!-- 3 · One key -->
+    <section class="screen" id="s3">
+      <div class="eyebrow">Step 3 of 3</div>
+      <h1 class="title">Connect one key</h1>
+      <p class="lede">DAAS uses your own OpenAI key for search and Research Chat.</p>
+      <div class="msg error" id="s3msg"></div>
+      <div class="field">
+        <label for="openai">OpenAI API key</label>
+        <input id="openai" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" maxlength="200">
+        <p class="hint">Your key passes through our server once on its way into your own database. We never save it.</p>
+      </div>
+      <div class="field optional">
+        <label for="anthropic">Anthropic (Claude) API key</label>
+        <input id="anthropic" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" maxlength="200">
+        <p class="hint">Add this to use Claude as well. You can add it later in Supabase.</p>
+      </div>
+      <div class="note">
+        <b>What happens next.</b> We build your private database, install the CRM, and hand it to you. It takes a few minutes. Keep this page open.
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" data-back="2">Back</button>
+        <button class="btn btn-gold" id="build">Build my CRM</button>
+      </div>
+    </section>
+
+    <!-- 4 · Building -->
+    <section class="screen" id="s4">
+      <div class="eyebrow">Building your workspace</div>
+      <h1 class="title" id="s4title">This takes a few minutes</h1>
+      <p class="lede">Your database is being built in our account. It holds no names yet.</p>
+      <div class="msg error" id="s4msg"></div>
+      <ul class="checklist" id="checklist"></ul>
+      <div class="live"><span id="liveline">Getting started</span><span class="dots"></span></div>
+    </section>
+
+    <!-- 5 · Claim -->
+    <section class="screen" id="s5">
+      <div class="done-badge">✓</div>
+      <h1 class="title" style="text-align:center">Your workspace is ready to claim</h1>
+      <p class="lede" style="text-align:center">One step takes ownership: move the project into your own Supabase account. This is what makes it truly yours.</p>
+
+      <div class="creds" id="creds">
+        <div class="lbl">Sign in with</div>
+        <div class="val"><span id="cEmail"></span><button class="copy" data-copy="cEmail">Copy</button></div>
+        <div class="lbl" id="pwLbl">Temporary password</div>
+        <div class="val"><span id="cPass"></span><button class="copy" data-copy="cPass">Copy</button></div>
+        <p class="hint" id="credsHint">Change this password after you first sign in.</p>
+      </div>
+
+      <div class="note">
+        <b>On the Supabase screen:</b>
+        <ol class="guide">
+          <li>Sign in, or <b>create a free Supabase account</b> if you don't have one.</li>
+          <li>Select or <b>create an organization</b>.</li>
+          <li>Keep the plan on <b>Free — $0 / month</b>.</li>
+          <li>Review and <b>confirm the transfer</b>.</li>
+        </ol>
+      </div>
+
+      <label class="chkline"><input type="checkbox" id="saved"><span>I've saved my email and temporary password above.</span></label>
+
+      <div class="actions">
+        <a class="btn btn-gold" id="claimBtn" target="_blank" rel="noopener" href="#" aria-disabled="true">Claim my workspace</a>
+      </div>
+      <p class="privacy">Opens in a new tab. Keep this one open — your password is here.</p>
+    </section>
+
+  </div>
+  <p class="privacy">Questions? Reply to the email that sent you here.</p>
+</div>
+</main>
+
+<footer>
+  <div>DAAS <span class="heb">דעת</span></div>
+  <div>A relationship CRM for shluchim.</div>
+</footer>
+
+<script>
+"use strict";
+const API = "https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1";
+const PROVISION = API + "/provision";
+
+// ── US states + common time zones ──────────────────────────────────────────
+const STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+const ZONES = [
+  ["America/New_York","Eastern"],["America/Chicago","Central"],["America/Denver","Mountain"],
+  ["America/Phoenix","Arizona (no daylight saving)"],["America/Los_Angeles","Pacific"],
+  ["America/Anchorage","Alaska"],["Pacific/Honolulu","Hawaii"]
+];
+(function fillSelects(){
+  const st = document.getElementById("state");
+  STATES.forEach(s => { const o=document.createElement("option"); o.value=s; o.textContent=s; st.appendChild(o); });
+  const tz = document.getElementById("tz");
+  ZONES.forEach(([v,l]) => { const o=document.createElement("option"); o.value=v; o.textContent=l+" ("+v.split("/")[1].replace("_"," ")+")"; tz.appendChild(o); });
+  let guess = "America/New_York";
+  try { guess = Intl.DateTimeFormat().resolvedOptions().timeZone || guess; } catch(e){}
+  if (ZONES.some(z => z[0]===guess)) tz.value = guess; else tz.value = "America/New_York";
+})();
+
+// ── Screen control ─────────────────────────────────────────────────────────
+const answers = {};
+let job = null;         // { job_id, job_token }
+let building = false;
+
+function show(n){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("on"));
+  document.getElementById("s"+n).classList.add("on");
+  const steps = document.getElementById("steps");
+  steps.style.display = (n>=1 && n<=3) ? "flex" : "none";
+  steps.querySelectorAll(".dot").forEach(d => {
+    const s = +d.dataset.s;
+    d.classList.toggle("on", s===n);
+    d.classList.toggle("done", s<n);
+  });
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function err(id, sentence, whatToDo, tech){
+  const el = document.getElementById(id);
+  el.innerHTML = sentence + (whatToDo ? '<span class="do">'+whatToDo+'</span>' : "") + (tech ? '<span class="tech">'+tech+'</span>' : "");
+  el.classList.add("show");
+}
+function clearErr(id){ const el=document.getElementById(id); el.classList.remove("show"); el.innerHTML=""; }
+const val = id => document.getElementById(id).value.trim();
+
+// ── Step 1: access code ─────────────────────────────────────────────────────
+document.getElementById("s1next").onclick = () => {
+  clearErr("s1msg");
+  const code = val("code");
+  if (!/^[A-Za-z0-9-]{6,64}$/.test(code)) {
+    err("s1msg", "That doesn't look like a valid access code.", "Check the code from your invitation and try again.");
+    return;
+  }
+  answers.code = code;
+  show(2);
+};
+document.getElementById("code").addEventListener("keydown", e => { if(e.key==="Enter") document.getElementById("s1next").click(); });
+
+// ── Step 2: shul details ────────────────────────────────────────────────────
+document.getElementById("s2next").onclick = () => {
+  clearErr("s2msg");
+  const org=val("org"), email=val("email"), city=val("city"), state=val("state"), tz=val("tz"), logo=val("logo");
+  if (org.length < 2) return err("s2msg","Please enter your organization name.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err("s2msg","Please enter a valid email address.","This is how you'll sign in.");
+  if (city.length < 2) return err("s2msg","Please enter your city.");
+  if (!/^[A-Z]{2}$/.test(state)) return err("s2msg","Please choose your state.");
+  if (!tz) return err("s2msg","Please choose your time zone.");
+  Object.assign(answers, { org, email:email.toLowerCase(), city, state, tz, logo: logo || null });
+  show(3);
+};
+
+// ── Step 3: keys + build ────────────────────────────────────────────────────
+document.getElementById("build").onclick = startBuild;
+document.querySelectorAll("[data-back]").forEach(b => b.onclick = () => show(+b.dataset.back));
+
+async function startBuild(){
+  clearErr("s3msg");
+  const openai = val("openai"), anthropic = val("anthropic");
+  if (openai.length < 8) return err("s3msg","Please enter your OpenAI API key.","Search and Research Chat need it to work.");
+
+  const btn = document.getElementById("build");
+  btn.disabled = true; btn.textContent = "Starting…";
+
+  const payload = {
+    code: answers.code,
+    answers: {
+      org: answers.org, city: answers.city, state: answers.state, tz: answers.tz,
+      logo: answers.logo, email: answers.email, has_anthropic: anthropic.length >= 8
+    },
+    openai_key: openai,
+    anthropic_key: anthropic || undefined
+  };
+
+  let res, body;
+  try {
+    res = await fetch(PROVISION, { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(payload) });
+    body = await res.json();
+  } catch(e){
+    btn.disabled=false; btn.textContent="Build my CRM";
+    return err("s3msg","We couldn't reach the setup service.","Check your internet and try again.", String(e && e.message || e));
+  }
+
+  if (res.status === 403) {   // bad / used code → back to step 1
+    btn.disabled=false; btn.textContent="Build my CRM";
+    show(1);
+    return err("s1msg","That access code is invalid or has already been used.","Each code works once. Ask for a new one if you need it.");
+  }
+  if (!res.ok || !body.job_id || !body.job_token){
+    btn.disabled=false; btn.textContent="Build my CRM";
+    return err("s3msg", body.error || "We couldn't start setup just now.","Please try again in a moment.", "HTTP "+res.status);
+  }
+
+  job = { job_id: body.job_id, job_token: body.job_token };
+  btn.disabled=false; btn.textContent="Build my CRM";
+  building = true;
+  buildChecklist();
+  show(4);
+  applyProgress(body);
+  drive();
+}
+
+// ── Step 4: drive the state machine + show progress ─────────────────────────
+const PHASES = [
+  { key:"create",  label:"Creating your database",   steps:["create_project","creating_project","poll_health"] },
+  { key:"schema",  label:"Installing the CRM",        steps:["install_schema"] },
+  { key:"keys",    label:"Securing your keys",        steps:["provision_keys","function_secrets"] },
+  { key:"jobs",    label:"Deploying background jobs",  steps:["deploy_functions"] },
+  { key:"signin",  label:"Setting up your sign-in",   steps:["auth_config","create_owner"] },
+  { key:"finish",  label:"Finishing up",              steps:["seed_zip_state","mint_claim","awaiting_claim"] }
+];
+function buildChecklist(){
+  const ul = document.getElementById("checklist"); ul.innerHTML="";
+  PHASES.forEach(p => {
+    const li = document.createElement("li"); li.id = "ph-"+p.key;
+    li.innerHTML = '<span class="mark"></span><span>'+p.label+'</span>';
+    ul.appendChild(li);
+  });
+}
+function phaseIndexForStep(step){
+  for (let i=0;i<PHASES.length;i++) if (PHASES[i].steps.includes(step)) return i;
+  return 0;
+}
+function applyProgress(body){
+  const step = body.step || "create_project";
+  const idx = phaseIndexForStep(step);
+  PHASES.forEach((p,i) => {
+    const li = document.getElementById("ph-"+p.key);
+    li.classList.remove("active","done");
+    const mark = li.querySelector(".mark");
+    if (i < idx){ li.classList.add("done"); mark.innerHTML="✓"; }
+    else if (i === idx && body.status !== "awaiting_claim"){ li.classList.add("active"); mark.innerHTML='<span class="spin"></span>'; }
+    else if (body.status === "awaiting_claim"){ li.classList.add("done"); mark.innerHTML="✓"; }
+    else { mark.innerHTML=""; }
+  });
+  document.getElementById("liveline").textContent = body.progress || "Working";
+}
+
+async function drive(){
+  let fails = 0;
+  while (building){
+    let res, body;
+    try {
+      res = await fetch(PROVISION, { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(job) });
+      body = await res.json();
+    } catch(e){
+      fails++;
+      if (fails > 6){ building=false; return err("s4msg","We lost the connection during setup.","Your workspace keeps building. Refresh in a minute and it should be ready to claim.", String(e && e.message || e)); }
+      await sleep(3500); continue;
+    }
+    fails = 0;
+
+    if (res.status === 409 && body.paused){
+      building=false;
+      return err("s4msg","Setup is paused right now.","Please try again shortly, or contact whoever gave you your access code.");
+    }
+    if (body.status === "failed"){
+      building=false;
+      return err("s4msg","Setup ran into a problem.","Please reply to your invitation email so we can finish it for you.", body.error || "");
+    }
+    applyProgress(body);
+    if (body.status === "awaiting_claim"){ building=false; return toClaim(body); }
+    await sleep(2600);
+  }
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ── Step 5: claim ───────────────────────────────────────────────────────────
+function toClaim(body){
+  const claimBtn = document.getElementById("claimBtn");
+  claimBtn.href = body.claim_url || "#";
+
+  const email = body.owner_email || answers.email;
+  document.getElementById("cEmail").textContent = email;
+
+  if (body.owner_temp_password){
+    document.getElementById("cPass").textContent = body.owner_temp_password;
+  } else {
+    // Older provisioner without first-login support: no password to show.
+    document.getElementById("pwLbl").style.display="none";
+    document.getElementById("cPass").parentElement.style.display="none";
+    document.getElementById("credsHint").textContent = "Set your password from the sign-in page after you claim.";
+  }
+  show(5);
+  document.getElementById("saved").focus();
+}
+
+// Enable the claim button only once the customer confirms they saved credentials.
+document.getElementById("saved").addEventListener("change", e => {
+  const btn = document.getElementById("claimBtn");
+  if (e.target.checked){ btn.removeAttribute("aria-disabled"); btn.style.pointerEvents="auto"; btn.style.opacity="1"; }
+  else { btn.setAttribute("aria-disabled","true"); btn.style.pointerEvents="none"; btn.style.opacity=".45"; }
+});
+document.getElementById("claimBtn").style.pointerEvents="none";
+document.getElementById("claimBtn").style.opacity=".45";
+document.getElementById("claimBtn").addEventListener("click", e => {
+  if (document.getElementById("claimBtn").getAttribute("aria-disabled")==="true"){ e.preventDefault(); }
+});
+
+// Copy buttons
+document.querySelectorAll(".copy").forEach(b => b.onclick = async () => {
+  const txt = document.getElementById(b.dataset.copy).textContent;
+  try { await navigator.clipboard.writeText(txt); const t=b.textContent; b.textContent="Copied"; setTimeout(()=>b.textContent=t,1400); } catch(e){}
+});
+
+// Warn before leaving mid-build
+window.addEventListener("beforeunload", e => { if (building){ e.preventDefault(); e.returnValue=""; } });
+
+show(1);
+</script>
+</body>
+</html>
