@@ -123,7 +123,6 @@ footer .heb{font-size:.9rem}
   <div class="nav-in">
     <a class="brand" href="/"><b>DAAS</b><span class="heb">דעת</span></a>
     <div class="nav-sp"></div>
-    <a class="btn btn-ghost btn-sm" href="/crm/">Log in</a>
   </div>
 </nav>
 
@@ -142,7 +141,7 @@ footer .heb{font-size:.9rem}
       <div class="msg error" id="s1msg"></div>
       <div class="field">
         <label for="code">Access code</label>
-        <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. TEMPLE-BETH-EL" maxlength="64">
+        <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. CHABAD-YOURTOWN-01" maxlength="64">
       </div>
       <div class="actions">
         <button class="btn btn-gold" id="s1next">Continue</button>
@@ -157,11 +156,11 @@ footer .heb{font-size:.9rem}
       <div class="msg error" id="s2msg"></div>
       <div class="field">
         <label for="org">Organization name</label>
-        <input id="org" type="text" autocomplete="organization" placeholder="Temple Beth El" maxlength="120">
+        <input id="org" type="text" autocomplete="organization" placeholder="Chabad of Yourtown" maxlength="120">
       </div>
       <div class="field">
         <label for="email">Your email</label>
-        <input id="email" type="email" autocomplete="email" placeholder="rabbi@your-shul.org" maxlength="180">
+        <input id="email" type="email" autocomplete="email" placeholder="chabadofyourtown@gmail.com" maxlength="180">
         <p class="hint">This is your sign-in. Use the address you check.</p>
       </div>
       <div class="row2">
@@ -217,12 +216,10 @@ footer .heb{font-size:.9rem}
 
     <!-- 4 · Building -->
     <section class="screen" id="s4">
-      <div class="eyebrow">Building your workspace</div>
-      <h1 class="title" id="s4title">This takes a few minutes</h1>
-      <p class="lede">Your database is being built in our account. It holds no names yet.</p>
+      <h1 class="title" id="s4title">Your database is being built</h1>
       <div class="msg error" id="s4msg"></div>
-      <ul class="checklist" id="checklist"></ul>
       <div class="live"><span id="liveline">Getting started</span><span class="dots"></span></div>
+      <p class="privacy" style="text-align:left;margin-top:22px">This takes a few minutes. Keep this page open.</p>
     </section>
 
     <!-- 5 · Claim -->
@@ -247,6 +244,7 @@ footer .heb{font-size:.9rem}
           <li>Keep the plan on <b>Free — $0 / month</b>.</li>
           <li>Review and <b>confirm the transfer</b>.</li>
         </ol>
+        <p style="margin:12px 0 0;color:#f0d9a6"><b>Do not create a new project.</b> You only make an account and an organization. Your workspace transfers into it on its own.</p>
       </div>
 
       <label class="chkline"><input type="checkbox" id="saved"><span>I've saved my email and temporary password above.</span></label>
@@ -384,45 +382,13 @@ async function startBuild(){
   job = { job_id: body.job_id, job_token: body.job_token };
   btn.disabled=false; btn.textContent="Build my CRM";
   building = true;
-  buildChecklist();
   show(4);
   applyProgress(body);
   drive();
 }
 
 // ── Step 4: drive the state machine + show progress ─────────────────────────
-const PHASES = [
-  { key:"create",  label:"Creating your database",   steps:["create_project","creating_project","poll_health"] },
-  { key:"schema",  label:"Installing the CRM",        steps:["install_schema"] },
-  { key:"keys",    label:"Securing your keys",        steps:["provision_keys","function_secrets"] },
-  { key:"jobs",    label:"Deploying background jobs",  steps:["deploy_functions"] },
-  { key:"signin",  label:"Setting up your sign-in",   steps:["auth_config","create_owner"] },
-  { key:"finish",  label:"Finishing up",              steps:["seed_zip_state","mint_claim","awaiting_claim"] }
-];
-function buildChecklist(){
-  const ul = document.getElementById("checklist"); ul.innerHTML="";
-  PHASES.forEach(p => {
-    const li = document.createElement("li"); li.id = "ph-"+p.key;
-    li.innerHTML = '<span class="mark"></span><span>'+p.label+'</span>';
-    ul.appendChild(li);
-  });
-}
-function phaseIndexForStep(step){
-  for (let i=0;i<PHASES.length;i++) if (PHASES[i].steps.includes(step)) return i;
-  return 0;
-}
 function applyProgress(body){
-  const step = body.step || "create_project";
-  const idx = phaseIndexForStep(step);
-  PHASES.forEach((p,i) => {
-    const li = document.getElementById("ph-"+p.key);
-    li.classList.remove("active","done");
-    const mark = li.querySelector(".mark");
-    if (i < idx){ li.classList.add("done"); mark.innerHTML="✓"; }
-    else if (i === idx && body.status !== "awaiting_claim"){ li.classList.add("active"); mark.innerHTML='<span class="spin"></span>'; }
-    else if (body.status === "awaiting_claim"){ li.classList.add("done"); mark.innerHTML="✓"; }
-    else { mark.innerHTML=""; }
-  });
   document.getElementById("liveline").textContent = body.progress || "Working";
 }
 
