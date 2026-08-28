@@ -43,7 +43,7 @@ h1,h2,h3{margin:0}
 /* ---------- HERO ---------- */
 .hero{position:relative;overflow:hidden;background:radial-gradient(ellipse 56% 44% at 50% 24%,rgba(35,76,115,.5),transparent 72%),linear-gradient(135deg,#071322 16%,#0a1b31 68%,#091729)}
 .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 74%,var(--ink));pointer-events:none}
-.hero-copy{max-width:840px;margin:auto;text-align:center;position:relative;z-index:1;padding:40px 0 118px}
+.hero-copy{max-width:840px;margin:auto;text-align:center;position:relative;z-index:1;padding:40px 0 90px}
 .mark{position:relative;width:184px;height:184px;margin:0 auto 26px;isolation:isolate}
 .mark img{width:100%;height:100%;object-fit:contain;display:block;
   -webkit-mask-image:radial-gradient(circle at 50% 51%,#000 46%,rgba(0,0,0,.5) 66%,transparent 82%);
@@ -58,8 +58,8 @@ h1,h2,h3{margin:0}
 .hero h1 strong{display:block;color:var(--gold);font-weight:600}
 .lede{color:#c2ccd8;font-size:clamp(1.02rem,1.8vw,1.2rem);max-width:660px;margin:24px auto 14px;line-height:1.6}
 .lede b{color:#fff;font-weight:600}
-.hero-value{max-width:600px;margin:0 auto 26px;color:#93a6ba;font-size:.92rem;line-height:1.55}
-.hero-value b{color:#dce4ec;font-weight:500}
+.hero-value{max-width:660px;margin:2px auto 28px;color:#aebaca;font-size:clamp(1.02rem,1.75vw,1.22rem);line-height:1.6}
+.hero-value b{color:#eef2f6;font-weight:600}
 .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .hero-note{margin-top:16px;color:#6f8095;font-size:.78rem}
 
@@ -82,9 +82,16 @@ h1,h2,h3{margin:0}
 .proof{font-size:.85rem;color:var(--gold);margin-top:22px;font-weight:600;line-height:1.5}
 .proof span{display:block;color:#8fa0b3;font-weight:400;margin-top:3px}
 
+.section-title .intro-more{margin-top:14px;color:#9fb0c1;font-size:1rem}
+
 /* Product frame — one consistent treatment for every screenshot/gif */
 .product{border-radius:12px;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 70px rgba(0,0,0,.42);position:relative;line-height:0}
 .product img{display:block;width:100%;height:auto}
+
+/* Centered showcase (DAAS Assistant) — a big, prominent product image */
+.showcase{padding:66px 0;text-align:center}
+.showcase .feature-copy{max-width:700px;margin:0 auto 34px}
+.showcase .product{max-width:960px;margin:0 auto}
 
 /* ---------- ENGINE BAND ---------- */
 .engine{margin:56px 0 0;padding:96px 0;background:linear-gradient(180deg,#0d2038,#0a182a);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -173,16 +180,30 @@ h1,h2,h3{margin:0}
   .wrap{width:min(100% - 32px,var(--max))}
   .nav{height:66px}
   .nav-links a:not(.nav-cta){display:none}
-  .hero-copy{padding:34px 0 84px}
+  .hero-copy{padding:30px 0 62px}
   .mark{width:150px;height:150px;margin-bottom:20px}
-  .intro{padding:72px 0 20px}
-  .engine{padding:70px 0;margin-top:36px}
-  .full-band,.faq,.demo{padding:70px 0}
-  .capture-flow{grid-template-columns:1fr}
-  .phone-section{padding:64px 0}
-  .request{padding:66px 0}
+  .intro{padding:64px 0 12px}
+  .engine{padding:64px 0;margin-top:32px}
+  .full-band,.faq,.demo{padding:62px 0}
+  .phone-section{padding:56px 0}
+  .request{padding:62px 0}
   .request-form{grid-template-columns:1fr}
   .nav-cta{padding:9px 13px;font-size:.82rem}
+  /* Full-bleed product images so dense screenshots read as large as possible */
+  .feature{gap:18px}
+  .showcase{padding:52px 0}
+  .showcase .feature-copy{margin-bottom:22px}
+  .feature .product,.showcase .product{
+    width:100vw;max-width:100vw;margin-left:calc(-50vw + 50%);
+    border-radius:0;border-left:0;border-right:0;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+  /* Dense desktop screenshots: enlarge and let them scroll sideways so text is legible */
+  .feature .product{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+  .feature .product::-webkit-scrollbar{height:5px}
+  .feature .product::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+  .feature .product img{width:185vw;max-width:none}
+  .capture-flow{grid-template-columns:1fr;gap:0;width:100vw;max-width:100vw;margin-left:calc(-50vw + 50%);margin-top:30px}
+  .capture-flow figure{border-radius:0;border-left:0;border-right:0}
+  .capture-cap{padding:12px 18px}
 }
 </style>
 </head>
@@ -213,7 +234,6 @@ h1,h2,h3{margin:0}
       <a class="button primary" href="#request">Request DAAS for your community</a>
       <a class="button secondary" href="/demo/">Explore the live demo</a>
     </div>
-    <div class="hero-note">A fictional community. The real DAAS, ready to explore.</div>
   </div>
 </section>
 
@@ -222,6 +242,7 @@ h1,h2,h3{margin:0}
     <span class="kicker">The relationship engine</span>
     <h2>DAAS holds the entire history, and guides you on how to use it.</h2>
     <p>Contacts, conversations, events, giving, notes, tasks, and the small details that matter all belong in one place. DAAS turns that history into clear next steps for your community.</p>
+    <p class="intro-more">DAAS also surfaces home value and other publicly available information, creating a smart Prospect Score for every household.</p>
   </div>
 </section>
 
@@ -278,10 +299,10 @@ h1,h2,h3{margin:0}
   </div>
 </section>
 
-<section class="wrap feature flip">
+<section class="wrap showcase">
   <div class="feature-copy">
     <span class="kicker">DAAS Assistant</span>
-    <h2>Ask for any output in plain English.</h2>
+    <h2>Send an email with your voice.</h2>
     <p>Record a voice note straight into DAAS to prepare an email, build a complicated search, or create an event. Describe what you need and DAAS opens the right tool with the work prepared.</p>
     <p>You still review the audience, the wording, the details, and the result. <strong>AI does the clerical work. You do the human work.</strong></p>
   </div>
