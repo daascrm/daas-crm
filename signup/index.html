@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Set up your DAAS workspace</title>
-<meta name="description" content="Set up your own DAAS CRM. Enter your access code, tell us about your shul, and we build your private workspace in a few minutes.">
+<meta name="description" content="Use your DAAS access code to set up your private workspace.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0a1322;--bg2:#0c1830;--navy:#0f1e33;--panel:#122540;
@@ -116,6 +116,8 @@ ol.guide b{color:var(--txt)}
 footer{background:#081020;border-top:1px solid var(--line-2);color:var(--txt3);padding:26px 0;text-align:center;font-size:.82rem}
 footer .heb{font-size:.9rem}
 .privacy{color:var(--txt3);font-size:.82rem;margin-top:18px;text-align:center}
+/* A focused access screen, not a decorative setup wizard. */
+:root{--bg:#f7f7f5;--bg2:#fff;--navy:#fff;--panel:#fff;--line:#d9dddf;--line-2:#e9ebec;--line-gold:#d9dddf;--gold:#b88a2e;--gold-hi:#a77b22;--gold-soft:#f6f0e3;--txt:#14202d;--txt2:#5f6b76;--txt3:#84909a;--ok:#367a59;--err:#c15345;--font-ui:'Inter',Arial,sans-serif;--font-display:'Inter',Arial,sans-serif;--sh:none}body{background:var(--bg);color:var(--txt);font-family:var(--font-ui)}h1,h2,h3{font-family:var(--font-ui);font-weight:600;letter-spacing:-.045em;line-height:1.1}.heb{font-family:var(--font-ui)}nav{position:static;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:none}.nav-in{max-width:880px;padding:17px 24px}.brand{color:var(--txt);letter-spacing:-.025em}.brand b{font-size:1rem}main{align-items:flex-start;padding:72px 20px 84px}.wrap{max-width:640px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:none;padding:38px 40px 35px}.steps{gap:0;margin-bottom:31px}.steps .dot{height:2px;border-radius:0;background:#e3e6e7}.steps .dot.on{background:var(--txt)}.steps .dot.done{background:var(--txt)}.eyebrow{color:#7e8992;letter-spacing:.1em}.title{font-size:clamp(1.75rem,3vw,2.15rem)!important;margin-bottom:10px!important}.lede{color:var(--txt2);line-height:1.55;margin-bottom:28px}.field label{font-size:.86rem;color:var(--txt);letter-spacing:-.01em}.field .hint{color:var(--txt3)}input,select{background:#fff;border-color:#cbd1d4;border-radius:6px;color:var(--txt);padding:12px 13px}input:focus,select:focus{border-color:#536270;background:#fff;box-shadow:0 0 0 3px rgba(21,32,45,.07)}.btn{border-radius:6px;box-shadow:none!important;padding:12px 18px;font-size:.9rem;transition:background .15s,border-color .15s}.btn-gold{background:var(--txt);color:#fff}.btn-gold:not(:disabled):hover{background:#2a3a49;transform:none}.btn-ghost{background:#fff;border-color:#cbd1d4;color:var(--txt2)}.btn-ghost:not(:disabled):hover{border-color:#8e989f;color:var(--txt);background:#fff}.note{background:#f4f5f5;border-color:#dfe3e4;border-radius:6px;color:var(--txt2);padding:15px 16px}.note b{color:var(--txt)}.msg.error{background:#fff3f1;border-color:#f1c2ba;color:#a83f32}.checklist li{border-color:var(--line-2)}.live{color:var(--txt2)}.creds{background:#f7f8f8;border-color:#dde1e2;border-radius:6px}.copy{background:#fff;border-color:#cbd1d4;color:var(--txt);border-radius:5px}.done-badge{width:44px;height:44px;background:#eff7f2;border-color:#7db394;color:#367a59;border-radius:6px;font-size:1.25rem}.chkline{color:var(--txt2)}footer{background:#fff;border-color:var(--line);color:var(--txt3);padding:24px 0}.privacy{color:var(--txt3)}
 </style>
 </head>
 <body>
@@ -151,8 +153,8 @@ footer .heb{font-size:.9rem}
     <!-- 2 · About your shul -->
     <section class="screen" id="s2">
       <div class="eyebrow">Step 2 of 3</div>
-      <h1 class="title">About your shul</h1>
-      <p class="lede">This sets up your workspace. You can change any of it later.</p>
+      <h1 class="title">Your workspace</h1>
+      <p class="lede">A few details to set up your CRM. You can change them later.</p>
       <div class="msg error" id="s2msg"></div>
       <div class="field">
         <label for="org">Organization name</label>
@@ -192,31 +194,31 @@ footer .heb{font-size:.9rem}
     <!-- 3 · One key -->
     <section class="screen" id="s3">
       <div class="eyebrow">Step 3 of 3</div>
-      <h1 class="title">Connect one key</h1>
-      <p class="lede">DAAS uses your own OpenAI key for search and Research Chat.</p>
+      <h1 class="title">Your AI key</h1>
+      <p class="lede">Your own OpenAI key powers the DAAS features that use AI.</p>
       <div class="msg error" id="s3msg"></div>
       <div class="field">
         <label for="openai">OpenAI API key</label>
         <input id="openai" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" maxlength="200">
-        <p class="hint">Your key passes through our server once on its way into your own database. We never save it.</p>
+        <p class="hint">Your key is installed in your own workspace and is not retained by DAAS.</p>
       </div>
       <div class="field optional">
         <label for="anthropic">Anthropic (Claude) API key</label>
         <input id="anthropic" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" maxlength="200">
-        <p class="hint">Add this to use Claude as well. You can add it later in Supabase.</p>
+        <p class="hint">Optional. You can add it later.</p>
       </div>
       <div class="note">
-        <b>What happens next.</b> We build your private database, install the CRM, and hand it to you. It takes a few minutes. Keep this page open.
+        <b>What happens next.</b> We prepare your private workspace and hand it over to you. This takes a few minutes. Keep this page open.
       </div>
       <div class="actions">
         <button class="btn btn-ghost" data-back="2">Back</button>
-        <button class="btn btn-gold" id="build">Build my CRM</button>
+        <button class="btn btn-gold" id="build">Set up workspace</button>
       </div>
     </section>
 
     <!-- 4 · Building -->
     <section class="screen" id="s4">
-      <h1 class="title" id="s4title">Your database is being built</h1>
+      <h1 class="title" id="s4title">Preparing your workspace</h1>
       <div class="msg error" id="s4msg"></div>
       <div class="live"><span id="liveline">Getting started</span><span class="dots"></span></div>
       <p class="privacy" style="text-align:left;margin-top:22px">This takes a few minutes. Keep this page open.</p>
