@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>DAAS Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a1f44; --navy-2:#12294f; --ink:#0d1b34; --paper:#f6f7fb;
+    --card:#ffffff; --line:#e4e8f1; --muted:#5b6b86; --gold:#c9a227; --gold-2:#b8911d;
+    --ok:#127a4b; --ok-bg:#e5f3ec; --warn:#8a5a00; --warn-bg:#fbf0d8;
+    --bad:#b3261e; --bad-bg:#fbe7e6; --chip:#eef1f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);
+    background:var(--paper);line-height:1.5}
+  h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0}
+  a{color:var(--navy)}
+  .wrap{max-width:1060px;margin:0 auto;padding:20px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:16px 20px;background:var(--navy);color:#fff}
+  header.top .brand{display:flex;align-items:baseline;gap:10px}
+  header.top h1{color:#fff;font-size:20px}
+  header.top .tag{color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  header.top .who{font-size:13px;color:#c7d2e6}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);
+    background:#fff;padding:7px 12px;color:var(--ink)}
+  button:hover{border-color:#c9d2e2}
+  button.primary{background:var(--gold);border-color:var(--gold-2);color:#3a2c00;font-weight:600}
+  button.primary:hover{background:var(--gold-2)}
+  button.ghost{background:transparent}
+  button.danger{color:var(--bad);border-color:#f0c8c5}
+  button.danger:hover{background:var(--bad-bg)}
+  button:disabled{opacity:.5;cursor:default}
+  input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:2px solid #cbd7ee;border-color:#a9bce0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;
+    box-shadow:0 1px 2px rgba(13,27,52,.04)}
+  .card h2{font-size:18px;margin-bottom:4px}
+  .card .sub{color:var(--muted);font-size:13px;margin-bottom:12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+  td.mono,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  .chip{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:11px;font-weight:600}
+  .chip.ok{background:var(--ok-bg);color:var(--ok)}
+  .chip.warn{background:var(--warn-bg);color:var(--warn)}
+  .chip.bad{background:var(--bad-bg);color:var(--bad)}
+  .chip.lock{background:#eef1f7;color:var(--navy)}
+  .muted{color:var(--muted)}
+  .hide{display:none!important}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:11px 16px;border-radius:10px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:90vw}
+  .toast.bad{background:var(--bad)}
+  .toast.ok{background:var(--ok)}
+  /* login */
+  .login{max-width:380px;margin:8vh auto}
+  .login .card{padding:26px}
+  .login label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
+  .login input{width:100%}
+  .err{color:var(--bad);font-size:13px;margin-top:10px;min-height:18px}
+  .codebox{font-family:ui-monospace,monospace;font-size:16px;font-weight:600;background:#f2f4f9;
+    border:1px dashed #b9c4da;border-radius:8px;padding:10px 14px;display:inline-block}
+  details summary{cursor:pointer;font-size:13px;color:var(--muted)}
+  .small{font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login" class="login">
+  <div class="card">
+    <div style="text-align:center;margin-bottom:6px">
+      <div class="tag" style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.1em">DAAS</div>
+      <h1 style="font-size:24px;margin-top:4px">Control room</h1>
+      <p class="muted small">Admin sign-in</p>
+    </div>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" placeholder="admin@daascrm.app" />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+    <div class="err" id="loginErr"></div>
+    <button class="primary" id="loginBtn" style="width:100%;margin-top:14px">Sign in</button>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="hide">
+  <header class="top">
+    <div class="brand"><span class="tag">DAAS</span><h1>Control room</h1></div>
+    <div class="row">
+      <span class="who" id="whoami"></span>
+      <button class="ghost" id="refreshBtn" style="color:#fff;border-color:#38507e">Refresh</button>
+      <button class="ghost" id="logoutBtn" style="color:#fff;border-color:#38507e">Sign out</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- SHULS -->
+    <div class="card">
+      <h2>Shuls</h2>
+      <div class="sub">Every account in the tenant directory. Status is what a Stripe subscription will drive later.</div>
+      <table>
+        <thead><tr><th>Organization</th><th>Owner(s)</th><th>Status</th><th>Project</th><th>Created</th><th></th></tr></thead>
+        <tbody id="shulRows"><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- CODES -->
+    <div class="card">
+      <h2>Signup codes</h2>
+      <div class="sub">A code is the gate for one signup. (Later, a paid Stripe checkout writes one of these automatically.)</div>
+      <div class="row" style="margin-bottom:12px">
+        <input id="codeNote" placeholder="Note (e.g. Rabbi Cohen, Temple Beth El)" style="flex:1;min-width:220px" />
+        <button class="primary" id="issueBtn">Issue new code</button>
+      </div>
+      <div id="newCode" class="hide" style="margin-bottom:12px"></div>
+      <table>
+        <thead><tr><th>Code</th><th>Status</th><th>Note</th><th>Created</th><th></th></tr></thead>
+        <tbody id="codeRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="card">
+      <h2>Account tools</h2>
+      <div class="sub">Free up an owner email so it can sign up again, or scan the provisioning org for leftover projects.</div>
+      <div class="row" style="margin-bottom:14px">
+        <input id="freeEmail" type="email" placeholder="owner@email.com" style="flex:1;min-width:220px" />
+        <button id="freeBtn">Free up this email</button>
+      </div>
+      <div class="row">
+        <button id="scanBtn">Scan provisioning org for projects</button>
+      </div>
+      <div id="projRows" class="hide" style="margin-top:12px"></div>
+    </div>
+
+    <!-- JOBS -->
+    <div class="card">
+      <h2>Recent build jobs</h2>
+      <div class="sub">The last 30 provisioning runs — handy for spotting a stuck or failed build.</div>
+      <table>
+        <thead><tr><th>Org / email</th><th>Status</th><th>Step</th><th>Project</th><th>When</th></tr></thead>
+        <tbody id="jobRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://ipazpeybzzacmsxzwksz.supabase.co";
+const PUBLISHABLE_KEY = "sb_publishable_hOeP4MzV04l1PAGzSjRHJg__EEi6PJm";
+const FN = SUPABASE_URL + "/functions/v1/admin";
+
+const sb = window.supabase.createClient(SUPABASE_URL, PUBLISHABLE_KEY);
+const $ = (id) => document.getElementById(id);
+
+function toast(msg, kind){
+  const t = document.createElement("div");
+  t.className = "toast " + (kind||"");
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), kind==="bad" ? 5200 : 3200);
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function fmtDate(s){ if(!s) return "—"; const d=new Date(s); return isNaN(d)?"—":d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+function statusChip(s){
+  const cls = s==="active" ? "ok" : (s==="suspended" ? "warn" : (s==="closed" ? "bad" : ""));
+  return `<span class="chip ${cls}">${esc(s)}</span>`;
+}
+
+// Call the admin function with the logged-in user's JWT.
+async function api(action, payload){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ showLogin(); throw new Error("Signed out."); }
+  const res = await fetch(FN, {
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      "apikey":PUBLISHABLE_KEY,
+      "authorization":"Bearer "+session.access_token,
+    },
+    body: JSON.stringify(Object.assign({ action }, payload||{})),
+  });
+  const json = await res.json().catch(()=>({error:"Bad response."}));
+  if(!res.ok) throw new Error(json.error || ("HTTP "+res.status));
+  return json;
+}
+
+// ---- Auth screens ----
+function showLogin(){ $("app").classList.add("hide"); $("login").classList.remove("hide"); }
+function showApp(email){ $("login").classList.add("hide"); $("app").classList.remove("hide"); $("whoami").textContent = email; }
+
+$("loginBtn").onclick = async () => {
+  $("loginErr").textContent = "";
+  $("loginBtn").disabled = true;
+  try{
+    const { error } = await sb.auth.signInWithPassword({ email:$("email").value.trim(), password:$("password").value });
+    if(error) throw error;
+    await boot();
+  }catch(e){ $("loginErr").textContent = e.message || "Sign-in failed."; }
+  finally{ $("loginBtn").disabled = false; }
+};
+$("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
+$("logoutBtn").onclick = async () => { await sb.auth.signOut(); showLogin(); };
+$("refreshBtn").onclick = () => loadOverview();
+
+// ---- Data render ----
+async function loadOverview(){
+  try{
+    const d = await api("overview");
+    renderShuls(d.shuls||[]);
+    renderCodes(d.codes||[]);
+    renderJobs(d.jobs||[]);
+  }catch(e){ toast(e.message,"bad"); }
+}
+
+function renderShuls(shuls){
+  const tb = $("shulRows");
+  if(!shuls.length){ tb.innerHTML = `<tr><td colspan="6" class="muted">No shuls yet.</td></tr>`; return; }
+  tb.innerHTML = shuls.map(s=>{
+    const owners = (s.members||[]).map(m=>esc(m.email)).join("<br>") || "<span class='muted'>—</span>";
+    const lock = s.protected ? ` <span class="chip lock" title="protected from deletion">locked</span>` : "";
+    const statusSel = s.protected ? statusChip(s.status) : `
+      <select data-status="${s.id}">
+        ${["active","suspended","closed"].map(v=>`<option value="${v}" ${v===s.status?"selected":""}>${v}</option>`).join("")}
+      </select>`;
+    const del = s.protected ? "" :
+      `<button class="danger" data-del="${s.id}" data-name="${esc(s.organization_name)}" data-ref="${esc(s.supabase_project_ref)}">Delete</button>`;
+    return `<tr>
+      <td><strong>${esc(s.organization_name)}</strong>${lock}<br><span class="muted mono">${esc(s.slug)}</span></td>
+      <td>${owners}</td>
+      <td>${statusSel}</td>
+      <td class="mono">${esc(s.supabase_project_ref)}</td>
+      <td>${fmtDate(s.created_at)}</td>
+      <td>${del}</td>
+    </tr>`;
+  }).join("");
+
+  tb.querySelectorAll("select[data-status]").forEach(sel=>{
+    sel.onchange = async () => {
+      try{ const r = await api("set_tenant_status",{ tenant_id:sel.dataset.status, status:sel.value });
+        toast(`${r.organization_name}: ${r.status}`,"ok"); }
+      catch(e){ toast(e.message,"bad"); loadOverview(); }
+    };
+  });
+  tb.querySelectorAll("button[data-del]").forEach(b=>{
+    b.onclick = () => confirmDeleteTenant(b.dataset.del, b.dataset.name, b.dataset.ref);
+  });
+}
+
+function renderCodes(codes){
+  const tb = $("codeRows");
+  if(!codes.length){ tb.innerHTML = `<tr><td colspan="5" class="muted">No codes.</td></tr>`; return; }
+  tb.innerHTML = codes.map(c=>{
+    const chip = c.status==="unused" ? `<span class="chip ok">unused</span>` : `<span class="chip">claimed</span>`;
+    const act = c.status==="unused" ? `<button class="ghost small" data-void="${esc(c.code)}">Void</button>` : "";
+    return `<tr>
+      <td class="mono">${esc(c.code)}</td><td>${chip}</td>
+      <td>${esc(c.note||"")}</td><td>${fmtDate(c.created_at)}</td><td>${act}</td>
+    </tr>`;
+  }).join("");
+  tb.querySelectorAll("button[data-void]").forEach(b=>{
+    b.onclick = async () => {
+      try{ await api("void_code",{ code:b.dataset.void }); toast("Code voided","ok"); loadOverview(); }
+      catch(e){ toast(e.message,"bad"); }
+    };
+  });
+}
+
+function renderJobs(jobs){
+  const tb = $("jobRows");
+  if(!jobs.length){ tb.innerHTML = `<tr><td colspan="5" class="muted">No jobs.</td></tr>`; return; }
+  tb.innerHTML = jobs.map(j=>{
+    const cls = j.status==="claimed"?"ok":(j.status==="failed"?"bad":(j.status==="running"?"":"warn"));
+    const err = j.error ? `<br><span class="muted small">${esc(j.error)}</span>` : "";
+    return `<tr>
+      <td>${esc(j.owner_email||"—")}${err}</td>
+      <td><span class="chip ${cls}">${esc(j.status)}</span></td>
+      <td class="small">${esc(j.step||"")}</td>
+      <td class="mono">${esc(j.project_ref||"—")}</td>
+      <td>${fmtDate(j.updated_at||j.created_at)}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ---- Actions ----
+$("issueBtn").onclick = async () => {
+  $("issueBtn").disabled = true;
+  try{
+    const r = await api("issue_code",{ note:$("codeNote").value.trim() });
+    $("codeNote").value = "";
+    const box = $("newCode");
+    box.classList.remove("hide");
+    box.innerHTML = `New code: <span class="codebox" id="cc">${esc(r.code)}</span>
+      <button class="ghost small" id="copyCode">Copy</button>`;
+    $("copyCode").onclick = () => { navigator.clipboard.writeText(r.code); toast("Copied","ok"); };
+    loadOverview();
+  }catch(e){ toast(e.message,"bad"); }
+  finally{ $("issueBtn").disabled = false; }
+};
+
+$("freeBtn").onclick = async () => {
+  const email = $("freeEmail").value.trim();
+  if(!email) return;
+  try{
+    const r = await api("free_email",{ email });
+    toast(`Removed ${r.removed_memberships} membership(s) for ${r.email}`,"ok");
+    $("freeEmail").value = "";
+    loadOverview();
+  }catch(e){ toast(e.message,"bad"); }
+};
+
+function confirmDeleteTenant(id, name, ref){
+  const alsoProj = confirm(
+    `Delete the shul "${name}"?\n\nThis removes its rows from the control room (build jobs, membership, tenant, retained tokens).\n\nClick OK to also DELETE its Supabase project (${ref}) if DAAS still owns it, or Cancel to keep the project and only remove the rows.`
+  );
+  // Two-step: first a hard confirm that we're deleting at all.
+  const go = confirm(`Are you sure? This cannot be undone.\n\nShul: ${name}\nProject: ${ref}\nAlso delete project: ${alsoProj ? "YES" : "no"}`);
+  if(!go) return;
+  api("delete_tenant",{ tenant_id:id, delete_project:alsoProj })
+    .then(r=>{
+      let msg = `Deleted ${r.deleted_tenant}`;
+      if(r.project_deleted) msg += ` + project`;
+      if(r.project_note) msg += ` (${r.project_note})`;
+      toast(msg, r.project_note ? "warn" : "ok");
+      loadOverview();
+    })
+    .catch(e=>toast(e.message,"bad"));
+}
+
+$("scanBtn").onclick = async () => {
+  $("scanBtn").disabled = true;
+  try{
+    const d = await api("list_projects");
+    const box = $("projRows");
+    box.classList.remove("hide");
+    const ps = d.projects||[];
+    if(!ps.length){ box.innerHTML = `<p class="muted small">No projects returned.</p>`; return; }
+    box.innerHTML = `<table><thead><tr><th>Project</th><th>Ref</th><th>Status</th><th>Tracked?</th><th></th></tr></thead><tbody>`+
+      ps.map(p=>{
+        const tag = p.protected ? `<span class="chip lock">locked</span>`
+          : (p.tracked ? `<span class="chip">tracked shul</span>` : `<span class="chip warn">untracked</span>`);
+        const del = (p.protected||p.tracked) ? "" : `<button class="danger small" data-proj="${esc(p.ref)}" data-name="${esc(p.name)}">Delete</button>`;
+        return `<tr><td>${esc(p.name)}</td><td class="mono">${esc(p.ref)}</td><td class="small">${esc(p.status)}</td><td>${tag}</td><td>${del}</td></tr>`;
+      }).join("") + `</tbody></table>
+      <p class="muted small" style="margin-top:8px">Only <b>untracked</b> projects can be deleted here. A tracked shul must be deleted from the Shuls table so its rows go too.</p>`;
+    box.querySelectorAll("button[data-proj]").forEach(b=>{
+      b.onclick = () => {
+        if(!confirm(`Permanently delete project "${b.dataset.name}" (${b.dataset.proj})? This cannot be undone.`)) return;
+        api("delete_project",{ ref:b.dataset.proj })
+          .then(()=>{ toast("Project deleted","ok"); $("scanBtn").click(); })
+          .catch(e=>toast(e.message,"bad"));
+      };
+    });
+  }catch(e){ toast(e.message,"bad"); }
+  finally{ $("scanBtn").disabled = false; }
+};
+
+// ---- Boot ----
+async function boot(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ showLogin(); return; }
+  try{
+    const d = await api("overview");
+    showApp(d.admin || session.user.email);
+    renderShuls(d.shuls||[]); renderCodes(d.codes||[]); renderJobs(d.jobs||[]);
+  }catch(e){
+    // Valid Supabase user but not an allow-listed admin, or token issue.
+    if(/authoriz/i.test(e.message)){ await sb.auth.signOut(); showLogin(); $("loginErr").textContent = "That account is not a DAAS admin."; }
+    else { showLogin(); $("loginErr").textContent = e.message; }
+  }
+}
+boot();
+</script>
+</body>
+</html>
