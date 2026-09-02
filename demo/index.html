@@ -136,8 +136,6 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 .badge.mid{color:var(--amber-tx);background:var(--amber-bg);border-color:var(--amber-ln)}
 .badge.lapsed{color:var(--red-tx);background:var(--red-bg);border-color:var(--red-ln)}
 .ctag{display:inline-block;font-family:var(--font-ui);font-size:10.5px;font-weight:500;text-transform:none;letter-spacing:0;padding:1px 7px;border-radius:3px;margin-top:4px;border:1px solid transparent}
-.ctag.cuy{background:#eef1f4;color:#182c49;border-color:#cfd5dc}
-.ctag.gea{background:var(--green-bg);color:var(--green-tx);border-color:var(--green-ln)}
 .ctag.unk{background:#f2f4f7;color:var(--txt3);border-color:var(--border)}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:1px solid var(--border);border-radius:5px;overflow:hidden;margin-bottom:7px}
 .pcell{background:var(--surf);padding:6px 9px}
@@ -1876,7 +1874,7 @@ html.force-desktop #mobileShell{display:none!important}
 <script>
 // ── BUILD ──
 const BUILD_STAMP='2026-08-25.1.DEMO'; // 2026-08-25.1 TENANT VAPID KEY: phone push loads app_settings.vapid_public from the signed-in tenant, uses the old shared key only when that row is absent, and replaces an existing origin subscription when it belongs to a different VAPID pair. The old endpoint row is removed only after the replacement subscription is saved. Silent re-sync moved behind tenant resolution/settings hydration, so it can no longer run before the tenant client exists. ||| PREVIOUS (2026-08-21.2) SETTINGS/SIDEBAR REBUILD: drawer decluttered (duplicates + API Keys removed), new Organization customizations panel as single org-identity source, notifications moved to mobile menu, org-name/logo identity label, ZIP->state geocoding fix, per-form delete button, Forms URL setting. // 2026-08-21 DE-OHIO PASS: AI prompts read Rabbi Context + Profile Building Context only (no baked persona/place); state/county/city are data-derived; branding placeholders generic; Deploy-to-GitHub + Ohio voter importer removed; email org-defaults hydrate at boot; embed origin settings-driven. // FULL-WINDOW BOOT SPLASH, AND THE BOOT RACE IT CLOSES. RE-APPLIED: this shipped as 2026-08-18.7 and was lost when a parallel session saved its own copy of .6 forward into .8 - if it goes missing again, that is why, and this note is the record. Nothing from .8 (the mobile centre Log button and the shared pencil icon) is touched here. THE COMPLAINT (owner): the app showed 'loading' but the buttons were already there, and clicking one bounced back to the dashboard when the load finished; mobile loaded without data and looked wrong. ROOT CAUSE, one bug and two symptoms: #appLoading was a SIBLING OF THE VIEWS INSIDE THE CONTENT COLUMN, so the navy rail, the header, the filter strip and the entire mobile shell sat outside it and stayed live for the whole load. Clicking a nav button ran switchView(), whose first act was document.getElementById('appLoading')?.remove() - the loader vanished and an empty view painted against households=[] - and then loadAll()'s closing switchView(_uiPrefs.landing||'dash') threw him back to the dashboard. The loader never owned the input surface it was describing. FIX: #daasBoot, position:fixed inset:0 at z-index 100050 (clears #loginScreen's 99999 and every modal), navy field, gold flame mark pulsing inside a rotating gold arc, 'Loading your database'. Nothing behind it is reachable, so the race cannot start - no guard flag, no remembered view, no extra state to keep in sync, which is why this beat skeleton panels (a skeleton still needs a do-not-override-his-click guard across seven desktop views plus the mobile shell, and a guard is a thing that drifts). IT IS ON IN THE MARKUP AND TAKEN DOWN BY THE AUTH CHECK, not put up by it: on a phone #mobileShell is display:flex from the first paint, so the dashboard was drawn against an empty roster before a line of JS ran, which is the mobile half of the same complaint. No session -> _bootHide(true) immediately, then the login screen. ONE SPLASH FOR BOTH SURFACES: showApp now AWAITS mBoot() under it (it was fire-and-forget), so the phone's Daily Five, tasks, heatmap and Recent all render before anything is visible, and loadAll() sits in a try/finally so an error path lifts the splash too. TWO GUARDS THAT MATTER MORE THAN THEY LOOK: a 600ms MINIMUM on screen, because a warm cache finishes in ~200ms and a splash that flashes for a fifth of a second reads as a glitch rather than as a load; and a 45-SECOND WATCHDOG, because a full-window blocker over a hung fetch is a dead navy screen with no way out - it now lifts and shows whatever did land. REMOVED: the #appLoading div and both ?.remove() calls (switchView, _asShowEmailView). prefers-reduced-motion slows the arc and stills the pulse. ||| PREVIOUS (2026-08-18.8): Desktop rail's Log interaction button takes the SAME pencil as the mobile centre button - one icon means one thing on both surfaces. ||| MOBILE: THE CAPTURE TAB IS NOW THE CENTRE LOG ACTION. It was slot 2 of 5, one of five identical grey icons, named for its mechanism. It is now slot 3 (centre) as .m-navlog - a raised gold disc with a PENCIL, labelled 'Log'. CENTRE, NOT LAST: Shneur's first instinct was last-of-five, and last is the better thumb position, but centre keeps the row symmetric (two tabs either side) and is the convention every phone user already knows for a primary create action. ANCHORED IN THE BAR, NOT FLOATING - the disc sits in its own nav slot and only its top edge overhangs; this is deliberately NOT the FAB that was built and reverted in .1, which floated over page content. LABEL IS 'Log', NOT 'Log interaction': five tabs on a 390px screen is ~78px each and the longer string truncates - the desktop rail carries the full phrase because it has the room. THE DISC STAYS GOLD WHETHER OR NOT THE TAB IS ACTIVE, because it is an action and not a state; only the label takes the active weight, so it never reads as switched off. ||| DESKTOP: LOGGING PROMOTED OUT OF THE TOOLS DRAWER INTO THE TOP OF THE NAVY RAIL. It was the third item in the bottom nav-tools group, visually identical to Research chat and DAAS Assistant and named 'Quick capture' - mechanism, not job. It is now a filled GOLD pill above Dashboard labelled 'Log interaction', and it is the ONLY filled control in the rail, which is what makes it read as the action while everything under it reads as navigation. REMOVED from nav-tools in the same move: one entry point, not two. The hamburger drawer's own Quick Capture row under Intelligence is LEFT ALONE - it is a settings/tools drawer and duplicating the rail there costs nothing. ||| TRAY FORM AND QUICK CAPTURE FORM NOW USE IDENTICAL FIELD LABELS - Who / Interaction type / When / Notes (optional). The tray said 'Who was this with?' and 'What was it?', which made the same three fields read as two different forms depending on which surface you reached them from. ||| Manual form's field label 'Type' -> 'Interaction type' (Shneur). The tray form still reads 'What was it?' for the same field. ||| Quick Capture's Analyze and Attach buttons now carry the SAME radius/weight/height as the manual form's Log button (10px, 700, ~46px) - they were 7px/6px pills at .84rem next to a 10px 700 primary, so the two cards read as two different products. Manual form's 'Pick who, pick what, done.' subhead removed at Shneur's instruction; the header row's bottom margin absorbed its spacing. ||| AI PROPOSALS NOW RENDER BETWEEN THE AI BOX AND THE MANUAL FORM, not below it. #capture-results moved above #capture-manual: the proposals are the AI box's OUTPUT, so pushing the manual form between a dump and what it proposed read as an interruption. The manual form is the other path and belongs last. Proposal header 'Here’s what I’d log' -> 'Review and confirm', and the transcript block label 'Heard' -> 'Transcript' in BOTH _captureHeardHtml and the Ask-panel copy, so one word means one thing everywhere. ||| LOGGING IS NOW THE FIRST-CLASS ACTION ON BOTH SURFACES. Shneur: "the whole app hinges on ppl loging all interactions." (1) MOBILE CONTACT TRAY: the tools list was five equal-weight buttons and logging was not one of them - you had to Open Full Profile and scroll to the interactions tab. It is now three buttons: a big navy Log Interaction first, then Open Full Profile, then Context Chat. Build/Enrich Profile, Add Notes (which did the same thing as Open Full Profile) and Hide Contact are gone from the tray. mSheetEnrich/mSheetNotes/mSheetHide are LEFT DEFINED - nothing calls them from the tray any more, but hideHousehold is still reachable elsewhere and deleting live helpers to save three lines is not worth the risk. (2) THE TRAY LOGS IN PLACE. mSheetLog swaps #mSheetInner for the form (_mSheetMode='log') and mSheetLogBack swaps it back - same sheet, same person, no navigation, no modal. The form re-renders ONCE on open; chip and pill clicks mutate _mLogSel/_mLogType and restyle their own buttons, because a full re-render would wipe a half-typed note. It writes through logTouch (source:'tray'), so the AGC bump, track close, daily-five bookkeeping and undo journal are identical to every other path. (3) QUICK CAPTURE HAS A NON-AI PATH THAT IS ALWAYS ON SCREEN. The batch bar existed but only appeared at 2+ pins, so there was no way to log one person without going through the AI box. It is now #capture-manual, always visible, n>=1, sitting BELOW the AI box (Shneur's call: ai box above, manual form below). The type <select> is gone - all ten types are chips, because a dropdown on a phone is two taps and a scroll wheel. The AI box still fills this form in: captureVoicePinAll drops heard names into Who, and _captureContacts is still the PRE-SELECTED CONTACTS block in the analyze prompt. (4) THE CONFIRMATION MOVED INSIDE THE FORM (#capture-manual-result, directly above the button) - it used to render in #capture-results below the fold, where a phone never scrolled to it. #capture-results still belongs to the AI proposals. (5) ONE TYPE VOCABULARY, ONE ORDER, shared by the tray and Quick Capture, defaulting to Connected (the batch bar used to default to Shabbat attendance, which was right when it was a group-attendance tool and wrong now that it is the general form). (6) COPY: the stage flow read as narration ('Writing down what you said', 'Reading it and finding the person', 'Filing to...', HEARD) and is now flat status - Recording/Transcribing/Matching, 'Transcribing', 'Matching to a contact', TRANSCRIPT. The standing intro paragraph is gone; each card carries its own header. Buttons say 'Log interaction'/'Log to N people' and deliberately do NOT name the type - 'Log Connected to 2 people' does not parse, and the lit chip is already right above the button. NO FLOATING ACTION BUTTON AND NO BOTTOM-NAV RENAME - both were built and then reverted at Shneur's instruction. Do not re-add them. ||| CANVASS SYNC REMOVED: the ChabadOnCanvass one-way importer is gone from the app (sidebar button, mobile topbar button, _canvassFmt/refreshCanvassStatus/runCanvassSync/mSync) and the nightly-crm-sync cron job is unscheduled. Shneur does not use it. The edge function source is preserved at supabase/functions/canvass-sync/index.ts before deletion, since it existed nowhere in the repo. canvass_id columns and the import dedupe keys are LEFT ALONE - they hold real imported identifiers. ||| // ADDRESS MATCHING IS NOW SHARED, NOT A MOBILE-MAP FEATURE (Shneur: "anything helpful lets extend"). The USPS table, _normAddr, the raw/normalised union and the relevance tiers MOVED OUT OF BLOCK B INTO BLOCK A, because this is engine, not chrome: four different boxes search the same roster and had four different opinions about what '12 Maple Road' means. Block A now owns ADDR_ABBR (renamed from M_ADDR_ABBR), _normAddr, _addrBlob, _normBlob, _addrMatch, _matchTier and _rankMatches; Block B calls them, never the reverse, which is the documented direction of that dependency. UPGRADED CALL SITES: desktop header-search popout (_showSearchPopout - it slices to SIX rows, so ranking matters more there than anywhere: a street search must not spend all six on everyone who lives in that town), mobile global Find (_mFindRender - its old name-first/everything-else split let a city bury a street; now the full tier), mobile Contacts roster (mRenderRoster), and the mobile map. TWO DELIBERATE ASYMMETRIES. (1) _searchMatch reaches the whole _searchBlob - notes, interaction text, profile fields - while _addrMatch is names+address ONLY. The map and the roster mean 'find this person or street'; global Find means 'find this anywhere'. (2) THE NORMALISED PASS NEVER RUNS OVER THE FULL BLOB, only over names+address: normalising every interaction note for 600 households would cost real milliseconds on a phone for nothing, and a suffix table has no business rewriting words inside someone's notes. Raw matching still covers the whole blob, so nothing became unfindable. THE ROSTER IS MATCHED BUT NOT RE-RANKED - that list is alphabetical and the A-Z rail indexes into it, so re-sorting by relevance would break the rail. _rankMatches takes opts.mapFirst so 'has coordinates' is a tiebreak INSIDE a tier for the map only; match quality outranks it everywhere, since the right household with no coordinates beats the wrong one with them. Desktop Contacts table left alone on purpose: its box says 'Filter by name' and runs _nameMatch, so suffix equivalence is not in scope. Normalised blobs are memoised in a Map keyed by household id, self-invalidated on the source string. VERIFIED: both blocks node --check clean, both sentinels present, 92/92 on the stubbed VM harness (now loading the shared Block A layer alongside Block B) covering _addrMatch-vs-_searchMatch scope, tier assignment, ranking with and without mapFirst, no input mutation, USPS variants, and the no-regression checks; 33/33 in real Chromium at 390x844 with touch. ||| PREVIOUS (2026-08-17.5): MAP SEARCH: THE REAL USPS TABLE, AND STREET BEATS CITY. (1) M_ADDR_ABBR is now USPS PUBLICATION 28 APPENDIX C1 VERBATIM - 387 aliases (was a hand-written 90), the Postal Service's own suffix table, which exists because they have to route mail people addressed sloppily and therefore lists every variant seen in the wild: av/aven/avenu/avn/avnue all -> ave, hiway/hiwy/highwy -> hwy, crecent/cresent/crsnt -> cres. That matters because this roster was IMPORTED FROM SPREADSHEETS, not typed into a validating form. Plus Appendix B directionals (north->n) and C2 unit designators (apartment->apt). Public-domain data; identity rows (rd->rd) omitted since _mNormAddr falls through to the word, which is why 553 source rows become 387. WHY A TABLE AND NOT A SERVICE (asked directly): Leaflet HAS no geocoder - leaflet-control-geocoder is a UI shim over Nominatim/Google/etc; Google Places matches the REAL WORLD, not these 615 households, so it cannot answer 'which Klein is this' and would need a paid key that this architecture forbids in the browser anyway; libpostal is the real open-source answer and is a C library with ~2GB of data, so it fits neither a browser nor a Deno edge function. Every open-source JS address library resolves to exactly this lookup table - addresser's whole street-type brain is a 16KB JSON. A geocoder is still worth building, but it solves a DIFFERENT problem (missing pins, addresses not yet in the CRM) and Shneur deferred it. (2) BUG HE CAUGHT IMMEDIATELY: searching 'falls' returned all of Chagrin Falls, burying Falls Road. Cause was a flat relevance model - a city match and a street match sorted identically. Results are now tiered by WHICH FIELD matched: 0 person/household name, 1 street, 2 city/zip; then mappable; then alphabetical. So 'falls' gives the Falls surname, then Falls Road, then the town, and 'falls road' narrows to the street alone. Tier is computed ONCE PER HOUSEHOLD into a Map, never inside the comparator, which would have re-normalised on every one of the O(n log n) comparisons. NOTE the previous sort keyed on mappable-first; match quality now outranks it, because the right household with no coordinates beats the wrong one with them. VERIFIED: both blocks node --check clean, both sentinels present, 76/76 stubbed VM harness (USPS variants and misspellings, long<->short both directions, the Chagrin-Falls ranking case, no-regression checks that every raw substring matching before still matches, cache re-normalisation after an address edit) and 33/33 in real Chromium at 390x844 with touch. ||| PREVIOUS (2026-08-17.4): MAP SEARCH: STREET-SUFFIX EQUIVALENCE (Shneur: "road and rd, lane and ln etc need to be recognized"). Addresses get TYPED the way they are spoken and STORED the way they were imported, so a literal substring match missed half of them. New M_ADDR_ABBR table (~90 entries: USPS street suffixes long->short, plus directionals north->n and unit words apartment->apt) and _mNormAddr, which lowercases, strips ALL punctuation, and maps token by token. Applied to BOTH the query and the record, so it works in both directions - typed 'Pine Dr' finds a stored 'Pine Drive' just as typed '12 Maple Road' finds a stored '12 Maple Rd'. ONLY LONG->SHORT IS LISTED, deliberately: mapping short->long would have to pick a winner between 'Saint' and 'Street', which share the abbreviation 'st'. Collapsing both onto 'st' can only ever over-match, which in a search box is free. MATCHING IS THE UNION OF RAW AND NORMALISED, never normalised alone - '12 maple ro' tokenises to a word that is in no table, so a normalised-only match would have returned FEWER rows mid-typing than the old plain substring did. The union guarantees this change can never take a result away. Note a city like 'Chagrin Falls' normalises to 'chagrin fls' because Falls is a real suffix; harmless, since both sides get the same treatment, and the raw half of the union covers 'chagrin fall'. Normalised blobs are memoised in a Map KEYED BY HOUSEHOLD ID AND SELF-INVALIDATED on the source string - not stamped onto the household object, which gets PATCHed back to PostgREST. Also: the 'No address' label in results lost its '- opens the contact' tail (Shneur). VERIFIED: both blocks node --check clean, both sentinels present, 66/66 on the stubbed VM harness (normaliser unit tests, long->short and short->long in both directions, punctuation, no-regression checks that every raw substring that matched before still matches, and cache re-normalisation after an address edit) and 29/29 driving real Chromium at 390x844 with touch. ||| PREVIOUS (2026-08-17.3): MOBILE MAP: PINS YOU CAN ACTUALLY HIT, PLUS A SEARCH BAR (Shneur: "you have to make sure you're pressing exactly on it"). ROOT CAUSE: mobile pins were INTERACTIVE circleMarkers at radius 7 and Leaflet hit-tests the drawn SVG path exactly, so the whole target was an 14px circle against the ~44px a thumb needs - there was no forgiveness at all, by construction. Desktop never felt this because it uses 28px divIcons plus markercluster. FIX: the markers are now interactive:false DECORATION (radius 9) and ONE handler on the map owns every tap, so there is a single code path and no marker/map double-fire. New PURE _mPinHitTest(pins,pt,tapTol,stackTol) awards the tap to the NEAREST pin centre within M_TAP_TOL=24 (a ~48px target). NEAREST-WINS IS THE WHOLE POINT and is why the extra slop costs no precision: a fatter hit circle would let two close pins steal each other's taps, whereas here each pin owns exactly the half of the tolerance nearer to it - verified at 30px separation, the boundary flips between 14 and 16px from the left pin. STACKING IS NOT DESKTOP CLUSTERING (explicitly rejected - he wants grouping only for literal neighbours): pins are never merged or hidden at any zoom, and the only grouping happens at the moment of the tap. Pins whose CENTRES sit within M_STACK_TOL=14 of the winner are on top of each other on screen (spouses at one address, a duplex, an apartment building) and get listed by name in the tray instead of guessed at; a pin 20px away is inside the tap tolerance but excluded from the stack, so two houses a block apart always resolve to one. Selected pin gets a ring (_mHighlightPin, re-applied after _mSyncMapPins throws the markers away); tapping empty map now closes the tray, which it never did. SEARCH: floating rounded bar over the tiles at the top of the map tab (z-index 1200 clears Leaflet's own 1000 controls; the zoom buttons are pushed to top:60px so it never covers them; input font is 16px because iOS Safari zooms the page on focus at anything smaller). Matches the SAME fields the Contacts tab searches - household name, member first/last, street, city, zip - so a name that works there works here. CRM DATA ONLY, NO GEOCODER: Nominatim is CORS-blocked on GitHub Pages, which is already why geocodeMissing is skipped on the live site, so an arbitrary-address lookup would need a new edge function - deliberately deferred, not forgotten. Un-geocoded households still appear in results (ranked below mappable ones, labelled 'No address') and open their contact sheet instead of moving the map: searching a name and getting silence because that household was never geocoded is worse than the wrong-looking action. Tapping a mappable result flies to zoom 16, rings the pin and opens the tray. VERIFIED: both blocks node --check clean, both sentinels present, 36/36 on a stubbed VM harness covering the geometry (forgiveness, nearest-wins boundary, diagonal tolerance, stack inclusion at exactly 14px and exclusion at 15, no input mutation) and the matcher (Klein vs Kleinman, member first names, street/city/zip, mappable-first ordering, no-address households still findable). NO desktop map code, data layer or logTouch path touched. ||| PREVIOUS (2026-08-17.2): DAY-ONE FIXES from the live smoke test, all three found by clicking rather than by the harness — both live on the provider's server, not in the request shape. (1) OpenAI's json_object mode 400s unless the literal word 'json' appears in the INPUT; our schema-less sites say 'Return ONLY valid JSON' in the SYSTEM prompt, which becomes `instructions`, and OpenAI does not count that — it broke report search on desktop and mobile the moment the build went live. ai-router now injects the word only when it is genuinely absent. (2) CLAUDE SONNET 5 EMITS `thinking` BLOCKS AND THEY SPEND THE SAME BUDGET AS THE ANSWER. A Power Search returned a thinking block and NO text after 61 seconds; Profile Build's 4000-token ask came back cut mid-JSON, so the brace-scrape found no closing brace and dumped raw JSON into the Summary field. The router now gives Anthropic the same headroom OpenAI already had (double the ask, capped at 16384), Profile Build asks 12000 instead of 4000, and a thinking-only reply now reports running out of room instead of 'The AI returned an empty response' — it is a length problem, not a refusal, and the old wording sent the reader to the wrong place. (3) _buildProfilePhase2's prose fallback no longer says 'Model returned a narrative instead of structured data' when the real cause was truncation; it names the cut-off and says a rebuild usually works. NOT A BUG: task parsing returning null for 'call the kleins'. Reproduced against the real 700-household roster on both Luna and Sonnet — both matched Leslie and Steve Klein correctly. The roster holds both a Klein and a Kleinman, and the prompt says 'if unsure, use null', so declining is defensible. Change that instruction if you want it to guess. Harness 84/84 with regression tests for both server-side rules. Edge functions ai-router 2026-08-17.1b deployed. ||| PREVIOUS (2026-08-17.1): TWO PROVIDERS, NO MODEL NAMES IN THE BROWSER. Gemini is gone; every AI call now runs on Claude or OpenAI, chosen server-side by JOB TYPE. NEW ai-router edge function replaces ai-proxy AND gemini-proxy: a call site posts {tier:'deep'|'fast'|'search'} plus the Anthropic-shaped payload it already spoke, and the router picks the company and the model. deep -> claude-sonnet-5 (falls back to gpt-5.6-sol with no Anthropic key); fast -> gpt-5.6-luna, NEVER Claude, because those four sites are interactive and a reasoning model puts a visible pause in a command bar (latency, not cost); search -> claude-sonnet-5 + Anthropic web_search, or gpt-5.6-sol + OpenAI web search via the Responses API. NO MODEL PICKER ANYWHERE and no model string in this file: the fair question to ask a user is how much effort, never which vendor, and a model rename is now a 300-line server edit rather than a redeploy of this 1.7MB page. Client entry point is _ai(tier,payload) over the existing _fnPost; _aiComplete/_geminiComplete/_gemParts/_gemSystem and the GEM_* constants are deleted. Response shape is unchanged ({content:[{type:'text',text}],stop_reason}) so no call site changed how it reads a reply, and stop_reason is normalised across providers because captureAnalyze's truncation guard reads it. NEW: d.citations — the router returns every page the search tool actually read, and Profile Build now renders them as clickable Sources (OpenAI's terms require visible citations wherever web results are shown, and a research claim the rabbi cannot check in one tap is one he has to take on faith). SCHEMAS: the call sites' Gemini-dialect nullable:true is translated server-side into a JSON Schema null union — shipping the Gemini spelling to OpenAI would silently drop nullability and turn an absent household_id into an empty string. OpenAI's dialect supports anyOf, which Gemini's did not, so _rpAiRun/_mAsSearch/captureAnalyze can finally be pinned — deliberately left as a follow-up, not done on cutover day. TRANSCRIPTION -> gpt-transcribe, one engine: both were run on real voice notes covering Shabbos, Yom Kippur, Neilah, Shavuos, Isru Chag and gpt-transcribe held up with no word list or priming, so the Gemini audio path, the Whisper op, the Settings engine dropdown and the daas_transcribe preference are all gone (a picker with one option is worse than none). _blobToWav is UNTOUCHED — 16kHz mono PCM16 is what the engine wants, its header logic is byte-tested, and it is what made the A/B valid. QUICK CHAT MODE REMOVED (Shneur): it did not do enough over the plain text search bar to justify a third option. Standard is the light mode, Power Search the heavy one; the help text was verified accurate and kept, since it describes how much DATA each mode reads, not which model reads it. setStrength normalises an unknown mode to standard, so a chat_sessions row saved with mode:'quick' loads on Standard instead of a mode that no longer exists. Power Search's cost estimate is untouched — $2/1M input is Claude Sonnet 5's exact rate and the ~90%-cheaper line is its $0.20 cache rate; only the stale ~$0.30 in the help modal became ~$0.20. VERIFIED: both blocks node --check clean, both sentinels present, 75/75 on a stubbed VM harness (translation, cache_control blocks, JSON modes, stop_reason round-trip, resolution matrix, citation extraction, error surfacing, _jsonFromReply), and every tier smoke-tested against the LIVE functions — fast/deep/search on Claude, search AND deep forced onto OpenAI, embed, and transcribe. THE OPENAI SEARCH BRANCH NEVER FIRES IN NORMAL USE (the Anthropic key is set), so it is forceable on purpose: body.force:'openai' per request, or AI_FORCE_PROVIDER=openai on the function. Re-verify it that way, not by deleting secrets. ||| PREVIOUS (2026-08-16.4): RATE-LIMIT HANDLING. _fnPost now RETRIES 429/503 (2 retries, so 3 attempts) across every proxy — each call through it is idempotent, since nothing is written until a proposal is approved. Honours Gemini's own retryDelay from the 429 body when present (capped at 20s), otherwise exponential backoff with jitter so two open tabs don't retry in lockstep. WHY IT MATTERS HERE: one Research Chat message ships the whole roster — ~32k tokens at 615 households, before semantic notes and growing history — so a quick back-and-forth trips a tokens-per-minute ceiling that a single retry rides straight over. On exhaustion the message names the provider, says to wait a minute, and names the actual fix (the key is still on the Gemini free tier; billing lifts it instantly) instead of leaking RESOURCE_EXHAUSTED. 400/500 still fail fast and unretried, so a missing secret or a bad model still reports itself immediately. opts.retries overrides per call. Also logs the raw failure body to the console on any non-2xx, because the softened UI sentence makes it impossible to tell a Gemini 429 from a Supabase EDGE_FUNCTION_ERROR after the fact. DIAGNOSED 2026-08-16: the 'rate limit' reports were NOT rate limits — Supabase logs show 15 gemini-proxy calls, 13 x 200 and 2 x 503 EDGE_FUNCTION_ERROR, and zero 429s anywhere including at the gateway. Both 503s were gemini-proxy crashing on an unguarded `await req.text()` (a phone dropping connection mid-upload rejects the body read; an uncaught rejection inside Deno.serve surfaces as a bare 503). Fixed and redeployed in gemini-proxy + openai-proxy: guarded body read, whole handler wrapped, and upstream non-200s now logged server-side with status + snippet. ||| PREVIOUS (2026-08-16.3): QUICK CAPTURE RECORDER = WHATSAPP SHAPE. The recording state is now its own pane (#capture-recorder) sitting in the composer's slot, so the box reads as TRANSFORMING rather than a new screen appearing: delete (trash) on the left, pulsing dot + m:ss timer, LIVE WAVEFORM (canvas driven by an AnalyserNode off the same MediaStream — RMS pushed every ~55ms, ~18 bars/sec, older bars faded so it reads left-to-right; analyser is never connected to destination or he'd hear himself), then pause, then send (accent circle, →). All three are 44px and aria-labelled. PAUSE is real (MediaRecorder.pause/resume, _capElapsedMs banks time across pauses so the clock genuinely freezes) and HIDES ITSELF where pause() is unsupported rather than offering a dead control. HARD STOP at 5:00 with the timer going red from 4:00 — 16kHz mono PCM16 is ~32KB/s and base64 inflates a third against Gemini's 20MB inline cap (~7 min), so a forgotten recorder ends as a usable note instead of a rejected request. Waveform degrades quietly with no AudioContext/rAF. THREE mutually exclusive panes now: composer (idle), recorder (recording), stage panel (transcribing/analyzing) — the stage panel lost its actions row since recording was the only stage that had any. Recording stays WhatsApp-simple with no step row; the Record -> Write it down -> Match it row appears once processing starts, with Record already ticked. Proposals now open with a 'Here's what I'd log — N items, nothing saves until you confirm each one' heading: a bare stack of cards read as 'done' rather than 'your turn', especially after a voice note where he pressed nothing between speaking and seeing them. Stage copy: 'Writing down what you said' / 'Reading it and finding the person'. ||| PREVIOUS (2026-08-16.2): QUICK CAPTURE FLOW + COPY. FLOW: the composer and a new stage panel (#capture-stage) are now MUTUALLY EXCLUSIVE — exactly one is on screen. Before, a voice note left the textarea reading 'Transcribing…' while the mic sat in the corner as a small red square and the Analyze button was still there offering to start the thing already running: three controls describing one moment. Now _captureStage('idle'|'recording'|'transcribing'|'analyzing') hides the composer + intro + batch bar and shows one named step with a Record -> Write it down -> Match it progress row (_capStepsHtml greys the first two on the typed path). RECORDING is a real state: pulsing dot, mm:ss timer (_capRecTick), a 44px 'Done — use this' button, and a 'Throw it away' that DISCARDS (_captureCancelVoice + _capRecCancelled) — previously there was no way out of a recording except to let it transcribe, since pressing the mic again both stopped AND sent it. closeCapture mid-recording now discards instead of firing a request into a panel he walked away from. The transcript stays on screen through matching as a 'Heard' block, so a misheard name is catchable before the proposal arrives. captureAnalyze no longer takes/needs a btn (the composer is hidden), guards re-entry on _captureStageName, and scrolls the proposals into view; its failure message now says the text is still in the box. The voice auto-chain still stands down when the pin-instead banner fires. COPY: 'tell Claude who you are' -> 'tell the AI who you are' in Rabbi Context, 'Claude will sort it out' -> 'The AI will sort it out' in the brain-dump, plus stale Claude/Whisper references in comments — Research Chat and everything else except profile research runs on Gemini now. _rosterBudget left at 200k on purpose (Gemini's window is far larger, but a bigger window is not a reason to spend more per Power Search). ||| PREVIOUS (2026-08-16.1): AI PROXY CONSOLIDATION: zero provider keys left in the browser. crm_ant_key/crm_oai_key/crm_rapid_key and the ANTHROPIC_KEY/OPENAI_KEY/RAPIDAPI_KEY globals are GONE, along with _keyNudge and the three API-Keys inputs. Four edge functions now hold the keys: ai-proxy (Anthropic — MAX_TOKENS_CAP raised 4096->16384, which was silently truncating Quick Capture's 8000-token captureAnalyze), NEW gemini-proxy (GEMINI_API_KEY), NEW openai-proxy (embeddings + the Whisper fallback), NEW data-proxy (RapidAPI/Zillow). Client entry points _aiComplete/_geminiComplete/_openaiProxy/_dataProxy over a shared _fnPost. EVERY Claude call site moved to Gemini except _buildProfilePhase2, which keeps Claude because it uses the native web_search tool — it moved onto _aiComplete instead. Gemini's native JSON mode (responseMimeType, plus a responseSchema where the shape is closed) replaces 'return ONLY JSON' + regex brace-scraping at every structured call site: _asAnalyze router, parseTaskInput, enrichProcessDump, buildProfileSoft, captureAnalyze, _rpAiRun/_mAsSearch. TRANSCRIPTION: new _transcribe() runs Gemini first with an automatic Whisper fallback (engine picker in Settings -> API Keys, localStorage daas_transcribe) — Gemini rejects MediaRecorder's webm/mp4 containers, so _blobToWav decodes with the browser's own codecs and re-encodes to 16kHz mono PCM16 WAV first. VOICE AUTO-CHAIN (confirmed with the owner): Quick Capture AND the DAAS Assistant now transcribe -> analyze -> land on the review screen with no manual tap; typed input still needs the tap, nothing saves without an approval tap, and the raw transcript shows as a 'Heard:' line (_captureHeardHtml/_asHeardHtml). Quick Capture defers the auto-chain when the pin-instead banner fires. MELISSA REMOVED ENTIRELY (fetchMelissa, the dead fetchContactAge, the add-contact DOB hook, the Personator host): verified against the DB that it never returned a single DOB. Embeddings STAY on OpenAI — 1536-dim vectors are already in pgvector. Power Search cost estimate repriced to Gemini Pro. ||| PREVIOUS (2026-08-10.4): Forms→Settings gear button now also on the Donation Forms page header (was Events-only) — same openFormsSettings modal. ||| PREVIOUS (2026-08-10.3): CONFIRMATION EMAILS v3 (settings-driven, auto-embed): nothing org-specific is hardwired — global branding (org name, logo URL, mailing address, tax/receipt footer, ב"ה, default sender + default event/donation paragraphs + global CC) lives in app_settings.confirm_email_settings, edited via a NEW "Settings" (gear) button on the Events/Forms page (openFormsSettings/saveFormsSettings → sbSetSetting). Every confirmation email AUTO-EMBEDS all submitted fields (name, email, event+date, amount, dedication, notes, custom fields) — the tokens system is GONE. Form Builder step 4 now only holds PER-FORM overrides: send toggle, from/reply name, from/reply email, and the custom opening paragraph (stripe_config.email={send,from_name,reply_to,intro,cc}); signup-notify layers per-form over global via loadFormEmail(slug)+effectiveSettings. Callers pass slug + first/last/email/phone + fields. Logo defaults to the live logo.png until email-logo.png is uploaded. ||| PREVIOUS (2026-08-10.2): EMAIL TEMPLATE v2: confirmation emails now carry ב"ה + the Chabad logo (CONFIRM_LOGO_URL, defaults to the hosted app logo), and each form has an editable heading + message body (stripe_config.email.heading/message) pre-filled with kind defaults — donation default is the rabbi's standard tax-receipt text (+ 501c3/Tax-ID footer), event default keeps the auto date/location details. Tokens {first_name}/{amount}/{event_name}/{event_date}/{event_location} filled server-side. Email now sends FROM the reply-to address (default rabbi@jewishchagrinfalls.com), not no-reply@mg. ||| PREVIOUS (2026-08-10.1): SIGNUP CONFIRMATION EMAILS + PHONE PUSH: public event/donation form submissions now trigger (1) a branded confirmation email to the signer/donor via Mailgun (new `signup-notify` edge function), CC'ing the form's notify list; and (2) a Web Push notification to every device registered in the new `push_subscriptions` table, so the rabbi's phone buzzes on each signup/donation. Form Builder step 3 "Notify on signup" replaced by "Confirmation emails" (From name, Reply-to, Send-confirmation toggle, CC chips) for BOTH event + donation forms, written to stripe_config.email; CC still also stored on events.notify_emails for backward-safety. event-register + stripe-webhook (one-time + recurring invoice.paid) call signup-notify fire-and-forget (never block the save; event redelivery gated on regWasNew). form-submit no longer sets Stripe receipt_email (DAAS sends its own thank-you — also disable Stripe's "successful payment" customer emails in the Dashboard). API Keys modal gains a "Phone notifications" enable button (permission + pushManager.subscribe → push_subscriptions, upsert on endpoint); sw.js gains push + notificationclick handlers (sw.js must be uploaded to the crm repo manually — the Deploy button pushes index.html only). New secrets: VAPID_PUBLIC_KEY/VAPID_PRIVATE_KEY/VAPID_SUBJECT, NOTIFY_SECRET, optional CONFIRM_FROM_ADDRESS. New table push_subscriptions. ||| PREVIOUS (2026-08-09.1): RECURRING DONATIONS + DOUBLE-CHARGE FIX: donation forms have a "Charge every month" option (writes stripe_config.recurring={interval:'month'}); form.html renders monthly forms with a subscription-mode Payment Element + "Donate Monthly" button and passes a per-page idempotency token; form-submit creates a Stripe Customer+Subscription for recurring forms and attaches an Idempotency-Key to all PaymentIntent/Subscription creates (a retry after a soft error can no longer mint a second charge — the root cause of the observed $3 double charge); stripe-webhook now also handles invoice.paid (logs each monthly renewal as a fresh donation row, deduped by stripe_invoice_id) and ignores subscription-invoice PaymentIntents so nothing double-logs. New donations columns: recurring, stripe_subscription_id, stripe_invoice_id. ||| PREVIOUS (2026-08-06.1) COPY: checkbox render fix + Prospect Finder copy pass. CHECKBOXES: `.modal input{width:100%;background;border;padding;margin-bottom}` is written for TEXT fields and has NO type guard, so every checkbox inside a modal was stretched to full modal width with a box drawn round it — tick and label unreadable. Global `input[type=checkbox],input[type=radio]` reset placed AFTER it (source order wins on equal specificity) with an explicit margin-bottom:0 because `.modal input` sets the longhand; three hand-patched `width:auto` workarounds and five redundant inline accent-colors removed; `.fb-check input{width:auto}` dropped, which had been shrinking form-builder boxes back to the ~13px default AFTER the reset. New `label.chk` / `.chk-note`. Checkbox copy confirmed line by line with the rabbi (This one mattered 24 words -> 8; Thanked 22 -> 9; Active -> Published; Allow optional donation -> Let people add a donation; req/required -> Required). PROSPECT FINDER: shipped in .1 before HANDOFF §4 existed, so the whole page got the pass. The three tab ? panels were rewritten twice — they had been explaining how the filter works and defending design decisions ('you're not punished for being slightly familiar', 'It is not a biggest-gap list', 'Unlike the other two tabs this isn't a cut-off') rather than saying who is on the list. Final form: plain sentence first, then the pillar shorthand — High Capacity / low Affinity, High Affinity / low Generosity, Real Generosity — capitalised, named once, never re-explained. Also: the Get to Know banner 48 words -> 24 (it is `_gapCaveat()`, shared from the retired Gap dropdown, which is why the first pass missed it); all five Engine Settings rows + section note rewritten (they had em-dashes instead of brackets, 'ceiling' as a visible word, ranking explanations, and fragment grammar); metric labels capitalised; 'thin data' -> 'rough score'; last gift through a new `_monthYear()`; 'Marked reviewed' lost its second clause; NEW `pf-page` ? on the heading answering how this page differs from the Daily Five. APP-WIDE: 'Saved!'/'Copied!' lost their exclamation marks; the profile Check-in stat printed 'every 42d', now 'about every six weeks'. LEFT ALONE ON PURPOSE: the public form's 'Thank you!' defaults (donor-facing, different register) and raw day counts in the Contacts 'Days Since' column and the 'Nd late' track cell (sortable grids where the number IS the content — the one standing exception to the no-raw-days rule). NO LOGIC TOUCHED: copy, CSS, one date helper, one help panel. NOTE: lands on top of 2026-08-04.1 from another session; that build's notes follow. ||| PREVIOUS (2026-08-04.1): BUG AUDIT (2026-08-04) — exhaustive audit + fixes (two passes this session). Batch of confirmed fixes from the exhaustive pass (all verified: both blocks node --check clean, both sentinels present, VM engine harness 30/30, jsdom headless render of all 7 views + Daily Five/Waiting Room/Engine Settings/Reports at 0 app errors). FIXES: (a) double-submit guards on _egNameSave (Enter+button) and _ecDuplicate (per-id) — the only two genuinely unguarded creates; confirmAddContact/saveDonation/saveInteraction/_mergeConfirm were already guarded via _guardClick. (b) TASK LOSS: _mergeConfirm now repoints the duplicate's tasks to the keeper before delete; _doMoveContact moves a contact's tasks with it (tasks filter by household_id). (c) ENRICH: _enrichSaveAllChunks routes note chunks by chunk.type not DOM presence — a note in a SINGLE-member household is now logged as a person Note via logTouch instead of misfiled into household notes. (d) EMAIL: _ecOpen (desktop+mobile) defaults track_clicks OFF for null/legacy rows, matching every other path (clicks are opt-in for deliverability); _ebPaletteInsert clamps click-insert so content never lands below the unsubscribe footer. (e) REPORTS: contact-grain last-contact no longer folds registration reg_date (matches the manual + household grain); _rpInterTouch future-gated. [event_fee-in-reports and Fee-Paid-always-0 were FALSE POSITIVES — m.donations is already event-fee-filtered and r._fee is set at load.] (f) EASTERN DATES (manual: "the day begins and ends in Ohio"): renderWins week boundary, _rpResolveDateRange/_rpResolveYear, toggleTaskDone link window (UTC→Eastern date), desktop + mobile heatmap grids, calcAge, _ecFmtDate, chat-sidebar Today bucket. (g) COPY: CSV "Days Since" exports "never" not 99999; snooze undo label uses word form (_snoozeWords) not "30d". First-pass note (same 2026-08-04 session) follows. // BUG AUDIT (first pass) — two _bumpAGCAgg sync fixes, both aligning the LIVE incremental aggregate bump with the two full-reload builders (loadAGCInteractionAggregates, _recalcAGCAggForHH) and the authoritative server calculate_agc, per the documented "all builders stay in sync" invariant. (1) DEDUPE KEY: bump was trimming notes ((notes||'').trim()) while every other path keys on RAW untrimmed coalesce(notes,''), so a note with surrounding whitespace deduped differently live vs a reload. Now untrimmed. (2) SIGNIFICANT FLAG: bump set a.significant AFTER the dedupe early-return, so a couple's second (deduped) row marked "this mattered" was dropped live until the next reload — the household lost its 4 Affinity points in the local fallback score. Now set BEFORE the return, matching the builder + server (a household is significant if EITHER row is marked; The Prospect Score manual: worth 4 if a household has ANY interaction marked). NO scoring math, thresholds, bands, or copy touched. VERIFIED: both blocks node --check clean; both sentinels present; a stubbed VM harness (no live DB) proves load==bump for lastContact/connected12/lifetime/reachDates/significant, future+Note exclusion, check-in-window clamps, Hebrew Yom Tov dates, and 8000-household scoring with no NaN/throw. Prior stamp .3 note below. // PROSPECT FINDER — the rest of the copy pass, plus the app-wide §4 sweep it prompted. PF LEFTOVERS (all shipped in .1 before HANDOFF §4 existed): the Get to Know banner was 48 words of pre-rules prose because it is `_gapCaveat()`, shared code inherited from the retired Gap dropdown — rewritten to 24 and now names the fix ('Add a street address to include them'). The five Engine Settings rows had four §4 problems at once — em-dash instead of brackets, 'ceiling' as a visible label, ranking explanations in the hints, fragment grammar ('Days.', 'Smaller = …') — all rewritten, and the section blurb with them. Metric labels capitalised (Capacity/Affinity/Overdue) since the pillars are named vocabulary. 'thin data' chip -> 'rough score'. Last gift now renders through a new `_monthYear()` ('November 2025') so it matches last contact rendering through `_agoWords`. 'Marked reviewed' toast lost its second clause. NEW `pf-page` ? panel on the page heading answering the question the shortened subtitle no longer does — how this page differs from the Daily Five — which is where that belongs. APP-WIDE SWEEP: 'Saved!' -> 'Saved' and 'Copied!' -> 'Copied' (rule 9); the profile's Check-in stat printed 'every 42d' and now reads 'about every six weeks' via `_everyWords`, its tooltip rewritten. DELIBERATELY LEFT: the public form's 'Thank you!' defaults (a donor-facing thank-you is a different register from app chrome), and the raw day counts in the Contacts 'Days Since' column and the Active Tracks 'Nd late' cell — both are sortable data grids where the number IS the content, which is the one standing exception to the no-raw-days rule. NO LOGIC TOUCHED anywhere: copy, one new date helper, one new help panel. VERIFIED: both blocks node --check clean, both sentinels present, helpers executed against real inputs (_monthYear, _everyWords, _gapCaveat), all four PF ? panels inside the 120-word budget (98/56/45/69), §4 grep clean over the PF region.
-const _PAGE_LOADED_AT=Date.now(); // used by the deploy stale-tab guard
+// Pre-Launch Audit M8: removed dead _PAGE_LOADED_AT (a "stale-tab guard" that was never wired). Real auto-refresh is the controllerchange->reload in _mRegisterSW (sw.js already skipWaiting()+clients.claim()).
 console.log('DAAS build '+BUILD_STAMP);
 
 // ── CHROME CREDENTIAL-PROMPT SUPPRESSION ──────────────────────────────────
@@ -1965,6 +1963,7 @@ let SB_KEY='';
 const TENANT_RESOLVER_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/resolve-tenant';
 const CENTRAL_ZILLOW_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/zillow-proxy';
 const TENANT_CACHE_KEY='daas_tenant';
+const TENANT_CACHE_TTL_MS=12*60*60*1000; // Pre-Launch Audit L10: re-resolve the workspace mapping at least this often so a re-keyed/migrated tenant can't pin a returning browser to a stale URL/key.
 // ── NO PROVIDER KEYS, AND NO MODEL NAMES, IN THE BROWSER (2026-08-17) ────
 // ANTHROPIC_KEY / OPENAI_KEY / RAPIDAPI_KEY and their localStorage entries
 // (crm_ant_key / crm_oai_key / crm_rapid_key) are GONE. Every AI and data call
@@ -2228,12 +2227,22 @@ async function resolveWorkspace(){
   btn.textContent='Finding your workspace…';btn.disabled=true;
   try{
     let tenant=null;
-    try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(cached?.email===email&&_tenantIsSafe(cached))tenant=cached;}catch(_){}
+    try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(cached?.email===email&&_tenantIsSafe(cached)&&(Date.now()-(cached.cachedAt||0)<TENANT_CACHE_TTL_MS))tenant=cached;}catch(_){} // L10: honour cache TTL
     if(!tenant){
-      const response=await fetch(TENANT_RESOLVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+      // Pre-Launch Audit M6: the tenant resolver is the single front door; give it
+      // a short timeout + a legible message so a slow control plane can't hang
+      // sign-in on "Finding your workspace..." with no way out.
+      const _rc=new AbortController();
+      const _rt=setTimeout(()=>_rc.abort(),12000);
+      let response;
+      try{
+        response=await fetch(TENANT_RESOLVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email}),signal:_rc.signal});
+      }catch(fe){
+        throw new Error(_rc.signal.aborted?'Couldn’t reach the workspace service — check your connection and try again.':((fe&&fe.message)||'We could not find that workspace.'));
+      }finally{clearTimeout(_rt);}
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.error||'We could not find that workspace.');
-      tenant={...body,email};localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(tenant));
+      tenant={...body,email,cachedAt:Date.now()};localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(tenant)); // L10: stamp resolve time
     }
     _configureTenant(tenant);_setLoginStage('password');document.getElementById('loginPassword').focus();return true;
   }catch(e){
@@ -2243,6 +2252,9 @@ async function resolveWorkspace(){
 function changeWorkspace(){
   _sb=null;SB_URL='';SB_KEY='';_authToken=null;_setLoginStage('email');
   try{localStorage.removeItem(TENANT_CACHE_KEY);}catch(_){}
+  // Pre-Launch Audit H5: drop cached per-tenant scalars so switching workspaces on
+  // one browser can't bleed one shul private context (or tz/form) into another.
+  try{localStorage.removeItem('ci_context');localStorage.removeItem('search_context');localStorage.removeItem('form_origin');localStorage.removeItem('stripe_pk');localStorage.removeItem('daas_tz');}catch(_){}
   document.getElementById('loginPassword').value='';document.getElementById('loginEmail').focus();
 }
 async function resetPassword(){
@@ -2454,9 +2466,24 @@ async function sbAll(path,pageSize=1000){
 // America/New_York wall-clock, matching the edge functions' todayLocalISO().
 // The app's "day" is the shul's day regardless of what timezone the device is
 // in. (A settings knob for other communities is parked for later.)
-const DAAS_TZ='America/New_York';
-function _countyLabel(c){if(!c)return 'County Unknown';if(c==='gea')return 'Geauga County';if(c==='cuy')return 'Cuyahoga County';if(c==='unk')return 'County Unknown';return /county/i.test(c)?c:c+' County';}
-const _estFmt=new Intl.DateTimeFormat('en-CA',{timeZone:DAAS_TZ,year:'numeric',month:'2-digit',day:'2-digit'});
+let DAAS_TZ='America/New_York';
+function _countyLabel(c){if(!c)return 'County Unknown';if(c==='unk')return 'County Unknown';return /county/i.test(c)?c:c+' County';}
+let _estFmt=new Intl.DateTimeFormat('en-CA',{timeZone:DAAS_TZ,year:'numeric',month:'2-digit',day:'2-digit'});
+// Pre-Launch Audit H3: the app day must be the shul local day, not Ohio time. The
+// provisioner records each tenant zone in app_settings.daas_tz; loadDaasTz() reads
+// it at login and re-points DAAS_TZ + the cached formatter. Eastern stays the
+// fallback so the legacy instance is unchanged. Money amounts are tz-independent.
+function _applyDaasTz(tz){
+  if(!tz||typeof tz!=='string')return;
+  try{ new Intl.DateTimeFormat('en-CA',{timeZone:tz}); }catch(_){ return; }
+  DAAS_TZ=tz;
+  _estFmt=new Intl.DateTimeFormat('en-CA',{timeZone:DAAS_TZ,year:'numeric',month:'2-digit',day:'2-digit'});
+  try{localStorage.setItem('daas_tz',tz);}catch(_){}
+}
+try{const _tz=localStorage.getItem('daas_tz');if(_tz)_applyDaasTz(_tz);}catch(_){}
+async function loadDaasTz(){
+  try{ const rows=await sb('app_settings?key=eq.daas_tz&select=value'); if(rows&&rows.length&&rows[0].value)_applyDaasTz(String(rows[0].value).trim()); }catch(e){}
+}
 function localDateStr(d){const x=(d instanceof Date)?d:new Date(d);return _estFmt.format(x);} // Date/timestamp → 'YYYY-MM-DD' in Eastern
 function localToday(offsetDays=0){const d=new Date();if(offsetDays)d.setDate(d.getDate()+offsetDays);return localDateStr(d);}
 // Calendar days between a date-only string and Eastern today. Parses BOTH sides
@@ -2766,6 +2793,7 @@ function _removeMarker(m){ if(!m)return; if(clusterGroup&&clusterGroup.hasLayer(
 
 // ── STATE ──
 let households=[],filtered=[],markers=[],activeIdx=-1;
+let _dataLoaded=false; // Pre-Launch Audit M7: true once loadAll finishes, so empty != still-loading
 let hiddenHouseholds=[]; // households with hidden=true — kept out of main views & AI roster
 let agcCache={}; // household.id -> {total,affinity,generosity,capacity,detail}
 
@@ -2876,6 +2904,7 @@ async function _awaitClockSkewClear(maxTries=4){
 }
 
 async function loadAll(){
+  _dataLoaded=false; // Pre-Launch Audit M7
   households=[];filtered=[];markers.forEach(m=>m&&_removeMarker(m));markers=[];activeIdx=-1;
   if(clusterGroup)clusterGroup.clearLayers();
     for(const k in _interToHH)delete _interToHH[k];
@@ -2892,6 +2921,7 @@ async function loadAll(){
     try{await _ebLoadOrg();}catch(e){} // hydrate org branding from app_settings before any email UI/send
     try{_refreshOrgLabel();}catch(e){} // show org name/logo in the menu label
     try{await loadFormOrigin();}catch(e){} // tenant's public form domain for embed codes
+    try{await loadDaasTz();}catch(e){} // Pre-Launch Audit H3: per-tenant timezone before any date math renders
     // Push is origin-wide, but every resolved tenant owns a different VAPID pair.
     // Hydrate the tenant's public half before the settings UI becomes reachable,
     // then repair any existing subscription without holding up the main data load.
@@ -3044,6 +3074,7 @@ async function loadAll(){
       loadUIPrefs().catch(e=>console.warn('[DAAS] loadUIPrefs failed',e)),
       loadOutreachTracks().catch(e=>console.warn('[DAAS] loadOutreachTracks failed',e))
     ]);
+    _dataLoaded=true; // Pre-Launch Audit M7: load finished; empty now means "no contacts yet"
     switchView(_uiPrefs.landing||'dash');
 
   }catch(e){
@@ -3974,7 +4005,7 @@ function _renderListRow(h){
   const valStr=h.home_value?'$'+Math.round(h.home_value).toLocaleString():'';
   const g=getGivingStats(h);
   const agc=getAGCScore(h);
-  const scoreColor=agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)';
+  const scoreColor=agc.total>0?(agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   return`<div class="citem${i===activeIdx?' active':''}" onclick="byId('selectHousehold','${h.id}',${i})" oncontextmenu="_hideCtxMenu(event,'${h.id}')">
       <div class="pindot ${tier==='grey'?'':tier}">${i+1}</div>
       <div style="flex:1;min-width:0">
@@ -4080,11 +4111,11 @@ function setProp(mode,h,result){
   if(mode==='hint'){el.innerHTML='<div class="hint"><div class="hi"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg></div><p>Pick somebody to see their details</p></div>';return;}
   const idx=hIdx(h.id);
   const countyLabel=h.noAddress?'No Address':_countyLabel(h.county);
-  const tagClass=h.noAddress?'unk':h.county==='gea'?'gea':h.county==='cuy'?'cuy':'unk';
+  const tagClass='unk'; // L12: Ohio-only gea/cuy colour-coding removed (county is data-derived)
   const giving=getGivingStats(h);
 
   const liveScore=getProspectScore(h);
-  const scoreColor=liveScore>=70?'var(--green)':liveScore>=40?'var(--amber)':'var(--red)';
+  const scoreColor=liveScore>0?(liveScore>=70?'var(--green)':liveScore>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const header=`<div class="pinner" style="padding-bottom:6px;position:relative">
     <button onclick="setProp('hint')" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--txt3);padding:2px 6px;border-radius:4px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <button onclick="byId('openFullPanel','${households[idx].id}',${idx})" style="position:absolute;top:8px;right:28px;background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:2px 4px;border-radius:4px" title="Full screen view"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
@@ -4096,7 +4127,7 @@ function setProp(mode,h,result){
       ${(()=>{
         const agc=getAGCScore(h);
         if(agc.total===0)return'';
-        const sc=agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)';
+        const sc=agc.total>0?(agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)'):'var(--grey)';
         return `<span style="font-family:var(--font-ui);font-size:.58rem;color:${sc};background:rgba(0,0,0,.04);padding:2px 6px;border-radius:3px" title="Affinity: ${agc.affinity}/40 · Generosity: ${agc.generosity}/30 · Capacity: ${agc.capacity}/30">Score: ${agc.total}/100</span>`;
       })()}
     </div>
@@ -5003,7 +5034,7 @@ function placePinAt(i){
   const agcT=getAGCScore(h);
   const valStr=h.home_value?'<svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> $'+Math.round(h.home_value).toLocaleString():'';
   const givStr=g?'<svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7ZM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7Z"/></svg> $'+Math.round(g.total).toLocaleString()+' · '+g.count+' gift'+(g.count!==1?'s':''):'';
-  const scoreColor=agcT.total>=70?'#15803d':agcT.total>=40?'#a16207':'#b91c1c';
+  const scoreColor=agcT.total>0?(agcT.total>=70?'#15803d':agcT.total>=40?'#a16207':'#b91c1c'):'#a29d94';
   const tooltip=`<div style="font-family:var(--font-ui);min-width:180px">
     <div style="font-weight:600;font-size:.82rem;margin-bottom:3px">${_escHtml(h.displayName)}</div>
     <div style="font-size:.7rem;color:#666;margin-bottom:4px">${_escHtml((h.address||'')+', '+(h.city||''))}</div>
@@ -5755,7 +5786,7 @@ function buildProfileDisplay(p, idx, newInteractions, newDonations, containerId)
   const _hh=(typeof households!=='undefined'&&households[idx])||null;
   const _agc=_hh&&typeof getAGCScore==='function'?getAGCScore(_hh):{total:0};
   const prospectScore=_agc.total||0;
-  const scoreColor=prospectScore>=70?'var(--green)':prospectScore>=40?'var(--amber)':'var(--red)';
+  const scoreColor=prospectScore>0?(prospectScore>=70?'var(--green)':prospectScore>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const stale=_profileStaleness(p,idx,newInteractions??null,newDonations??null);
   const lastUpdated=p.softBuiltAt&&p.softBuiltAt>p.builtAt?p.softBuiltAt:p.builtAt;
   const badgeHtml=stale.suggestFull
@@ -6630,7 +6661,7 @@ function openFullPanel(idx){
   const agc=getAGCScore(h);
   const g=getGivingStats(h);
   const score=agc.total;
-  const scoreColor=score>=70?'var(--green)':score>=40?'var(--amber)':'var(--red)';
+  const scoreColor=score>0?(score>=70?'var(--green)':score>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const data=h.property_data||{};
   const _profileRaw=h.profile_data||null;
   // AI-generated profile prose can echo content from notes/web search; escape every
@@ -6660,6 +6691,20 @@ function openFullPanel(idx){
   const memberIds=(h.members||[]).map(m=>'"'+m.id+'"').join(',');
   
   const renderFull = (interactions) => {
+    // Pre-Launch Audit H6: a couple logged together writes one interaction row per
+    // member (by design). Dedup by type|date|notes -- the same key the Activity tab,
+    // heatmap, Wins and mobile-recent already use -- so the Timeline shows one entry
+    // per touch (not one per spouse) and the count is not doubled. Every member id
+    // is kept on _ids so a delete removes all copies.
+    {
+      const _seen=new Map(); const _dd=[];
+      for(const i of interactions){
+        const _k=(i.type||'')+'|'+(i.date||'')+'|'+(i.notes||'');
+        if(_seen.has(_k)){ const e=_seen.get(_k); (e._ids=e._ids||[e.id]).push(i.id); if(i.significant)e.significant=true; continue; }
+        const e=Object.assign({},i,{_ids:[i.id]}); _seen.set(_k,e); _dd.push(e);
+      }
+      interactions=_dd;
+    }
     const notes=interactions.filter(i=>i.type==='Note');
     const activities=interactions.filter(i=>i.type!=='Note');
     // Compute staleness for badges
@@ -6670,8 +6715,8 @@ function openFullPanel(idx){
     
     // Build unified timeline: notes + activities + donations
     const timeline=[];
-    interactions.forEach(i=>timeline.push({date:i.date,sort:_localDate(i.date),type:i.type==='Note'?'note':'activity',label:i.type,text:i.notes||'',id:i.id,significant:!!i.significant}));
-    if(g)g.donations.forEach(d=>timeline.push({date:d.date,sort:_localDate(d.date),type:'donation',label:'Donation',amount:d.amount,method:d.method||null,text:d.notes||'',id:d.id}));
+    interactions.forEach(i=>timeline.push({date:i.date,sort:_localDate(i.date),type:i.type==='Note'?'note':'activity',label:i.type,text:i.notes||'',id:i.id,ids:(i._ids||[i.id]).join(','),significant:!!i.significant}));
+    if(g)g.donations.forEach(d=>timeline.push({date:d.date,sort:_localDate(d.date),type:'donation',label:'Donation',amount:d.amount,method:d.method||null,text:d.notes||'',id:d.id,ids:String(d.id)}));
     timeline.sort((a,b)=>b.sort-a.sort);
 
     const timelineHtml=timeline.length?timeline.map(t=>{
@@ -6686,7 +6731,7 @@ function openFullPanel(idx){
               <div class="fp-tl-date">${fd(t.date)}</div>
               <button onclick="editTimelineItem('${t.id}','${t.type}',this.dataset.text,'${t.date}',${idx})" data-text="${(t.text||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" style="background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:1px 3px" title="Edit"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
               ${t.type==='donation'?`<button onclick="moveDonation('${t.id}')" style="background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:1px 3px" title="Reassign to another contact"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l-3 3 3 3M2 12h13M19 5l3 3-3 3M22 8h-9M9 21h10a2 2 0 0 0 2-2v-3"/></svg></button>`:''}
-              <button onclick="deleteTimelineItem('${t.id}','${t.type}',${idx})" style="background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:1px 3px" title="Delete"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/><path d="M10 11v6M14 11v6"/></svg></button>
+              <button onclick="deleteTimelineItem('${t.ids||t.id}','${t.type}',${idx})" style="background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:1px 3px" title="Delete"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6"/><path d="M10 11v6M14 11v6"/></svg></button>
             </div>
           </div>
           ${t.text?`<div class="fp-tl-text">${t.text}</div>`:''}
@@ -7306,8 +7351,11 @@ async function editTimelineItem(id, type, textOrEvent, currentDate, idx){
 }
 
 async function deleteTimelineItem(id, type, idx){
+  // Pre-Launch Audit H6: `id` may be a comma-joined group (all member copies of one
+  // couple-logged touch). Delete every copy; the primary id drives index lookups.
+  const _ids=String(id).split(',').filter(Boolean); id=_ids[0];
   const label=type==='donation'?'donation':type==='note'?'note':'interaction';
-  if(!confirm(`Delete this ${label}?`))return;
+  if(!confirm(_ids.length>1?`Delete this ${label}? It’s logged against ${_ids.length} household members, so all copies go.`:`Delete this ${label}?`))return;
   try{
     const _fix=hIdxByRecord(id,type==='donation'?'donation':'interaction');
     if(_fix>=0)idx=_fix;
@@ -7322,7 +7370,10 @@ async function deleteTimelineItem(id, type, idx){
         refreshAGCScore(_h.id).then(()=>recolorAll()).catch(()=>{});
       }
     }else{
-      await sb('interactions?id=eq.'+id,{method:'DELETE'});
+      for(const _iid of _ids){
+        try{await sb('interactions?id=eq.'+_iid,{method:'DELETE'});}catch(e){console.warn('[DAAS] timeline delete failed for',_iid,e);}
+        try{_clearInteractionEmbedding(_iid);}catch(e){}
+      }
       // Mirror deleteInteraction: rebuild the aggregate + refresh the score so
       // warmth/tier don't stay stale until reload (this branch previously did neither).
       if(_h){
@@ -8266,6 +8317,12 @@ async function loadGlobalContext(){
       if(ta)ta.value=ctx;
       return ctx;
     }
+    // Pre-Launch Audit H5: query succeeded with no row -> this tenant has no
+    // context. Clear any cached value so we never inherit the previous
+    // workspace private notes (loadFormOrigin already does this).
+    localStorage.removeItem('ci_context');
+    const _ta=document.getElementById('globalContext'); if(_ta)_ta.value='';
+    return '';
   }catch(e){}
   return localStorage.getItem('ci_context')||'';
 }
@@ -8297,6 +8354,10 @@ async function loadSearchContext(){
       if(ta)ta.value=ctx;
       return ctx;
     }
+    // Pre-Launch Audit H5: no row for this tenant -> clear cache, don't inherit.
+    localStorage.removeItem('search_context');
+    const _ta=document.getElementById('searchContext'); if(_ta)_ta.value='';
+    return '';
   }catch(e){}
   return localStorage.getItem('search_context')||'';
 }
@@ -8598,7 +8659,13 @@ async function _daasLoadVapidPublic(){
   // A present-but-empty/invalid row is a provisioning error, not a legacy tenant.
   // Fall back only when the row itself is absent.
   const hasTenantKey=!!(rows&&rows.length);
-  const candidate=hasTenantKey?String(rows[0].value||'').trim():DAAS_LEGACY_VAPID_PUBLIC;
+  // Pre-Launch Audit L11: only the original single-tenant (legacy) project may use the
+  // built-in key. A newly provisioned tenant with no vapid_public row yet must NOT subscribe
+  // with the legacy key (those pushes would never arrive) — push stays unavailable until the
+  // provisioner writes the tenant's own key.
+  const _isLegacyTenant=/\/\/sdzbzdoncakpsnfapbxj\./.test(SB_URL||'');
+  const candidate=hasTenantKey?String(rows[0].value||'').trim():(_isLegacyTenant?DAAS_LEGACY_VAPID_PUBLIC:'');
+  if(!candidate){console.warn('[DAAS] no tenant VAPID public key yet — push unavailable');return null;}
   try{_daasVapidBytes(candidate);}
   catch(e){console.warn('[DAAS] invalid tenant VAPID public key',e);return null;}
   _daasVapidPublic=candidate;
@@ -8689,7 +8756,17 @@ window.addEventListener('DOMContentLoaded',async()=>{
   if(typeof DEMO_MODE!=='undefined'&&DEMO_MODE){
     try{session=(await _sb.auth.getSession()).data.session;}catch(_){}
   }else{
-    try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(_tenantIsSafe(cached)){_configureTenant(cached);session=(await _sb.auth.getSession()).data.session;}}catch(_){}
+  try{
+    let cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');
+    if(cached&&_tenantIsSafe(cached)){
+      // Pre-Launch Audit L10: a cached mapping older than the TTL is silently re-resolved so a
+      // re-keyed/migrated workspace is picked up. Best-effort — the cached value is kept on any failure (offline).
+      if(cached.email&&(Date.now()-(cached.cachedAt||0)>=TENANT_CACHE_TTL_MS)){
+        try{const _c=new AbortController();const _t=setTimeout(()=>_c.abort(),8000);let _r;try{_r=await fetch(TENANT_RESOLVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:cached.email}),signal:_c.signal});}finally{clearTimeout(_t);}if(_r&&_r.ok){const _b=await _r.json().catch(()=>null);const _fresh=_b?{..._b,email:cached.email,cachedAt:Date.now()}:null;if(_fresh&&_tenantIsSafe(_fresh)){cached=_fresh;localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(_fresh));}}}catch(_){/* keep cached mapping */}
+      }
+      _configureTenant(cached);session=(await _sb.auth.getSession()).data.session;
+    }
+  }catch(_){}
   }
   if(session){_authToken=session.access_token;showApp();}
   else{
@@ -11779,6 +11856,12 @@ async function openFormsSettings(){
       +'<label class="fb-lbl">Forms URL</label>'
       +'<input id="fs_form_origin" class="fb-in" type="url" value="'+A((localStorage.getItem('form_origin')||''))+'" placeholder="https://forms.yourdomain.org">'
     +'</div>'
+    +'<div class="fb-section"><h3>Payments (Stripe)</h3>'
+      +'<div class="fb-hint">Your Stripe <b>publishable</b> key powers the card box on your donation forms. Find it in Stripe &rarr; Developers &rarr; API keys. It is safe to paste here.</div>'
+      +'<label class="fb-lbl">Stripe publishable key</label>'
+      +'<input id="fs_stripe_pk" class="fb-in" type="text" value="'+A((localStorage.getItem('stripe_pk')||''))+'" placeholder="pk_live_\u2026 or pk_test_\u2026">'
+      +'<div class="fb-hint" style="margin-top:8px">Your Stripe <b>secret</b> key and OpenAI key are private \u2014 add those during signup, or in your Supabase project settings. They are never entered in the browser.</div>'
+    +'</div>'
     +'<div class="fb-section"><h3>Default sender</h3>'
       +'<div class="fb-hint">Used unless a form overrides it in its step&nbsp;4.</div>'
       +'<label class="fb-lbl">From / reply-to name</label>'
@@ -11819,6 +11902,17 @@ async function saveFormsSettings(){
   try{
     await sbSetSetting('confirm_email_settings',JSON.stringify(s));
     try{ const fo=g('fs_form_origin').value.trim(); if(fo)localStorage.setItem('form_origin',fo); else localStorage.removeItem('form_origin'); await sbSetSetting('form_origin',fo); }catch(e){}
+    try{
+      const pk=(g('fs_stripe_pk')?g('fs_stripe_pk').value.trim():'');
+      if(pk)localStorage.setItem('stripe_pk',pk); else localStorage.removeItem('stripe_pk');
+      await sbSetSetting('stripe_pk',pk);
+      for(const f of (_forms||[])){
+        try{
+          const cfg=Object.assign({}, (f&&typeof f.stripe_config==='object'&&f.stripe_config)?f.stripe_config:{});
+          if((cfg.pk||'')!==pk){ if(pk)cfg.pk=pk; else delete cfg.pk; await sb('forms?slug=eq.'+encodeURIComponent(f.slug),{method:'PATCH',body:JSON.stringify({stripe_config:cfg})}); f.stripe_config=cfg; }
+        }catch(_){}
+      }
+    }catch(e){}
     _fsSettings=s;
     document.getElementById('formsSettingsModal').style.display='none';
     if(typeof _ebToastMsg==='function')_ebToastMsg('Email settings saved');
@@ -12326,6 +12420,7 @@ function _ecBuildFormPayload(){
     return o;
   });
 
+  const _pk=(localStorage.getItem('stripe_pk')||'').trim(); if(_pk&&sc&&sc.cfg&&typeof sc.cfg==='object')sc.cfg.pk=_pk;
   return {payload:{
     slug,
     type:isDon?'donation':'event',
@@ -13871,7 +13966,7 @@ async function _fbDeleteBySlug(slug){
 
 // ── EMBED CODE (auto-height iframe) ──
 function _fbFormOrigin(){try{return (localStorage.getItem('form_origin')||'').trim();}catch(e){return '';}}
-async function loadFormOrigin(){try{const rows=await sb('app_settings?key=eq.form_origin&select=value');if(rows&&rows.length)localStorage.setItem('form_origin',(rows[0].value||'').trim());}catch(e){}}
+async function loadFormOrigin(){try{const rows=await sb('app_settings?key=in.(form_origin,stripe_pk)&select=key,value');if(rows&&rows.length){for(const r of rows){const v=(r.value||'').trim();if(r.key==='form_origin'){if(v)localStorage.setItem('form_origin',v);else localStorage.removeItem('form_origin');}else if(r.key==='stripe_pk'){if(v)localStorage.setItem('stripe_pk',v);else localStorage.removeItem('stripe_pk');}}}}catch(e){}}
 function _fbShowEmbed(slug){
   const FB_FORM_ORIGIN=_fbFormOrigin();
   if(!FB_FORM_ORIGIN){
@@ -17252,7 +17347,7 @@ const CT_COLS={
   name:{label:'Household',val:h=>h.displayName||'',html:h=>`<div style="font-weight:600">${_escHtml(h.displayName||'')}</div><div class="ct-sub">${_escHtml(h.noAddress?'No address on file':((h.address||'')+(h.city?', '+h.city:'')))}</div>`},
   email:{label:'Email',val:h=>((h.members||[]).map(m=>m.email).filter(Boolean)[0]||''),html:h=>(h.members||[]).filter(m=>m.email).map(m=>`<div>${_escHtml(m.first_name)}: ${_escHtml(m.email)}</div>`).join('')||'<span class="ct-sub">—</span>'},
   phone:{label:'Phone',val:h=>((h.members||[]).map(m=>m.phone).filter(Boolean)[0]||''),html:h=>(h.members||[]).filter(m=>m.phone).map(m=>`<div>${_escHtml(m.first_name)}: ${_escHtml(m.phone)}</div>`).join('')||'<span class="ct-sub">—</span>'},
-  agc:{label:'Prospect',val:h=>getAGCScore(h).total,html:h=>{const t=getAGCScore(h).total;const c=t>=70?'var(--green)':t>=40?'var(--amber)':'var(--red)';return `<span style="font-family:var(--font-ui);font-weight:700;color:${c}">${t}</span>`;}},
+  agc:{label:'Prospect',val:h=>getAGCScore(h).total,html:h=>{const t=getAGCScore(h).total;const c=t>0?(t>=70?'var(--green)':t>=40?'var(--amber)':'var(--red)'):'var(--grey)';return `<span style="font-family:var(--font-ui);font-weight:700;color:${c}">${t}</span>`;}},
   homeValue:{label:'Home Value',val:h=>h.home_value||0,html:h=>h.home_value?'$'+Math.round(h.home_value).toLocaleString():'<span class="ct-sub">—</span>'},
   lastContact:{label:'Last Contact',val:h=>(_agcInterAgg[h.id]||{}).lastContact||'',html:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;return lc||'<span class="ct-sub">never</span>';}},
   daysSince:{label:'Days Since',val:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;const d=_daysSince(lc);return d==null?99999:d;},csv:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;if(!lc)return 'never';const d=_daysSince(lc);return d==null?'never':String(d);},html:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;if(!lc)return '<span style="color:var(--red);font-family:var(--font-ui)">never</span>';const d=_daysSince(lc)??0;const c=d<=30?'var(--green)':d<=90?'var(--amber)':'var(--red)';return `<span style="font-family:var(--font-ui);color:${c}">${d}d</span>`;}},
@@ -17774,7 +17869,7 @@ async function renderWins(){
   rows=rows.filter(r=>{
     const info=contactMap[r.contact_id];
     const hh=info?info.hhId:('c:'+r.contact_id);
-    const key=hh+'|'+r.type+'|'+r.date+'|'+((r.notes||'').trim());
+    const key=hh+'|'+r.type+'|'+r.date+'|'+(r.notes||'');
     if(_seenWin.has(key))return false;
     _seenWin.add(key);return true;
   }).slice(0,10);
@@ -18226,9 +18321,18 @@ function pinSearchFilter(){
   dd.style.display='block';
 }
 
+// Pre-Launch Audit M7: distinguish "still loading" from "loaded, zero contacts".
+function _noContactsMarkup(mobile){
+  const _loaded=(typeof _dataLoaded!=='undefined')&&_dataLoaded;
+  if(mobile) return _loaded?'<div class="m-empty">No contacts yet. Add your first contact, or import your list, to start your Daily Five.</div>':'<div class="m-empty">Loading your contacts&hellip;</div>';
+  const flame='<svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 4 4 5 5 7 1-2 5-3 5-7M7 21c0-4 4-5 5-7 1 2 5 3 5 7"/></svg>';
+  const msg=_loaded?'No contacts yet. Add your first contact, or import your list, and your Daily Five will appear here.':'Loading your contacts&hellip;';
+  return '<div class="hint"><div class="hi">'+flame+'</div><p>'+msg+'</p></div>';
+}
 function renderDailyFive(){
   const el=document.getElementById('body-panel-daily5');
-  if(!el||!households.length){if(el)el.innerHTML='<div class="hint"><div class="hi"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 4 4 5 5 7 1-2 5-3 5-7M7 21c0-4 4-5 5-7 1 2 5 3 5 7"/></svg></div><p>Loading your contacts&hellip;</p></div>';return;}
+  if(!el)return;
+  if(!households.length){el.innerHTML=_noContactsMarkup(false);return;}
   el.innerHTML='<div class="hint"><div class="hi"><div class="spin" style="width:20px;height:20px;border-width:3px"></div></div><p style="margin-top:8px">Building your Daily Five&hellip;</p></div>';
   _buildDailyFive(el);
 }
@@ -20023,7 +20127,7 @@ async function renderSRI(){
   connectedRows.forEach(r=>{
     const hhid=contactHHMap[r.contact_id];
     if(!hhid)return;
-    const key=r.type+'|'+r.date+'|'+((r.notes||'').trim());
+    const key=r.type+'|'+r.date+'|'+(r.notes||'');
     const seen=_sriSeen[hhid]||(_sriSeen[hhid]=new Set());
     if(seen.has(key))return; // same conversation, second spouse — one household touch
     seen.add(key);
@@ -20382,7 +20486,7 @@ function _pfBuildTab(tab){
 function renderProspectFinder(){
   const wrap=document.getElementById('prospectsViewInner');
   if(!wrap)return;
-  if(!households.length){wrap.innerHTML='<div class="hint">'+_PF_EMPTY_SVG+'<p>Loading your contacts&hellip;</p></div>';return;}
+  if(!households.length){wrap.innerHTML='<div class="hint">'+_PF_EMPTY_SVG+'<p>'+((typeof _dataLoaded!=='undefined'&&_dataLoaded)?'No contacts yet. Add your first contact, or import your list, to see prospects here.':'Loading your contacts&hellip;')+'</p></div>';return;}
   const tabs=[
     {id:'getToKnow',label:'Get to Know',help:'pf-getToKnow'},
     {id:'inviteToGive',label:'Invite to Give',help:'pf-inviteToGive'},
@@ -20757,7 +20861,7 @@ function _rpCols(entity,groupMode){
       cols.giving_this_year={label:'Giving '+yrNow,get:r=>((R().h[r.id]||{}).byYear||{})[yrNow]||0,num:true};
       cols.giving_last_year={label:'Giving '+(yrNow-1),get:r=>((R().h[r.id]||{}).byYear||{})[yrNow-1]||0,num:true};
       cols.members={label:'Members',get:r=>(r.members||[]).map(_daasDisplayName).join('; ')};
-      cols.county={label:'County',get:r=>{var c=r.county;if(!c||c==='unk')return '';if(c==='gea')return 'Geauga';if(c==='cuy')return 'Cuyahoga';return c;}};
+      cols.county={label:'County',get:r=>{var c=r.county;if(!c||c==='unk')return '';return c;}};
       cols.daas_id={label:'DAAS IDs',get:r=>(r.members||[]).map(m=>m.daas_id).filter(v=>v!=null&&v!=='').map(v=>'#'+v).join('; ')};
       cols.external_ids={label:'External IDs',get:r=>(r.members||[]).map(m=>m.external_id).filter(Boolean).join('; ')};
     }else{ // donation donor-mode aggregates over the FILTERED result set
@@ -22425,9 +22529,18 @@ async function _mIngestSharedPayload(){
 
 /* Register the service worker (needed for the Android share target) */
 function _mRegisterSW(){
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  }
+  if(!('serviceWorker' in navigator))return;
+  // Pre-Launch Audit M8: register, then reload ONCE when a newly-deployed service
+  // worker takes control, so a long-open tab picks up the new build instead of
+  // running stale code indefinitely. sw.js calls skipWaiting()+clients.claim(), so
+  // the new SW activates immediately; the guard flag prevents a reload loop, and we
+  // only reload when REPLACING an existing controller (never on first install).
+  const _hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  let _swReloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(_swReloaded||!_hadController)return; _swReloaded=true; try{location.reload();}catch(_){}
+  });
 }
 
 
@@ -22516,7 +22629,7 @@ async function mRenderRecent(){
 async function mRenderD5(){
   const host=document.getElementById('mD5host');
   if(!host) return;
-  if(!households.length){ host.innerHTML='<div class="m-empty">Loading your contacts&hellip;</div>'; return; }
+  if(!households.length){ host.innerHTML=_noContactsMarkup(true); return; }
   host.innerHTML='<div class="m-card m-card-pad" style="text-align:center;color:var(--txt3)"><div class="spin" style="width:22px;height:22px;border-width:3px;margin:6px auto"></div><div style="margin-top:8px;font-size:.8rem">Building your Daily Five&hellip;</div></div>';
   try{
     _mD5Cards = await _computeDailyQueue();
@@ -22822,7 +22935,7 @@ function mRenderRoster(){
     const letter=/[A-Z]/.test(L)?L:'#';
     if(letter!==curLetter){ curLetter=letter; letters.add(letter); html+=`<div class="m-alpha-head" id="mAlpha-${letter}">${letter}</div>`; }
     const agc=getAGCScore(h).total;
-    const c=agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)';
+    const c=agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)';
     const initials=(_mLastName(h)[0]||(h.displayName||'?')[0]||'?').toUpperCase();
     const sub=h.noAddress?'No address':((h.city||h.address||'').toString());
     html+=`<div class="m-rost-row" onclick="mOpenSheetById('${h.id}')">
@@ -23121,8 +23234,8 @@ function mSheetHide(hid){ mCloseSheet(); hideHousehold(hid); try{ if(typeof mRen
 const M_TAP_TOL=24, M_STACK_TOL=14;
 let _mSelHhId=null, _mMapSearchDebounce=null;
 
-function _mPinColor(h){ const agc=getAGCScore(h).total; return agc>=70?'#15803d':agc>=40?'#a16207':'#b91c1c'; }
-function _mScoreVar(agc){ return agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'; }
+function _mPinColor(h){ const agc=getAGCScore(h).total; return agc>0?(agc>=70?'#15803d':agc>=40?'#a16207':'#b91c1c'):'#a29d94'; }
+function _mScoreVar(agc){ return agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)'; }
 
 /* Pure geometry, so it is testable with no map and no DOM.
    pins: [{x,y,id}] in container pixels. Returns null (empty space) or
@@ -23404,7 +23517,7 @@ function _mFindRender(){
   try{ matches=_rankMatches(matches,q,nq); }catch(e){}
   const rows=matches.slice(0,60).map(h=>{
     const agc=getAGCScore(h).total;
-    const c=agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)';
+    const c=agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)';
     const initials=((_mLastName(h)[0])||(h.displayName||'?')[0]||'?').toUpperCase();
     let snip='';
     try{ if(!nameHit(h)&&typeof _popoutSnippet==='function')snip=_popoutSnippet(h,q); }catch(e){}
