@@ -118,6 +118,13 @@ footer .heb{font-size:.9rem}
 .privacy{color:var(--txt3);font-size:.82rem;margin-top:18px;text-align:center}
 /* A focused access screen, not a decorative setup wizard. */
 :root{--bg:#f7f7f5;--bg2:#fff;--navy:#fff;--panel:#fff;--line:#d9dddf;--line-2:#e9ebec;--line-gold:#d9dddf;--gold:#b88a2e;--gold-hi:#a77b22;--gold-soft:#f6f0e3;--txt:#14202d;--txt2:#5f6b76;--txt3:#84909a;--ok:#367a59;--err:#c15345;--font-ui:'Inter',Arial,sans-serif;--font-display:'Inter',Arial,sans-serif;--sh:none}body{background:var(--bg);color:var(--txt);font-family:var(--font-ui)}h1,h2,h3{font-family:var(--font-ui);font-weight:600;letter-spacing:-.045em;line-height:1.1}.heb{font-family:var(--font-ui)}nav{position:static;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:none}.nav-in{max-width:880px;padding:17px 24px}.brand{color:var(--txt);letter-spacing:-.025em}.brand b{font-size:1rem}main{align-items:flex-start;padding:72px 20px 84px}.wrap{max-width:640px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:none;padding:38px 40px 35px}.steps{gap:0;margin-bottom:31px}.steps .dot{height:2px;border-radius:0;background:#e3e6e7}.steps .dot.on{background:var(--txt)}.steps .dot.done{background:var(--txt)}.eyebrow{color:#7e8992;letter-spacing:.1em}.title{font-size:clamp(1.75rem,3vw,2.15rem)!important;margin-bottom:10px!important}.lede{color:var(--txt2);line-height:1.55;margin-bottom:28px}.field label{font-size:.86rem;color:var(--txt);letter-spacing:-.01em}.field .hint{color:var(--txt3)}input,select{background:#fff;border-color:#cbd1d4;border-radius:6px;color:var(--txt);padding:12px 13px}input:focus,select:focus{border-color:#536270;background:#fff;box-shadow:0 0 0 3px rgba(21,32,45,.07)}.btn{border-radius:6px;box-shadow:none!important;padding:12px 18px;font-size:.9rem;transition:background .15s,border-color .15s}.btn-gold{background:var(--txt);color:#fff}.btn-gold:not(:disabled):hover{background:#2a3a49;transform:none}.btn-ghost{background:#fff;border-color:#cbd1d4;color:var(--txt2)}.btn-ghost:not(:disabled):hover{border-color:#8e989f;color:var(--txt);background:#fff}.note{background:#f4f5f5;border-color:#dfe3e4;border-radius:6px;color:var(--txt2);padding:15px 16px}.note b{color:var(--txt)}.msg.error{background:#fff3f1;border-color:#f1c2ba;color:#a83f32}.checklist li{border-color:var(--line-2)}.live{color:var(--txt2)}.creds{background:#f7f8f8;border-color:#dde1e2;border-radius:6px}.copy{background:#fff;border-color:#cbd1d4;color:var(--txt);border-radius:5px}.done-badge{width:44px;height:44px;background:#eff7f2;border-color:#7db394;color:#367a59;border-radius:6px;font-size:1.25rem}.chkline{color:var(--txt2)}footer{background:#fff;border-color:var(--line);color:var(--txt3);padding:24px 0}.privacy{color:var(--txt3)}
+.opt{color:#9aa3b2;font-weight:400;font-size:.85em}
+.subhead{font-weight:600;color:#e8ecf3;margin:2px 0 10px;font-size:.98rem}
+.how{color:#c9a24a;cursor:pointer;text-decoration:underline}
+.howbox{margin-top:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:8px;padding:11px 13px;font-size:.86rem;color:#cdd3dd}
+.howbox ol{margin:0;padding-left:18px}
+.howbox li{margin:4px 0}
+.sep{border:none;border-top:1px solid rgba(255,255,255,.12);margin:20px 0 10px}
 </style>
 </head>
 <body>
@@ -185,30 +192,66 @@ footer .heb{font-size:.9rem}
         <input id="logo" type="url" placeholder="https://…/logo.png" maxlength="500">
         <p class="hint">Paste a link to your logo, or skip and add it later.</p>
       </div>
+      <div class="field optional">
+        <label for="fweb">Your forms web address <span class="opt">— optional</span></label>
+        <input id="fweb" type="text" autocomplete="off" spellcheck="false" placeholder="forms.yourshul.com" maxlength="200">
+        <p class="hint">Where your donation and signup forms will live — a “forms.” address on your own website domain. Not sure, or don't have one yet? Skip it — DAAS can set this up with you later.</p>
+      </div>
       <div class="actions">
         <button class="btn btn-ghost" data-back="1">Back</button>
         <button class="btn btn-gold" id="s2next">Continue</button>
       </div>
     </section>
 
-    <!-- 3 · One key -->
+    <!-- 3 · Optional keys -->
     <section class="screen" id="s3">
       <div class="eyebrow">Step 3 of 3</div>
-      <h1 class="title">Your AI key</h1>
-      <p class="lede">Your own OpenAI key powers the DAAS features that use AI.</p>
+      <h1 class="title">Connect your keys</h1>
+      <p class="lede">These switch on AI features and online donations. <b>Every field here is optional — skip anything and add it later</b> in your workspace. Your CRM is built either way.</p>
       <div class="msg error" id="s3msg"></div>
-      <div class="field">
-        <label for="openai">OpenAI API key</label>
+
+      <div class="field optional">
+        <label for="openai">OpenAI API key <span class="opt">— optional</span></label>
         <input id="openai" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" maxlength="200">
-        <p class="hint">Your key is installed in your own workspace and is not retained by DAAS.</p>
+        <p class="hint">Powers Search and Research Chat. Installed privately in your own workspace; DAAS does not keep it. <a class="how" data-how="how-openai">How do I get this?</a></p>
+        <div class="howbox" id="how-openai" hidden>
+          <ol>
+            <li>Go to <b>platform.openai.com</b> and sign in (or create an account).</li>
+            <li>Add a payment method under <b>Billing</b> (OpenAI bills you directly for usage — typically a few dollars a month).</li>
+            <li>Open <b>API keys</b> in the left menu, click <b>Create new secret key</b>.</li>
+            <li>Copy the key (it starts with <b>sk-</b>) and paste it above.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="field optional">
+        <label for="anthropic">Anthropic (Claude) API key <span class="opt">— optional</span></label>
+        <input id="anthropic" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" maxlength="200">
+        <p class="hint">A second AI provider. Fine to leave blank.</p>
+      </div>
+
+      <hr class="sep">
+      <div class="subhead">Online donations · Stripe <span class="opt">— optional</span></div>
+      <div class="field optional">
+        <label for="stripe_pk">Stripe publishable key</label>
+        <input id="stripe_pk" type="text" autocomplete="off" spellcheck="false" placeholder="pk_live_… or pk_test_…" maxlength="255">
       </div>
       <div class="field optional">
-        <label for="anthropic">Anthropic (Claude) API key</label>
-        <input id="anthropic" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" maxlength="200">
-        <p class="hint">Optional. You can add it later.</p>
+        <label for="stripe_secret">Stripe secret key</label>
+        <input id="stripe_secret" type="password" autocomplete="off" spellcheck="false" placeholder="sk_live_… or sk_test_…" maxlength="255">
+        <p class="hint">Donations go straight into <b>your own Stripe account</b>. Your secret key is stored privately in your workspace — never in your browser. <a class="how" data-how="how-stripe">How do I get these?</a></p>
+        <div class="howbox" id="how-stripe" hidden>
+          <ol>
+            <li>Go to <b>dashboard.stripe.com</b> and sign in (or create a free account).</li>
+            <li>Open <b>Developers → API keys</b> (top-right menu, then the left panel).</li>
+            <li>Copy the <b>Publishable key</b> and paste it in the first box.</li>
+            <li>Click <b>Reveal</b> on the <b>Secret key</b>, copy it, and paste it in the second box.</li>
+          </ol>
+        </div>
       </div>
+
       <div class="note">
-        <b>What happens next.</b> We prepare your private workspace and hand it over to you. This takes a few minutes. Keep this page open.
+        <b>What happens next.</b> We prepare your private workspace and hand it over to you — a few minutes; keep this page open. Anything you skipped, you can add anytime in your workspace under <b>Settings → Setup</b>.
       </div>
       <div class="actions">
         <button class="btn btn-ghost" data-back="2">Back</button>
@@ -247,6 +290,10 @@ footer .heb{font-size:.9rem}
           <li>Review and <b>confirm the transfer</b>.</li>
         </ol>
         <p style="margin:12px 0 0;color:#f0d9a6"><b>Do not create a new project.</b> You only make an account and an organization. Your workspace transfers into it on its own.</p>
+      </div>
+
+      <div class="note" id="dnsNote">
+        <b>Make your forms address live.</b> To point your forms web address (for example forms.yourshul.com) at your new workspace, one DNS record is added with your domain provider. We'll send you the exact record to paste in — or <b>DAAS can set up your DNS for you</b>. Reply to your invitation email and we'll take care of it.
       </div>
 
       <label class="chkline"><input type="checkbox" id="saved"><span>I've saved my email and temporary password above.</span></label>
@@ -293,6 +340,12 @@ const ZONES = [
 const answers = {};
 let job = null;         // { job_id, job_token }
 let building = false;
+// Pre-Launch Audit H2: the one-time job token must survive a refresh or a dropped
+// response, or the customer's code is spent and their building workspace is
+// unreachable. Persist it and rehydrate on load.
+const JOB_KEY = "daas_signup_job";
+function _clearSavedJob(){ try{ localStorage.removeItem(JOB_KEY); }catch(_){} }
+function _loadSavedJob(){ try{ const j=JSON.parse(localStorage.getItem(JOB_KEY)||"null"); return (j&&j.job_id&&j.job_token)?j:null; }catch(_){ return null; } }
 
 function show(n){
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("on"));
@@ -330,13 +383,15 @@ document.getElementById("code").addEventListener("keydown", e => { if(e.key==="E
 // ── Step 2: shul details ────────────────────────────────────────────────────
 document.getElementById("s2next").onclick = () => {
   clearErr("s2msg");
-  const org=val("org"), email=val("email"), city=val("city"), state=val("state"), tz=val("tz"), logo=val("logo");
+  const org=val("org"), email=val("email"), city=val("city"), state=val("state"), tz=val("tz"), logo=val("logo"), fweb=val("fweb");
   if (org.length < 2) return err("s2msg","Please enter your organization name.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err("s2msg","Please enter a valid email address.","This is how you'll sign in.");
   if (city.length < 2) return err("s2msg","Please enter your city.");
   if (!/^[A-Z]{2}$/.test(state)) return err("s2msg","Please choose your state.");
   if (!tz) return err("s2msg","Please choose your time zone.");
-  Object.assign(answers, { org, email:email.toLowerCase(), city, state, tz, logo: logo || null });
+  let formUrl=fweb.toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'').replace(/\s+/g,'');
+  if(formUrl && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(formUrl)) return err("s2msg","That forms web address doesn't look right.","Use something like forms.yourshul.com, or leave it blank to set up later.");
+  Object.assign(answers, { org, email:email.toLowerCase(), city, state, tz, logo: logo || null, form_url: formUrl || null });
   show(3);
 };
 
@@ -347,7 +402,8 @@ document.querySelectorAll("[data-back]").forEach(b => b.onclick = () => show(+b.
 async function startBuild(){
   clearErr("s3msg");
   const openai = val("openai"), anthropic = val("anthropic");
-  if (openai.length < 8) return err("s3msg","Please enter your OpenAI API key.","Search and Research Chat need it to work.");
+  const stripePk = val("stripe_pk"), stripeSecret = val("stripe_secret");
+  // Every key here is optional; they can be added later under Settings -> Setup.
 
   const btn = document.getElementById("build");
   btn.disabled = true; btn.textContent = "Starting…";
@@ -356,10 +412,13 @@ async function startBuild(){
     code: answers.code,
     answers: {
       org: answers.org, city: answers.city, state: answers.state, tz: answers.tz,
-      logo: answers.logo, email: answers.email, has_anthropic: anthropic.length >= 8
+      logo: answers.logo, email: answers.email, form_url: answers.form_url || null,
+      has_anthropic: anthropic.length >= 8
     },
-    openai_key: openai,
-    anthropic_key: anthropic || undefined
+    openai_key: openai || undefined,
+    anthropic_key: anthropic || undefined,
+    stripe_publishable_key: stripePk || undefined,
+    stripe_secret_key: stripeSecret || undefined
   };
 
   let res, body;
@@ -382,6 +441,7 @@ async function startBuild(){
   }
 
   job = { job_id: body.job_id, job_token: body.job_token };
+  try{ localStorage.setItem(JOB_KEY, JSON.stringify(job)); }catch(_){} // Pre-Launch Audit H2
   btn.disabled=false; btn.textContent="Build my CRM";
   building = true;
   show(4);
@@ -408,17 +468,18 @@ async function drive(){
     }
     fails = 0;
 
+    if (res.status === 404){ building=false; _clearSavedJob(); show(1); return err("s1msg","We couldn’t find that setup session.","It may have expired. Enter your access code to start again — ask for a new code if yours has already been used."); }
     if (res.status === 409 && body.paused){
       building=false;
       return err("s4msg","Setup is paused right now.","Please try again shortly, or contact whoever gave you your access code.");
     }
     if (body.status === "failed"){
-      building=false;
+      building=false; _clearSavedJob();
       return err("s4msg","Setup ran into a problem.","Please reply to your invitation email so we can finish it for you.", body.error || "");
     }
     applyProgress(body);
     if (body.status === "awaiting_claim"){ building=false; return toClaim(body); }
-    await sleep(2600);
+    await sleep((body.queued?6000:2600)+Math.floor(Math.random()*900)); // Pre-Launch Audit H1: jitter + back off when queued
   }
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -452,7 +513,8 @@ document.getElementById("saved").addEventListener("change", e => {
 document.getElementById("claimBtn").style.pointerEvents="none";
 document.getElementById("claimBtn").style.opacity=".45";
 document.getElementById("claimBtn").addEventListener("click", e => {
-  if (document.getElementById("claimBtn").getAttribute("aria-disabled")==="true"){ e.preventDefault(); }
+  if (document.getElementById("claimBtn").getAttribute("aria-disabled")==="true"){ e.preventDefault(); return; }
+  _clearSavedJob(); // Pre-Launch Audit H2: build claimed — done with the token
 });
 
 // Copy buttons
@@ -464,7 +526,21 @@ document.querySelectorAll(".copy").forEach(b => b.onclick = async () => {
 // Warn before leaving mid-build
 window.addEventListener("beforeunload", e => { if (building){ e.preventDefault(); e.returnValue=""; } });
 
-show(1);
+document.querySelectorAll(".how").forEach(a => a.onclick = () => { const b=document.getElementById(a.dataset.how); if(b) b.hidden=!b.hidden; });
+
+// Pre-Launch Audit H2: if a build is already in flight for this browser (a refresh
+// or a dropped response after the code was redeemed), reconnect to it instead of
+// stranding the customer on step 1 with a spent code.
+(function _bootSignup(){
+  const saved=_loadSavedJob();
+  if(saved){
+    job=saved; building=true; show(4);
+    document.getElementById("liveline").textContent="Reconnecting to your setup…";
+    drive();
+  } else {
+    show(1);
+  }
+})();
 </script>
 </body>
 </html>

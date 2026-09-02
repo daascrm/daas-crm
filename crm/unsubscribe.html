@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Email Preferences</title>
+<style>
+  :root{
+    --fill:#f4f4f2;--surf:#ffffff;--border:#e5e4e0;
+    --accent:#0f1e33;--accent-d:#182c49;
+    --txt:#1c1917;--txt2:#57534e;--txt3:#a3a099;
+    --font-ui:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  body{margin:0;background:var(--surf);font-family:var(--font-ui);color:var(--txt);
+       display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box;
+       -webkit-font-smoothing:antialiased}
+  .card{background:var(--fill);border-radius:16px;max-width:460px;width:100%;padding:36px 32px;text-align:center}
+  .org{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);font-weight:600;margin-bottom:18px}
+  h1{font-size:1.35rem;font-weight:600;letter-spacing:-.01em;margin:0 0 12px;color:var(--txt)}
+  p{font-size:.95rem;line-height:1.65;color:var(--txt2);margin:0 0 20px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;border:none;cursor:pointer;
+       font-family:var(--font-ui);font-weight:600;font-size:.88rem;padding:12px 28px;border-radius:999px;transition:background .15s}
+  .btn:hover{background:var(--accent-d)}
+  .btn:disabled{opacity:.5;cursor:default}
+  .foot{margin-top:22px;font-size:.7rem;color:var(--txt3)}
+  .spin{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);
+        border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="org">Email preferences</div>
+    <h1 id="t">One moment&hellip;</h1>
+    <p id="m"><span class="spin"></span>Loading your email preferences.</p>
+    <button class="btn" id="b" style="display:none"></button>
+    <div class="foot">Managed with DAAS</div>
+  </div>
+<script>
+/* Pre-Launch Audit M2: multi-tenant unsubscribe page. The visible link carries
+ * the sending shul's own email-unsub function URL in ?api=, so this one shared
+ * page (served for every shul on daascrm.app) talks to the right project. Kept
+ * click-to-confirm on purpose: corporate scanners (Outlook SafeLinks etc.) fetch
+ * links automatically, and an unsubscribe-on-load removes people who never clicked.
+ */
+(function(){
+  var params=new URLSearchParams(location.search);
+  var token=(params.get('u')||'').trim();
+  var api=(params.get('api')||'').trim();
+  var t=document.getElementById('t'), m=document.getElementById('m'), b=document.getElementById('b');
+  // Only allow this page to POST to a genuine Supabase email-unsub endpoint.
+  var API_RE=/^https:\/\/[a-z0-9]{20}\.supabase\.co\/functions\/v1\/email-unsub$/;
+  var UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  function show(title,msg,btnLabel,btnFn){
+    t.textContent=title; m.textContent=msg;
+    if(btnLabel){ b.textContent=btnLabel; b.style.display='inline-block'; b.disabled=false; b.onclick=btnFn; }
+    else b.style.display='none';
+  }
+  function byHand(title){
+    show(title||'Link problem',
+      'Please open the link directly from the email, or just reply to the email and we’ll take you off the list by hand.');
+  }
+  if(!token||!UUID_RE.test(token)){ byHand('Link problem'); return; }
+  if(!api||!API_RE.test(api)){
+    // Older links without ?api= (or a malformed one): fall back to opening the
+    // link's own GET endpoint is not safe here, so ask them to use the email link.
+    byHand('Link problem'); return;
+  }
+  function call(action){
+    b.disabled=true;
+    return fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({token:token,action:action})}).then(function(r){return r.json();});
+  }
+  function fail(){
+    show('Something went wrong',
+      'We couldn’t process this just now. Please try again in a moment, or reply to any of our emails and we’ll take you off the list by hand.',
+      'Try again',doUnsub);
+  }
+  show('Unsubscribe from these emails?',
+    'Click the button below to stop receiving these emails. Changed your mind? Just close this page — nothing happens until you click.',
+    'Unsubscribe me',doUnsub);
+  function doUnsub(){
+    show('One moment…','Updating your email preferences.');
+    call('unsubscribe').then(function(j){
+      if(!j||!j.ok){
+        show('Link problem',
+          'We couldn’t find a mailing-list record for this link. It may be from an old email. Reply to any of our emails and we’ll take care of it by hand.');
+        return;
+      }
+      if(j.already) show('Already unsubscribed','You were already off the list — no further emails will be sent to you.','Resubscribe',resub);
+      else show('You’ve been unsubscribed','You won’t receive any more of these emails. If this was a mistake, you can rejoin with one click.','Resubscribe',resub);
+    }).catch(fail);
+  }
+  function resub(){
+    show('One moment…','Adding you back to the list.');
+    call('resubscribe').then(function(j){
+      if(j&&j.ok) show('Welcome back!','You’ve been resubscribed and will receive these emails again.');
+      else fail();
+    }).catch(fail);
+  }
+})();
+</script>
+</body>
+</html>
