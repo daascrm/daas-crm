@@ -456,6 +456,10 @@ function applyProgress(body){
 
 async function drive(){
   let fails = 0;
+  // Pre-Launch Audit L6: bound the wizard's overall wait so a project that never turns
+  // healthy can't spin forever. The saved token is kept so a refresh can reconnect.
+  const _startedAt = Date.now();
+  const _DRIVE_MAX_MS = 20*60*1000;
   while (building){
     let res, body;
     try {
@@ -479,6 +483,7 @@ async function drive(){
     }
     applyProgress(body);
     if (body.status === "awaiting_claim"){ building=false; return toClaim(body); }
+    if (Date.now() - _startedAt > _DRIVE_MAX_MS){ building=false; return err("s4msg","Setup is taking longer than expected.","Your workspace may still be finishing in the background — refresh this page in a few minutes to reconnect, or reply to your invitation email and we’ll finish it for you."); } // L6: overall job TTL
     await sleep((body.queued?6000:2600)+Math.floor(Math.random()*900)); // Pre-Launch Audit H1: jitter + back off when queued
   }
 }

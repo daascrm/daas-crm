@@ -137,8 +137,6 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 .badge.mid{color:var(--amber-tx);background:var(--amber-bg);border-color:var(--amber-ln)}
 .badge.lapsed{color:var(--red-tx);background:var(--red-bg);border-color:var(--red-ln)}
 .ctag{display:inline-block;font-family:var(--font-ui);font-size:10.5px;font-weight:500;text-transform:none;letter-spacing:0;padding:1px 7px;border-radius:3px;margin-top:4px;border:1px solid transparent}
-.ctag.cuy{background:#eef1f4;color:#182c49;border-color:#cfd5dc}
-.ctag.gea{background:var(--green-bg);color:var(--green-tx);border-color:var(--green-ln)}
 .ctag.unk{background:#f2f4f7;color:var(--txt3);border-color:var(--border)}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:1px solid var(--border);border-radius:5px;overflow:hidden;margin-bottom:7px}
 .pcell{background:var(--surf);padding:6px 9px}
@@ -1966,6 +1964,7 @@ let SB_KEY='';
 const TENANT_RESOLVER_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/resolve-tenant';
 const CENTRAL_ZILLOW_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/zillow-proxy';
 const TENANT_CACHE_KEY='daas_tenant';
+const TENANT_CACHE_TTL_MS=12*60*60*1000; // Pre-Launch Audit L10: re-resolve the workspace mapping at least this often so a re-keyed/migrated tenant can't pin a returning browser to a stale URL/key.
 // ── NO PROVIDER KEYS, AND NO MODEL NAMES, IN THE BROWSER (2026-08-17) ────
 // ANTHROPIC_KEY / OPENAI_KEY / RAPIDAPI_KEY and their localStorage entries
 // (crm_ant_key / crm_oai_key / crm_rapid_key) are GONE. Every AI and data call
@@ -2027,7 +2026,7 @@ async function resolveWorkspace(){
   btn.textContent='Finding your workspace…';btn.disabled=true;
   try{
     let tenant=null;
-    try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(cached?.email===email&&_tenantIsSafe(cached))tenant=cached;}catch(_){}
+    try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(cached?.email===email&&_tenantIsSafe(cached)&&(Date.now()-(cached.cachedAt||0)<TENANT_CACHE_TTL_MS))tenant=cached;}catch(_){} // L10: honour cache TTL
     if(!tenant){
       // Pre-Launch Audit M6: the tenant resolver is the single front door; give it
       // a short timeout + a legible message so a slow control plane can't hang
@@ -2042,7 +2041,7 @@ async function resolveWorkspace(){
       }finally{clearTimeout(_rt);}
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.error||'We could not find that workspace.');
-      tenant={...body,email};localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(tenant));
+      tenant={...body,email,cachedAt:Date.now()};localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(tenant)); // L10: stamp resolve time
     }
     _configureTenant(tenant);_setLoginStage('password');document.getElementById('loginPassword').focus();return true;
   }catch(e){
@@ -2267,7 +2266,7 @@ async function sbAll(path,pageSize=1000){
 // The app's "day" is the shul's day regardless of what timezone the device is
 // in. (A settings knob for other communities is parked for later.)
 let DAAS_TZ='America/New_York';
-function _countyLabel(c){if(!c)return 'County Unknown';if(c==='gea')return 'Geauga County';if(c==='cuy')return 'Cuyahoga County';if(c==='unk')return 'County Unknown';return /county/i.test(c)?c:c+' County';}
+function _countyLabel(c){if(!c)return 'County Unknown';if(c==='unk')return 'County Unknown';return /county/i.test(c)?c:c+' County';}
 let _estFmt=new Intl.DateTimeFormat('en-CA',{timeZone:DAAS_TZ,year:'numeric',month:'2-digit',day:'2-digit'});
 // Pre-Launch Audit H3: the app day must be the shul local day, not Ohio time. The
 // provisioner records each tenant zone in app_settings.daas_tz; loadDaasTz() reads
@@ -3804,7 +3803,7 @@ function _renderListRow(h){
   const valStr=h.home_value?'$'+Math.round(h.home_value).toLocaleString():'';
   const g=getGivingStats(h);
   const agc=getAGCScore(h);
-  const scoreColor=agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)';
+  const scoreColor=agc.total>0?(agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   return`<div class="citem${i===activeIdx?' active':''}" onclick="byId('selectHousehold','${h.id}',${i})" oncontextmenu="_hideCtxMenu(event,'${h.id}')">
       <div class="pindot ${tier==='grey'?'':tier}">${i+1}</div>
       <div style="flex:1;min-width:0">
@@ -3910,11 +3909,11 @@ function setProp(mode,h,result){
   if(mode==='hint'){el.innerHTML='<div class="hint"><div class="hi"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg></div><p>Pick somebody to see their details</p></div>';return;}
   const idx=hIdx(h.id);
   const countyLabel=h.noAddress?'No Address':_countyLabel(h.county);
-  const tagClass=h.noAddress?'unk':h.county==='gea'?'gea':h.county==='cuy'?'cuy':'unk';
+  const tagClass='unk'; // L12: Ohio-only gea/cuy colour-coding removed (county is data-derived)
   const giving=getGivingStats(h);
 
   const liveScore=getProspectScore(h);
-  const scoreColor=liveScore>=70?'var(--green)':liveScore>=40?'var(--amber)':'var(--red)';
+  const scoreColor=liveScore>0?(liveScore>=70?'var(--green)':liveScore>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const header=`<div class="pinner" style="padding-bottom:6px;position:relative">
     <button onclick="setProp('hint')" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--txt3);padding:2px 6px;border-radius:4px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <button onclick="byId('openFullPanel','${households[idx].id}',${idx})" style="position:absolute;top:8px;right:28px;background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--txt3);padding:2px 4px;border-radius:4px" title="Full screen view"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
@@ -3926,7 +3925,7 @@ function setProp(mode,h,result){
       ${(()=>{
         const agc=getAGCScore(h);
         if(agc.total===0)return'';
-        const sc=agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)';
+        const sc=agc.total>0?(agc.total>=70?'var(--green)':agc.total>=40?'var(--amber)':'var(--red)'):'var(--grey)';
         return `<span style="font-family:var(--font-ui);font-size:.58rem;color:${sc};background:rgba(0,0,0,.04);padding:2px 6px;border-radius:3px" title="Affinity: ${agc.affinity}/40 · Generosity: ${agc.generosity}/30 · Capacity: ${agc.capacity}/30">Score: ${agc.total}/100</span>`;
       })()}
     </div>
@@ -4833,7 +4832,7 @@ function placePinAt(i){
   const agcT=getAGCScore(h);
   const valStr=h.home_value?'<svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> $'+Math.round(h.home_value).toLocaleString():'';
   const givStr=g?'<svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7ZM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7Z"/></svg> $'+Math.round(g.total).toLocaleString()+' · '+g.count+' gift'+(g.count!==1?'s':''):'';
-  const scoreColor=agcT.total>=70?'#15803d':agcT.total>=40?'#a16207':'#b91c1c';
+  const scoreColor=agcT.total>0?(agcT.total>=70?'#15803d':agcT.total>=40?'#a16207':'#b91c1c'):'#a29d94';
   const tooltip=`<div style="font-family:var(--font-ui);min-width:180px">
     <div style="font-weight:600;font-size:.82rem;margin-bottom:3px">${_escHtml(h.displayName)}</div>
     <div style="font-size:.7rem;color:#666;margin-bottom:4px">${_escHtml((h.address||'')+', '+(h.city||''))}</div>
@@ -5585,7 +5584,7 @@ function buildProfileDisplay(p, idx, newInteractions, newDonations, containerId)
   const _hh=(typeof households!=='undefined'&&households[idx])||null;
   const _agc=_hh&&typeof getAGCScore==='function'?getAGCScore(_hh):{total:0};
   const prospectScore=_agc.total||0;
-  const scoreColor=prospectScore>=70?'var(--green)':prospectScore>=40?'var(--amber)':'var(--red)';
+  const scoreColor=prospectScore>0?(prospectScore>=70?'var(--green)':prospectScore>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const stale=_profileStaleness(p,idx,newInteractions??null,newDonations??null);
   const lastUpdated=p.softBuiltAt&&p.softBuiltAt>p.builtAt?p.softBuiltAt:p.builtAt;
   const badgeHtml=stale.suggestFull
@@ -6460,7 +6459,7 @@ function openFullPanel(idx){
   const agc=getAGCScore(h);
   const g=getGivingStats(h);
   const score=agc.total;
-  const scoreColor=score>=70?'var(--green)':score>=40?'var(--amber)':'var(--red)';
+  const scoreColor=score>0?(score>=70?'var(--green)':score>=40?'var(--amber)':'var(--red)'):'var(--grey)';
   const data=h.property_data||{};
   const _profileRaw=h.profile_data||null;
   // AI-generated profile prose can echo content from notes/web search; escape every
@@ -8458,7 +8457,13 @@ async function _daasLoadVapidPublic(){
   // A present-but-empty/invalid row is a provisioning error, not a legacy tenant.
   // Fall back only when the row itself is absent.
   const hasTenantKey=!!(rows&&rows.length);
-  const candidate=hasTenantKey?String(rows[0].value||'').trim():DAAS_LEGACY_VAPID_PUBLIC;
+  // Pre-Launch Audit L11: only the original single-tenant (legacy) project may use the
+  // built-in key. A newly provisioned tenant with no vapid_public row yet must NOT subscribe
+  // with the legacy key (those pushes would never arrive) — push stays unavailable until the
+  // provisioner writes the tenant's own key.
+  const _isLegacyTenant=/\/\/sdzbzdoncakpsnfapbxj\./.test(SB_URL||'');
+  const candidate=hasTenantKey?String(rows[0].value||'').trim():(_isLegacyTenant?DAAS_LEGACY_VAPID_PUBLIC:'');
+  if(!candidate){console.warn('[DAAS] no tenant VAPID public key yet — push unavailable');return null;}
   try{_daasVapidBytes(candidate);}
   catch(e){console.warn('[DAAS] invalid tenant VAPID public key',e);return null;}
   _daasVapidPublic=candidate;
@@ -8546,7 +8551,17 @@ window.addEventListener('DOMContentLoaded',async()=>{
   // Reuse only a validated, local tenant mapping to restore an existing session.
   // A fresh browser starts at the email step and never knows a tenant URL/key.
   let session=null;
-  try{const cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');if(_tenantIsSafe(cached)){_configureTenant(cached);session=(await _sb.auth.getSession()).data.session;}}catch(_){}
+  try{
+    let cached=JSON.parse(localStorage.getItem(TENANT_CACHE_KEY)||'null');
+    if(cached&&_tenantIsSafe(cached)){
+      // Pre-Launch Audit L10: a cached mapping older than the TTL is silently re-resolved so a
+      // re-keyed/migrated workspace is picked up. Best-effort — the cached value is kept on any failure (offline).
+      if(cached.email&&(Date.now()-(cached.cachedAt||0)>=TENANT_CACHE_TTL_MS)){
+        try{const _c=new AbortController();const _t=setTimeout(()=>_c.abort(),8000);let _r;try{_r=await fetch(TENANT_RESOLVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:cached.email}),signal:_c.signal});}finally{clearTimeout(_t);}if(_r&&_r.ok){const _b=await _r.json().catch(()=>null);const _fresh=_b?{..._b,email:cached.email,cachedAt:Date.now()}:null;if(_fresh&&_tenantIsSafe(_fresh)){cached=_fresh;localStorage.setItem(TENANT_CACHE_KEY,JSON.stringify(_fresh));}}}catch(_){/* keep cached mapping */}
+      }
+      _configureTenant(cached);session=(await _sb.auth.getSession()).data.session;
+    }
+  }catch(_){}
   if(session){_authToken=session.access_token;showApp();}
   else{
     _bootHide(true);
@@ -17126,7 +17141,7 @@ const CT_COLS={
   name:{label:'Household',val:h=>h.displayName||'',html:h=>`<div style="font-weight:600">${_escHtml(h.displayName||'')}</div><div class="ct-sub">${_escHtml(h.noAddress?'No address on file':((h.address||'')+(h.city?', '+h.city:'')))}</div>`},
   email:{label:'Email',val:h=>((h.members||[]).map(m=>m.email).filter(Boolean)[0]||''),html:h=>(h.members||[]).filter(m=>m.email).map(m=>`<div>${_escHtml(m.first_name)}: ${_escHtml(m.email)}</div>`).join('')||'<span class="ct-sub">—</span>'},
   phone:{label:'Phone',val:h=>((h.members||[]).map(m=>m.phone).filter(Boolean)[0]||''),html:h=>(h.members||[]).filter(m=>m.phone).map(m=>`<div>${_escHtml(m.first_name)}: ${_escHtml(m.phone)}</div>`).join('')||'<span class="ct-sub">—</span>'},
-  agc:{label:'Prospect',val:h=>getAGCScore(h).total,html:h=>{const t=getAGCScore(h).total;const c=t>=70?'var(--green)':t>=40?'var(--amber)':'var(--red)';return `<span style="font-family:var(--font-ui);font-weight:700;color:${c}">${t}</span>`;}},
+  agc:{label:'Prospect',val:h=>getAGCScore(h).total,html:h=>{const t=getAGCScore(h).total;const c=t>0?(t>=70?'var(--green)':t>=40?'var(--amber)':'var(--red)'):'var(--grey)';return `<span style="font-family:var(--font-ui);font-weight:700;color:${c}">${t}</span>`;}},
   homeValue:{label:'Home Value',val:h=>h.home_value||0,html:h=>h.home_value?'$'+Math.round(h.home_value).toLocaleString():'<span class="ct-sub">—</span>'},
   lastContact:{label:'Last Contact',val:h=>(_agcInterAgg[h.id]||{}).lastContact||'',html:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;return lc||'<span class="ct-sub">never</span>';}},
   daysSince:{label:'Days Since',val:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;const d=_daysSince(lc);return d==null?99999:d;},csv:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;if(!lc)return 'never';const d=_daysSince(lc);return d==null?'never':String(d);},html:h=>{const lc=(_agcInterAgg[h.id]||{}).lastContact;if(!lc)return '<span style="color:var(--red);font-family:var(--font-ui)">never</span>';const d=_daysSince(lc)??0;const c=d<=30?'var(--green)':d<=90?'var(--amber)':'var(--red)';return `<span style="font-family:var(--font-ui);color:${c}">${d}d</span>`;}},
@@ -17648,7 +17663,7 @@ async function renderWins(){
   rows=rows.filter(r=>{
     const info=contactMap[r.contact_id];
     const hh=info?info.hhId:('c:'+r.contact_id);
-    const key=hh+'|'+r.type+'|'+r.date+'|'+((r.notes||'').trim());
+    const key=hh+'|'+r.type+'|'+r.date+'|'+(r.notes||'');
     if(_seenWin.has(key))return false;
     _seenWin.add(key);return true;
   }).slice(0,10);
@@ -19906,7 +19921,7 @@ async function renderSRI(){
   connectedRows.forEach(r=>{
     const hhid=contactHHMap[r.contact_id];
     if(!hhid)return;
-    const key=r.type+'|'+r.date+'|'+((r.notes||'').trim());
+    const key=r.type+'|'+r.date+'|'+(r.notes||'');
     const seen=_sriSeen[hhid]||(_sriSeen[hhid]=new Set());
     if(seen.has(key))return; // same conversation, second spouse — one household touch
     seen.add(key);
@@ -20640,7 +20655,7 @@ function _rpCols(entity,groupMode){
       cols.giving_this_year={label:'Giving '+yrNow,get:r=>((R().h[r.id]||{}).byYear||{})[yrNow]||0,num:true};
       cols.giving_last_year={label:'Giving '+(yrNow-1),get:r=>((R().h[r.id]||{}).byYear||{})[yrNow-1]||0,num:true};
       cols.members={label:'Members',get:r=>(r.members||[]).map(_daasDisplayName).join('; ')};
-      cols.county={label:'County',get:r=>{var c=r.county;if(!c||c==='unk')return '';if(c==='gea')return 'Geauga';if(c==='cuy')return 'Cuyahoga';return c;}};
+      cols.county={label:'County',get:r=>{var c=r.county;if(!c||c==='unk')return '';return c;}};
       cols.daas_id={label:'DAAS IDs',get:r=>(r.members||[]).map(m=>m.daas_id).filter(v=>v!=null&&v!=='').map(v=>'#'+v).join('; ')};
       cols.external_ids={label:'External IDs',get:r=>(r.members||[]).map(m=>m.external_id).filter(Boolean).join('; ')};
     }else{ // donation donor-mode aggregates over the FILTERED result set
@@ -22714,7 +22729,7 @@ function mRenderRoster(){
     const letter=/[A-Z]/.test(L)?L:'#';
     if(letter!==curLetter){ curLetter=letter; letters.add(letter); html+=`<div class="m-alpha-head" id="mAlpha-${letter}">${letter}</div>`; }
     const agc=getAGCScore(h).total;
-    const c=agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)';
+    const c=agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)';
     const initials=(_mLastName(h)[0]||(h.displayName||'?')[0]||'?').toUpperCase();
     const sub=h.noAddress?'No address':((h.city||h.address||'').toString());
     html+=`<div class="m-rost-row" onclick="mOpenSheetById('${h.id}')">
@@ -23013,8 +23028,8 @@ function mSheetHide(hid){ mCloseSheet(); hideHousehold(hid); try{ if(typeof mRen
 const M_TAP_TOL=24, M_STACK_TOL=14;
 let _mSelHhId=null, _mMapSearchDebounce=null;
 
-function _mPinColor(h){ const agc=getAGCScore(h).total; return agc>=70?'#15803d':agc>=40?'#a16207':'#b91c1c'; }
-function _mScoreVar(agc){ return agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'; }
+function _mPinColor(h){ const agc=getAGCScore(h).total; return agc>0?(agc>=70?'#15803d':agc>=40?'#a16207':'#b91c1c'):'#a29d94'; }
+function _mScoreVar(agc){ return agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)'; }
 
 /* Pure geometry, so it is testable with no map and no DOM.
    pins: [{x,y,id}] in container pixels. Returns null (empty space) or
@@ -23296,7 +23311,7 @@ function _mFindRender(){
   try{ matches=_rankMatches(matches,q,nq); }catch(e){}
   const rows=matches.slice(0,60).map(h=>{
     const agc=getAGCScore(h).total;
-    const c=agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)';
+    const c=agc>0?(agc>=70?'var(--green)':agc>=40?'var(--amber)':'var(--red)'):'var(--grey)';
     const initials=((_mLastName(h)[0])||(h.displayName||'?')[0]||'?').toUpperCase();
     let snip='';
     try{ if(!nameHit(h)&&typeof _popoutSnippet==='function')snip=_popoutSnippet(h,q); }catch(e){}
