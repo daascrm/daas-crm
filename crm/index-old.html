@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="DAAS">
-<meta name="theme-color" content="#f4f1ea">
+<meta name="theme-color" content="#0f1e33">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>דעת</title>
@@ -1023,217 +1023,6 @@ html.force-desktop #mobileShell{display:none!important}
 .kpi .s{font-size:10.5px;color:var(--txt3);margin-top:1px}
 .kpi .s.up{color:var(--green)}
 .pager{display:flex;align-items:center;gap:6px;padding:8px 18px;font-size:11.5px;color:var(--txt2);background:var(--surf2);border-top:1px solid var(--border)}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THE MORNING — warm theme override layer (Direction D2)
-   A theme skin applied on top of the existing structure: it re-expresses the
-   design tokens as a warm, paper-light "morning" palette and flips the dark
-   navy chrome to a warm-white rail. Placed last so token + selector overrides
-   win. No class hooks are renamed, so all JS-rendered markup inherits it.
-   ═══════════════════════════════════════════════════════════════════════════ */
-:root{
-  --bg:#f4f1ea; --surf:#fffdf8; --surf2:#f3efe6; --warmwhite:#fbf9f3;
-  --border:#e8e2d6; --border2:#dcd4c5;
-  /* accent = warm bronze-gold; drives primary actions, active + focus states */
-  --accent:#9c7b3a; --accent-d:#7d6230; --accent-soft:rgba(156,123,58,.12);
-  --gold:#c68a2e; --green:#3f7d4e; --red:#b5544a;
-  --grey:#a99f92; --txt:#2b2723; --txt2:#6b6259; --txt3:#a99f92;
-  /* navy token repurposed to the same warm bronze so dark/interactive uses
-     (primary buttons, focus rings, active borders) stay on-brand + visible;
-     the sidebar/boot chrome that literally painted navy is overridden below */
-  --navy:#9c7b3a; --navy-2:#7d6230; --navy-line:rgba(43,39,35,.09);
-  --nav-txt:#6b6259; --nav-txt-hi:#2b2723;
-  --amber:#a16207; --amber-tx:#854d0e;
-  --green-bg:#eef5ef; --green-ln:#d7e6da; --green-tx:#2f5d3a;
-  --amber-bg:#f8f1e2; --amber-ln:#ecdcbf;
-  --red-bg:#f8efec; --red-ln:#ecd3ce; --red-tx:#7f3b34;
-  --row-hover:#faf7f0; --hairline:#efeae0;
-  --font-display:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
-  --sh-sm:0 1px 2px rgba(43,39,35,.05);
-  --sh-md:0 2px 8px rgba(43,39,35,.07),0 1px 2px rgba(43,39,35,.04);
-  --sh-lg:0 8px 30px rgba(43,39,35,.12),0 2px 6px rgba(43,39,35,.05);
-}
-html,body{background:var(--bg)}
-/* ── warm-white sidebar rail (was dark navy) ── */
-.side{background:var(--warmwhite);border-right:1px solid var(--border)}
-.brand{border-bottom:1px solid var(--border)}
-.brand span{color:var(--txt)}
-.side .nav button{color:var(--nav-txt)}
-.side .nav button:hover{color:var(--txt);background:var(--surf2)}
-.side .nav button.active{color:var(--txt);background:var(--surf);border-left-color:var(--accent);font-weight:600;box-shadow:var(--sh-sm)}
-.side .nav button.active .ic{color:var(--accent)}
-.side .nav .nav-log{background:var(--accent);color:#fff;border-radius:11px}
-.side .nav .nav-log .ic{color:#fff}
-.side .nav .nav-log:hover{background:var(--accent-d);color:#fff;filter:none}
-.side .nav .nav-tools{border-top:1px solid var(--border)}
-.side-foot{border-top:1px solid var(--border);color:var(--nav-txt)}
-.side-foot b{color:var(--txt)}
-.side-foot .gear:hover{color:var(--txt);background:var(--surf2)}
-.side .nav button:focus-visible,.side-foot .gear:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-/* ── boot splash: warm dark ink instead of navy (light text must stay legible) ── */
-#daasBoot{background:#2b2723;color:#cabfad}
-#daasBoot .db-word{color:#b6a992}
-/* ── heatmap: warm bronze ramp (was blue) ── */
-.heat-1{background:#ece0c6}
-.heat-2{background:#d8bd82}
-.heat-3{background:#b78f43}
-.heat-4{background:#8a6626}
-/* ── softer, warmer surfaces & controls (Morning uses generous radii) ── */
-.btn{border-radius:9px}
-.btn-pri{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn-pri:hover{background:var(--accent-d);border-color:var(--accent-d)}
-.modal{border-radius:16px;box-shadow:var(--sh-lg)}
-.modal-bg{background:rgba(43,39,35,.42)}
-.modal input,.tier-input,.srch input{border-radius:9px}
-.citem.active{background:var(--accent-soft);border-left-color:var(--accent)}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-::-webkit-scrollbar-thumb{background:var(--border2)}
-/* dashboard widget cards → warm rounded panels with soft shadow */
-.grid-stack-item-content{border-radius:16px!important;border:1px solid var(--border)!important;background:var(--surf)!important;box-shadow:var(--sh-md)!important}
-/* ── FIXED DASHBOARD (no drag) — sensible fixed sizes, decluttered by default ── */
-#dashGrid.dash-fixed{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;max-width:1180px;margin:0 auto}
-.dash-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh-md);overflow:hidden;display:flex;flex-direction:column}
-.dash-card.span2{grid-column:1 / -1}
-.dash-card.hidden{display:none}
-.dash-card .gs-panel-hdr{cursor:default;padding:13px 18px 12px;border-bottom:1px solid var(--hairline)}
-.dash-card .gs-panel-hdr h3{font-family:var(--font-display);font-size:1rem;font-weight:600}
-.dash-card .gs-panel-body{padding:14px 18px 16px}
-.dash-card.cap .gs-panel-body{max-height:440px;overflow-y:auto}
-@media(max-width:900px){#dashGrid.dash-fixed{grid-template-columns:1fr}.dash-card.span2{grid-column:auto}}
-.dash-tray{max-width:1180px;margin:0 auto 16px;background:var(--surf);border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh-md);padding:16px 20px}
-.dash-tray h3{font-family:var(--font-display);font-size:1rem;font-weight:600;margin-bottom:4px}
-.dash-tray .sub{color:var(--txt2);font-size:.76rem;margin-bottom:13px}
-.dash-tray-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:900px){.dash-tray-grid{grid-template-columns:1fr}}
-.dash-opt{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:11px;background:var(--surf2);text-align:left;width:100%;font-family:var(--font-ui)}
-.dash-opt:hover{border-color:var(--accent)}
-.dash-opt-t{flex:1;font-size:.82rem;font-weight:600;color:var(--txt)}
-.dash-sw{width:38px;height:22px;border-radius:999px;background:#d8d1c4;position:relative;flex:0 0 38px;transition:.18s}
-.dash-sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:.18s}
-.dash-sw.on{background:var(--accent)}.dash-sw.on::after{left:18px}
-/* mobile "Log" disc — accent fill + white icon (was gold/navy → bronze-on-bronze) */
-.m-navlog .m-navlog-disc{background:var(--accent);color:#fff}
-/* ── DAILY FIVE card (mockup UX): compact face, Log opens an in-card drawer ── */
-.d5c{background:var(--surf);border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh-sm);overflow:hidden;margin-bottom:12px;transition:box-shadow .16s}
-.d5c:hover{box-shadow:var(--sh-md)}
-.d5c-face{display:flex;align-items:center;gap:14px;padding:15px 17px}
-.d5c-av{width:46px;height:46px;border-radius:50%;flex:0 0 46px;display:grid;place-items:center;font-family:var(--font-display);font-size:17px;color:#fff}
-.d5c-body{flex:1;min-width:0}
-.d5c-name{font-family:var(--font-display);font-size:1.08rem;color:var(--txt);display:flex;align-items:center;gap:9px;flex-wrap:wrap;line-height:1.2}
-.d5c-tag{font-family:var(--font-ui);font-size:.56rem;font-weight:700;letter-spacing:.03em;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.d5c-why{color:var(--txt2);font-size:.82rem;margin-top:5px;line-height:1.45}
-.d5c-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.d5c-call{display:inline-flex;align-items:center;gap:6px;background:var(--surf2);color:var(--accent-d);border:1px solid var(--border);border-radius:11px;padding:9px 14px;font-size:.78rem;font-weight:600;text-decoration:none;white-space:nowrap}
-.d5c-call:hover{border-color:var(--accent)}
-.d5c-call .ic{width:15px;height:15px}
-.d5c-log{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;border:none;border-radius:11px;padding:10px 18px;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:var(--sh-sm)}
-.d5c-log:hover{background:var(--accent-d)}
-.d5c-log .ic{width:15px;height:15px}
-.d5c-drawer{max-height:0;overflow:hidden;transition:max-height .3s ease}
-.d5c.open .d5c-drawer{max-height:1200px}
-.d5c-drawer-in{padding:2px 17px 16px;border-top:1px solid var(--hairline);margin-top:2px}
-.d5c-lbl{color:var(--txt3);font-size:.72rem;margin:13px 0 10px}
-.d5c-otypes{display:flex;flex-wrap:wrap;gap:8px}
-.d5c-otype{border:1px solid var(--border);background:var(--surf2);border-radius:999px;padding:8px 15px;font-size:.75rem;font-weight:500;color:var(--txt);cursor:pointer;transition:.12s}
-.d5c-otype:hover{border-color:var(--accent);color:var(--accent-d);background:var(--accent-soft)}
-.d5c-sec{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;padding-top:11px;border-top:1px solid var(--hairline)}
-.d5c-sec button{font-size:.68rem;padding:6px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surf);color:var(--txt3);cursor:pointer;font-family:var(--font-ui)}
-.d5c-sec button:hover{border-color:var(--accent);color:var(--accent-d)}
-/* dashboard "show more" — sits at the bottom, after you scroll */
-.dash-morelink{display:block;margin:22px auto 8px;text-align:center;color:var(--txt2);font-size:.84rem;font-weight:600;padding:11px 18px;background:none;border:none;cursor:pointer;max-width:1180px;width:100%;font-family:var(--font-ui)}
-.dash-morelink:hover{color:var(--accent-d)}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   APP-WIDE POLISH — lift every view's cards, panels and controls to the
-   dashboard's level (warm rounded surfaces, soft shadows, refined spacing).
-   Targets the views' own class-based components (not inline styles).
-   ═══════════════════════════════════════════════════════════════════════════ */
-/* view cards & sections → warm rounded cards with soft shadow */
-.fp-card{border-radius:16px;box-shadow:var(--sh-md);padding:20px}
-.me-card{border-radius:14px;box-shadow:var(--sh-sm);padding:16px}
-.ev-card{border-radius:14px;box-shadow:var(--sh-sm);padding:16px 18px}
-.ev-card:hover{border-color:var(--accent);box-shadow:var(--sh-md);transform:translateY(-1px)}
-.rp-card{border-radius:14px;box-shadow:var(--sh-sm);padding:16px 18px}
-.rp-saved-row{border-radius:12px;box-shadow:var(--sh-sm);padding:13px 16px}
-.rp-saved-row:hover{border-color:var(--accent);background:var(--surf)}
-.fb-card{border-radius:12px;box-shadow:var(--sh-sm);padding:15px 17px}
-.fb-card:hover{border-color:var(--accent);background:var(--surf)}
-.fb-section{border-radius:16px;box-shadow:var(--sh-md);padding:18px 20px}
-/* shared panels & stat tiles */
-.panel{border-radius:16px;box-shadow:var(--sh-md)}
-.panel-h{padding:13px 18px;font-family:var(--font-display);font-size:1rem;font-weight:600;border-bottom-color:var(--hairline);cursor:default}
-.panel-h .more{color:var(--accent-d)}
-.kpi{padding:14px 18px}
-.kpi .k{letter-spacing:.06em}
-.kpi .v{font-family:var(--font-display);font-size:23px;letter-spacing:-.01em}
-/* tabs, chips, badges, pills → warm + rounded */
-.tab-bar{border-bottom-color:var(--border)}
-.badge{border-radius:999px;padding:2px 10px}
-/* inputs & selects → rounded, warm, consistent accent focus */
-input[type=text],input[type=search],input[type=email],input[type=number],input[type=date],input[type=tel],input[type=password],input:not([type]),select,textarea{border-radius:9px}
-input:focus,select:focus,textarea:focus{border-color:var(--accent)!important;outline:none}
-/* empty / loading states → calmer, warmer */
-.hint{gap:8px;color:var(--txt2)}
-.hint p{color:var(--txt3)}
-/* center the list-style views so content doesn't sprawl edge-to-edge */
-#reportsViewInner,#eventsViewInner,#prospectsViewInner{max-width:1180px;margin:0 auto}
-/* Ask chat: height tracks the VISIBLE viewport so the mobile keyboard can't cover the composer */
-#globalAskPanel{height:var(--vvh,100dvh)!important;bottom:auto!important}
-
-/* ═══ VIEW POLISH — Email, Contacts, Contact profile, DAAS Assistant ═══ */
-/* EMAIL — round to match Events */
-.eg-card{border-radius:14px;box-shadow:var(--sh-sm);padding:15px 17px}
-.eg-card:hover{border-color:var(--accent);box-shadow:var(--sh-md)}
-.eg-mini-btn{border-radius:9px}
-.ec-stat{border-radius:14px;box-shadow:var(--sh-sm);padding:14px 16px}
-.eg-tab{font-size:.78rem}
-/* CONTACTS table → rounded warm card with a refined header + pill presets */
-.ct-wrap-inner{border-radius:16px;box-shadow:var(--sh-md);border-color:var(--border)}
-.ct-table th{background:var(--surf2);padding:12px 18px;border-bottom-color:var(--border);font-size:11px}
-.ct-table td{padding:11px 18px;font-size:12.5px}
-.ct-table tr.ct-row:hover td{background:var(--surf2)}
-.ct-toolbar{padding:11px 18px}
-.ct-preset{padding:6px 14px;font-size:.72rem}
-.ct-preset:first-of-type{border-radius:9px 0 0 9px}
-.ct-preset:last-of-type{border-radius:0 9px 9px 0}
-.ct-preset.active{background:var(--accent-soft);color:var(--accent-d);border-color:var(--accent);border-bottom-color:var(--accent)}
-/* CONTACT PROFILE (dossier) → warmer rail, rounded controls, pill chips */
-.fp-rail{background:var(--warmwhite)}
-.fp-back{border-radius:9px}
-.fp-chip{border-radius:999px;padding:8px 14px}
-.fp-act{border-radius:11px;padding:10px 15px}
-.fp-minibtn{border:1px solid var(--accent);color:var(--accent-d);background:var(--accent-soft);border-radius:8px;padding:4px 10px}
-.fp-tab{font-size:.9rem;padding:11px 16px}
-.fp-score{box-shadow:var(--sh-sm)}
-/* DAAS ASSISTANT → warm pill chips (were cold grey), consistent accent */
-.as-chip{background:var(--surf2);border-radius:999px;padding:6px 14px;color:var(--txt2);font-size:.72rem}
-.as-chip:hover{border-color:var(--accent);color:var(--accent-d)}
-.as-chip-on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d);font-weight:600}
-.as-chip-on:hover{color:var(--accent-d)}
-/* ═══ MOBILE POLISH ═══ */
-/* search pill on the top bar (you liked it) */
-.m-topsearch{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surf2);border:1px solid var(--border);border-radius:999px;padding:9px 14px;color:var(--txt3);font-family:var(--font-ui);font-size:.82rem;cursor:pointer;box-shadow:var(--sh-sm);overflow:hidden}
-.m-topsearch svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2}
-.m-topsearch span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-topsearch:active{background:var(--surf)}
-/* rounder cards to match the desktop redesign */
-.m-card,.m-action-card{border-radius:16px}
-.m-d5-card{border-radius:18px}
-.m-section-h{font-size:1.1rem}
-/* Bottom nav had a z-index but no position, so it was ignored — the map's
-   positioned layers painted over the raised Log disc and clipped it. Make the
-   nav a positioned element so it always sits above the map. */
-.m-bottomnav{position:relative;z-index:30}
-/* People You're Chasing (mobile) */
-.m-chase-row{display:flex;align-items:center;gap:11px;padding:13px 0;border-top:1px solid var(--hairline);cursor:pointer}
-.m-chase-row:first-child{border-top:none}
-.m-chase-nm{font-family:var(--font-display);font-size:.95rem;font-weight:600;color:var(--txt);line-height:1.2}
-.m-chase-m{color:var(--txt2);font-size:.72rem;margin-top:2px}
-.m-chase-st{flex-shrink:0;font-size:.66rem;font-weight:600;color:var(--accent-d);background:var(--accent-soft);padding:5px 11px;border-radius:999px;white-space:nowrap}
-.m-chase-st.late{color:var(--s-lo,#b5544a);background:rgba(181,84,74,.12)}
-/* Show more on my dashboard (mobile) */
-.m-showmore{display:block;width:100%;margin:22px 0 6px;text-align:center;color:var(--txt2);font-size:.84rem;font-weight:600;padding:12px;background:none;border:none;cursor:pointer;font-family:var(--font-ui)}
-.m-showmore:active{color:var(--accent-d)}
 </style>
 </head>
 <body>
@@ -1832,11 +1621,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)!important;out
       <div style="display:flex;gap:8px">
         <button class="btn btn-sec" onclick="openCallSheet()" style="font-size:.65rem;padding:4px 10px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6Z"></path></svg> Call Sheet</button>
         <button class="btn btn-sec" onclick="openEngineSettings()" style="font-size:.65rem;padding:4px 10px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2A1.6 1.6 0 0 0 6.6 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.4H3a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 4.5 6.6l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 4.5V4a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 0 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1.4Z"></path></svg> Engine</button>
+        <button class="btn btn-sec" onclick="resetDashLayout()" style="font-size:.65rem;padding:4px 10px">↺ Reset Layout</button>
       </div>
     </div>
     <div class="grid-stack" id="dashGrid"></div>
-    <button class="dash-morelink" id="dashMoreBtn" onclick="toggleDashTray()">Show more on my dashboard ↓</button>
-    <div id="dashTray" class="dash-tray" style="display:none"></div>
   </div>
 
   <!-- EVENTS VIEW -->
@@ -7043,7 +6831,6 @@ function openFullPanel(idx){
     document.getElementById('fullPanelContent').innerHTML=html;
     _fpShowTab(window._fpActiveTab||'timeline');
     document.getElementById('fullPanel').style.display='flex';
-    if(typeof _daasArmBack==='function')_daasArmBack();
     document.getElementById('fullPanel').scrollTop=0;
     window.scrollTo(0,0);
     _hhEmailLoad(h.id,idx,0); // async — fills the Email History section
@@ -8373,48 +8160,22 @@ async function loadSearchContext(){
   return localStorage.getItem('search_context')||'';
 }
 
-// Keep --vvh synced to the VISIBLE viewport height so the on-screen keyboard
-// shrinks the Ask panel (keeping its composer in view) instead of hiding it.
-(function(){
-  try{
-    const vv=window.visualViewport; if(!vv) return;
-    const apply=()=>{ document.documentElement.style.setProperty('--vvh', Math.round(vv.height)+'px'); };
-    vv.addEventListener('resize',apply); vv.addEventListener('scroll',apply); apply();
-  }catch(e){}
-})();
-
-// ── IN-APP BACK BUTTON ──────────────────────────────────────────────────────
-// The phone/browser Back button should step back through screens, not leave the
-// app. When a full-screen surface (Ask / Quick Capture) opens or the mobile tab
-// moves off the dashboard, we arm one history entry; Back then unwinds that step
-// (closing the overlay or returning to the dashboard) instead of exiting.
-function _daasArmBack(){ try{ if(!(history.state&&history.state.daas)) history.pushState({daas:true},''); }catch(e){} }
-window.addEventListener('popstate',function(){
-  try{
-    const find=document.getElementById('mFindOverlay');
-    if(find&&find.classList.contains('open')){ mFindClose(); return; }
-    const fp=document.getElementById('fullPanel');
-    if(fp&&fp.style.display!=='none'){ if(typeof closeFullPanel==='function'){closeFullPanel();} else {fp.style.display='none';} return; }
-    const ask=document.getElementById('globalAskPanel');
-    if(ask&&ask.style.display!=='none'){ if(typeof isMobile==='function'&&isMobile()){mNav('dash');} else {closeGlobalAsk();} return; }
-    const cap=document.getElementById('captureOverlay');
-    if(cap&&cap.style.display!=='none'){ if(typeof isMobile==='function'&&isMobile()){mNav('dash');} else if(typeof closeCapture==='function'){closeCapture();} return; }
-    if(typeof isMobile==='function'&&isMobile()&&typeof _mActiveTab!=='undefined'&&_mActiveTab&&_mActiveTab!=='dash'){ mNav('dash'); return; }
-  }catch(e){}
-});
-
 function openGlobalAsk(){
   document.getElementById('globalAskPanel').style.display='flex';
-  _daasArmBack();
   setStrength(document.getElementById('searchMode')?.value||'standard');
   renderChatSidebar();
   const inp=document.getElementById('globalAskInput'); if(inp){autoGrowChat(inp);inp.focus();}
-  // Open to a NEW chat by default (like the Claude app). History stays in the
-  // rail to reopen on demand — we no longer auto-load the most recent session.
-  if(globalChatHistory.length===0){
-    currentSessionId=null;
-    document.getElementById('globalAskMessages').innerHTML=getWelcomeHTML();
-    const ht=document.getElementById('chatHeadTitle'); if(ht)ht.textContent='New conversation';
+  // Load most recent session automatically if no active session
+  if(!currentSessionId&&globalChatHistory.length===0){
+    sb('chat_sessions?select=id,title,updated_at,mode&order=updated_at.desc&limit=1').then(rows=>{
+      if(rows&&rows[0]){
+        loadSession(rows[0].id);
+      }else{
+        document.getElementById('globalAskMessages').innerHTML=getWelcomeHTML();
+      }
+    }).catch(()=>{
+      document.getElementById('globalAskMessages').innerHTML=getWelcomeHTML();
+    });
   }
 }
 
@@ -17531,99 +17292,61 @@ async function saveUIPrefs(){
   }catch(e){}
 }
 
-// ════════════════════════════════════════════════════════════════════════
-// FIXED DASHBOARD MODEL (replaces the draggable GridStack layout)
-// Panels render through the SAME renderAllPanels() → #body-<id> pipeline; we
-// only change how the cards are placed (a fixed CSS grid) and which show by
-// default. Order + span here; titles/fns are reused from DASH_DEFAULT_LAYOUT.
-// ════════════════════════════════════════════════════════════════════════
-const DASH_FIXED=[
-  {id:'panel-daily5',      span:2, always:true},
-  {id:'panel-heatmap',     span:1, default:true},
-  {id:'panel-tracks',      span:1, default:true},
-  {id:'panel-sri',         span:1},
-  {id:'panel-wins',        span:1},
-  {id:'panel-gifts',       span:1},
-  {id:'panel-tasks',       span:1},
-  {id:'panel-activity',    span:2, cap:true},
-  {id:'panel-emailengage', span:2, cap:true},
-].map(x=>{const d=DASH_DEFAULT_LAYOUT.find(p=>p.id===x.id)||{};return {...x,title:d.title||'',fn:d.fn||''};});
-const DASH_DEFAULT_VISIBLE=DASH_FIXED.filter(p=>p.always||p.default).map(p=>p.id);
-
-async function _loadDashVisible(){
-  try{
-    const rows=await sb('app_settings?key=eq.dash_visible&limit=1');
-    if(rows&&rows.length&&rows[0].value){const a=JSON.parse(rows[0].value);if(Array.isArray(a))return new Set(a);}
-  }catch(e){}
-  return new Set(DASH_DEFAULT_VISIBLE);
-}
-async function _saveDashVisible(set){
-  try{await sbSetSetting('dash_visible',JSON.stringify([...set]));}catch(e){console.warn('[DAAS] saveDashVisible failed',e);}
-}
-function _panelPlainTitle(p){return (p.title||'').replace(/<[^>]+>/g,'').trim();}
-
-function _makeFixedPanelEl(p){
-  const div=document.createElement('div');
-  div.className='dash-card gs-panel'+(p.span===2?' span2':'')+(p.cap?' cap':'');
-  div.dataset.pid=p.id;
-  div.innerHTML=`<div class="gs-panel-hdr">
-      <h3>${p.title}</h3>
-      <span onclick="showPanelHelp('${p.id}')" title="What does this panel do?" style="margin-left:auto;width:16px;height:16px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-family:var(--font-ui)" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--txt3)';this.style.borderColor='var(--border2)'">?</span>
-    </div>
-    <div class="gs-panel-body" id="body-${p.id}">
-      <div class="hint"><p>Loading…</p></div>
-    </div>`;
-  return div;
-}
-
-function _dashVisibleSet(){
-  return new Set([...document.querySelectorAll('#dashGrid .dash-card')].filter(c=>!c.classList.contains('hidden')).map(c=>c.dataset.pid));
-}
-function _renderDashTray(){
-  const t=document.getElementById('dashTray');if(!t)return;
-  const vis=_dashVisibleSet();
-  const opt=DASH_FIXED.filter(p=>!p.always);
-  t.innerHTML=`<h3>Customize your dashboard</h3><div class="sub">Daily Five, the tracker and the people you're chasing stay put. Turn on anything else you want to see.</div><div class="dash-tray-grid">`+
-    opt.map(p=>`<button class="dash-opt" onclick="toggleDashPanel('${p.id}')"><span class="dash-opt-t">${_panelPlainTitle(p)}</span><span class="dash-sw${vis.has(p.id)?' on':''}"></span></button>`).join('')+
-    `</div>`;
-}
-function toggleDashTray(){
-  const t=document.getElementById('dashTray');if(!t)return;
-  const show=(t.style.display==='none'||!t.style.display);
-  if(show)_renderDashTray();
-  t.style.display=show?'block':'none';
-  const b=document.getElementById('dashMoreBtn');
-  if(b)b.textContent=show?'Hide extra panels ↑':'Show more on my dashboard ↓';
-}
-function toggleDashPanel(id){
-  const card=document.querySelector('#dashGrid .dash-card[data-pid="'+id+'"]');if(!card)return;
-  card.classList.toggle('hidden');
-  _saveDashVisible(_dashVisibleSet());
-  _renderDashTray();
-}
-
 async function initDashboard(){
   _dashLoaded=true;
   // Load engine settings + pinned contacts first so panels render with correct thresholds
   await loadEngineSettings();
   await _loadDailyState();
-  // ── FIXED LAYOUT (no drag). Build every panel body so renderAllPanels() can
-  //    fill it, then hide the ones that aren't turned on. Daily Five + tracker +
-  //    Active tracks are on by default; the rest are opt-in via Customize.
-  if(_dashGrid){ try{_dashGrid.removeAll();_dashGrid.destroy(false);}catch(e){} _dashGrid=null; }
-  const _dgEl=document.getElementById('dashGrid');
-  if(_dgEl){
-    _dgEl.classList.remove('grid-stack');
-    _dgEl.classList.add('dash-fixed');
-    _dgEl.innerHTML='';
-    const _vis=await _loadDashVisible();
-    DASH_FIXED.forEach(p=>{
-      const el=_makeFixedPanelEl(p);
-      if(!p.always && !_vis.has(p.id)) el.classList.add('hidden');
-      _dgEl.appendChild(el);
-    });
-    _renderDashTray();
+  // Load saved layout — but only use it if it has ALL current panels
+  let layout=DASH_DEFAULT_LAYOUT;
+  try{
+    const rows=await sb('app_settings?key=eq.dashboard_layout&limit=1');
+    if(rows&&rows.length&&rows[0].value){
+      const parsed=JSON.parse(rows[0].value);
+      // New format: {version, panels}. Old format: bare array (legacy, version 1).
+      const savedVersion=parsed&&parsed.version?parsed.version:1;
+      const savedPanels=Array.isArray(parsed)?parsed:(parsed.panels||[]);
+      const savedIds=new Set(savedPanels.map(p=>p.id));
+      const defaultIds=new Set(DASH_DEFAULT_LAYOUT.map(p=>p.id));
+      // Require: matching version AND exact panel-set match (no extras, none missing)
+      const exactMatch=savedIds.size===defaultIds.size&&DASH_DEFAULT_LAYOUT.every(p=>savedIds.has(p.id));
+      if(savedVersion===DASH_LAYOUT_VERSION&&exactMatch){
+        layout=savedPanels;
+      }else{
+        console.warn('[DAAS] Saved dashboard layout discarded — version or panel-set mismatch (saved v'+savedVersion+', code v'+DASH_LAYOUT_VERSION+'). Resetting to defaults.');
+        // Clear the stale layout so it doesn't keep causing trouble
+        try{await sb('app_settings?key=eq.dashboard_layout',{method:'DELETE'});}catch(e){}
+      }
+    }
+  }catch(e){console.warn('[DAAS] layout load failed',e);}
+  // Init gridstack — idempotent: if a grid somehow already exists (double-init race,
+  // stale build re-entry), tear it down so widgets never stack twice.
+  if(_dashGrid){
+    try{_dashGrid.removeAll();_dashGrid.destroy(false);}catch(e){}
+    _dashGrid=null;
   }
+  // ALWAYS start from an empty container — clears any stale grid markup
+  // (including panels baked into the HTML by old live-DOM deploys).
+  const _dgEl=document.getElementById('dashGrid');
+  if(_dgEl)_dgEl.innerHTML='';
+  _dashGrid=GridStack.init({
+    column:12,
+    cellHeight:60,
+    margin:8,
+    animate:true,
+    resizable:{handles:'e,se,s,sw,w'},
+    float:false,
+  },document.getElementById('dashGrid'));
+
+  // Build panels — dedupe by id as a safety net against corrupted saved layouts
+  const seenPanels=new Set();
+  layout.filter(p=>{if(seenPanels.has(p.id))return false;seenPanels.add(p.id);return true;}).forEach(p=>{
+    const el=_makePanelEl(p);
+    _dashGrid.addWidget(el,{id:p.id,x:p.x,y:p.y,w:p.w,h:p.h});
+  });
+
+  // Save layout on change
+  _dashGrid.on('change',()=>saveDashLayout());
 
   // Give GridStack one rAF + 50ms to stamp the panel body divs into the DOM
   // before we try to write into them. Without this, body-panel-* elements don't
@@ -19276,62 +18999,49 @@ async function _buildDailyFive(el){
     const agcScore=getAGCScore(h);
     let badge='',badgeColor='';
     if(type==='pinned'){ badge='PINNED';badgeColor='#7c3aed'; }
-    else if(type==='keepwarm'){ badge='RECONNECT';badgeColor='#c2410c'; }
-    else if(type==='newcontact'){ badge='NEW';badgeColor='#0d7d70'; }
-    else if(type==='icebreaker'){ badge='PROSPECT';badgeColor='#8a7a5c'; }
+    else if(type==='keepwarm'){ badge='RECONNECT';badgeColor='#f97316'; }
+    else if(type==='newcontact'){ badge='NEW';badgeColor='#0d9488'; }
+    else if(type==='icebreaker'){ badge='PROSPECT';badgeColor='#6b7280'; }
     else if(type==='carryover'){ badge='CARRIED OVER';badgeColor='#a16207'; }
-    else { badge='FOLLOW-UP';badgeColor='#9c7b3a'; }
+    else { badge='FOLLOW-UP';badgeColor='#0f1e33'; }
+    // ONE sentence on the face. Everything else is behind "Why this name?".
     const whyNow=_whyReason(card);
     const trackId=type==='activetrack'?item.t.id:null;
-    const hhid=households[idx].id;
-    const initials=(h.displayName||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    let avColor='#a97a2e';try{const _t=_tierWithUnrated(h);avColor={close:'#3f7d4e',regular:'#a97a2e',thin:'#3b82f6',unrated:'#9c8f7d'}[_t]||avColor;}catch(e){}
-    const phone=(((h.members||[]).find(m=>m.phone)||{}).phone||'').replace(/[^0-9+]/g,'');
-    const firstName=_escHtml((h.members&&h.members[0]&&h.members[0].first_name)||(h.displayName||'').split(/[\s&]/)[0]||'');
-    const TYPES=['Connected','Phone call','Email / Text','Left VM','Meeting in person'];
-    return `<div class="d5c" id="d5c-${idx}">
-      <div class="d5c-face">
-        <div class="d5c-av" style="background:${avColor}">${initials}</div>
-        <div class="d5c-body">
-          <div class="d5c-name">${_escHtml(h.displayName)} <span class="d5c-tag" style="background:${badgeColor}1e;color:${badgeColor}">${badge}</span></div>
-          <div class="d5c-why">${whyNow}</div>
-        </div>
-        <div class="d5c-actions">
-          ${phone?`<a class="d5c-call" href="tel:${phone}"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c1 .3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg> Call ${firstName}</a>`:''}
-          <button class="d5c-log" onclick="toggleD5Log(${idx})"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Log</button>
-        </div>
+    return `<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-family:var(--font-ui);font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:10px;background:${badgeColor}22;color:${badgeColor};border:1px solid ${badgeColor}44">${badge}</span>
+        <span style="font-size:.8rem;font-weight:600;color:var(--txt);flex:1">${_escHtml(h.displayName)}</span>
+        <span style="font-family:var(--font-ui);font-size:.58rem;color:var(--txt3)">Prospect ${agcScore.total}</span>
       </div>
-      <div class="d5c-drawer" id="d5drawer-${idx}">
-        <div class="d5c-drawer-in">
-          <div class="d5c-lbl">How did it go with ${firstName}?</div>
-          <div class="d5c-otypes">
-            ${TYPES.map(o=>`<button class="d5c-otype" onclick="byId('showOutcomeTray','${hhid}',${idx},'${o}','${trackId||''}')">${_typeLabel(o)}</button>`).join('')}
-          </div>
-          <div id="outcome-tray-${idx}" style="display:none;margin-top:11px;padding:12px;background:var(--surf2);border-radius:11px;border:1px solid var(--border)">
-            <div style="font-size:.7rem;color:var(--txt2);margin-bottom:7px">Add a note (optional) — <span id="outcome-label-${idx}" style="font-weight:600;color:var(--accent-d)"></span></div>
-            <textarea id="outcome-note-${idx}" placeholder="What did you talk about?" style="width:100%;min-height:56px;background:var(--surf);border:1px solid var(--border2);border-radius:9px;padding:8px 10px;font-family:var(--font-ui);font-size:.76rem;color:var(--txt);resize:vertical;outline:none;margin-bottom:8px"></textarea>
-            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:.7rem;color:var(--txt2);margin-bottom:9px" title="A real moment in the relationship, not a routine touch. Adds to Affinity."><input type="checkbox" id="outcome-sig-${idx}"> This one mattered</label>
-            <div style="display:flex;gap:8px">
-              <button onclick="byId('saveOutcome','${hhid}',${idx})" class="btn btn-pri" style="font-size:.72rem;padding:8px 16px">Save</button>
-              <button onclick="document.getElementById('outcome-tray-${idx}').style.display='none'" class="btn btn-sec" style="font-size:.72rem;padding:8px 13px">Cancel</button>
-            </div>
-          </div>
-          <div class="d5c-sec">
-            <button onclick="switchView('crm');setTimeout(()=>byId('openFullPanel','${hhid}',${idx}),150)">View profile</button>
-            <button onclick="const w=document.getElementById('why-${idx}');w.style.display=w.style.display==='none'?'block':'none'">Why this name?</button>
-            ${type==='pinned'
-              ?`<button onclick="unpinHousehold('${h.id}')">Unpin</button>`
-              :`<button onclick="byId('snoozeDaily','${hhid}',${idx},7)">Snooze 7d</button><button onclick="byId('snoozeDaily','${hhid}',${idx},30)">30d</button><button onclick="byId('snoozeDaily','${hhid}',${idx},90)">90d</button>`}
-          </div>
-          <div id="why-${idx}" style="display:none;margin-top:10px;padding:10px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:9px;font-size:.68rem;font-family:var(--font-ui);line-height:1.5">${_whyHTML(card)}</div>
+      <div style="font-size:.68rem;color:var(--txt2);margin-bottom:8px">${whyNow}</div>
+      <div style="display:flex;gap:5px;margin-bottom:8px">
+        <button class="btn btn-sec" onclick="switchView('crm');setTimeout(()=>byId('openFullPanel','${households[idx].id}',${idx}),150)" style="font-size:.62rem;padding:3px 8px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+        <button class="btn btn-sec" onclick="const w=document.getElementById('why-${idx}');w.style.display=w.style.display==='none'?'block':'none'" style="font-size:.62rem;padding:3px 8px">Why this name?</button>
+      </div>
+      <div id="why-${idx}" style="display:none;margin-bottom:8px;padding:8px 10px;background:var(--surf2);border:1px solid var(--border);border-radius:6px;font-size:.62rem;font-family:var(--font-ui)">${_whyHTML(card)}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        ${['Connected','Phone call','Email / Text','Left VM','Meeting in person'].map(o=>`
+          <button onclick="byId('showOutcomeTray','${households[idx].id}',${idx},'${o}','${trackId||''}')" style="font-size:.6rem;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;background:var(--surf);color:var(--txt2);cursor:pointer" onmouseover="this.style.background='var(--surf2)'" onmouseout="this.style.background='var(--surf)'">${_typeLabel(o)}</button>`).join('')}
+        ${type==='pinned'
+          ?`<button onclick="unpinHousehold('${h.id}')" style="font-size:.6rem;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;background:var(--surf);color:var(--txt3);cursor:pointer"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Unpin</button>`
+          :`<button onclick="byId('snoozeDaily','${households[idx].id}',${idx},7)" style="font-size:.6rem;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;background:var(--surf);color:var(--txt3);cursor:pointer"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l10 8-10 8zM19 5v14"/></svg> 7d</button>
+        <button onclick="byId('snoozeDaily','${households[idx].id}',${idx},30)" style="font-size:.6rem;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;background:var(--surf);color:var(--txt3);cursor:pointer"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l10 8-10 8zM19 5v14"/></svg> 30d</button>
+        <button onclick="byId('snoozeDaily','${households[idx].id}',${idx},90)" style="font-size:.6rem;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;background:var(--surf);color:var(--txt3);cursor:pointer"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l10 8-10 8zM19 5v14"/></svg> 90d</button>`}
+      </div>
+      <div id="outcome-tray-${idx}" style="display:none;margin-top:8px;padding:8px;background:var(--surf2);border-radius:6px;border:1px solid var(--border)">
+        <div style="font-size:.65rem;color:var(--txt2);margin-bottom:5px">Add a note (optional) — <span id="outcome-label-${idx}" style="font-weight:600;color:var(--accent)"></span></div>
+        <textarea id="outcome-note-${idx}" placeholder="What did you talk about?" style="width:100%;min-height:52px;background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:6px;font-family:var(--font-ui);font-size:.72rem;color:var(--txt);resize:vertical;outline:none;margin-bottom:6px"></textarea>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:.62rem;color:var(--txt2);margin-bottom:6px" title="A real moment in the relationship, not a routine touch. Adds to Affinity.">
+          <input type="checkbox" id="outcome-sig-${idx}"> This one mattered
+        </label>
+        <div style="display:flex;gap:6px">
+          <button onclick="byId('saveOutcome','${households[idx].id}',${idx})" class="btn btn-pri" style="font-size:.62rem;padding:3px 10px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save</button>
+          <button onclick="document.getElementById('outcome-tray-${idx}').style.display='none'" class="btn btn-sec" style="font-size:.62rem;padding:3px 8px">Cancel</button>
         </div>
       </div>
     </div>`;
   }).join('');
 }
-
-// Expand-in-place: the whole Log button opens the logging drawer inside the card.
-function toggleD5Log(idx){ const c=document.getElementById('d5c-'+idx); if(c)c.classList.toggle('open'); }
 
 // Store pending outcome state
 const _pendingOutcome={};
@@ -22331,7 +22041,7 @@ function _asExecuteSearch(sentence){
 <div id="mobileShell">
   <div class="m-topbar">
     <div class="logo"><svg viewBox="0 0 32 32" width="20" height="20" style="flex-shrink:0"><path d="M16 2C13 8 9 12 9 17.5A7 7 0 0 0 16 24.5A7 7 0 0 0 23 17.5C23 12 19 8 16 2Z" fill="none" stroke="#d4a843" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg> דעת</div>
-    <button class="m-topsearch" onclick="mFindOpen()" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><span>Search names, notes…</span></button>
+    <div class="m-spacer"></div>
     <div style="position:relative" id="mUndoWrap">
       <button class="m-iconbtn" id="mUndoBtn" onclick="toggleMUndoPopout()" title="Undo a recent action" style="display:none"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-15-6.7L3 13"></path></svg></button>
       <div id="mUndoPopout" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:290px;max-width:86vw;background:var(--surf);border:1px solid var(--border2);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);z-index:10050;overflow:hidden">
@@ -22367,19 +22077,15 @@ function _asExecuteSearch(sentence){
           <button onclick="mRebuildDailyFive()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:0 13px;color:var(--txt2);font-family:var(--font-ui);font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:6px"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 3v6h-6M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3M3 21v-6h6"></path></svg> Rebuild</button>
         </div>
         <div id="mD5host"></div>
-        <div class="m-section-h" style="margin-top:26px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4 6 5 6 10a6 6 0 0 1-12 0c0-2 1-3 2-4 0 1 .5 2 1.5 2C9 10 9 6 12 2Z"></path></svg> Two Weeks at a Glance<span onclick="showPanelHelp('panel-heatmap')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
+        <div class="m-section-h" style="margin-top:24px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path></svg> Tasks<span onclick="showPanelHelp('panel-tasks')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
+        <div class="m-sub">Follow-ups, promises, plans.</div>
+        <div id="mTasksHost"></div>
+        <div class="m-section-h" style="margin-top:24px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4 6 5 6 10a6 6 0 0 1-12 0c0-2 1-3 2-4 0 1 .5 2 1.5 2C9 10 9 6 12 2Z"></path></svg> This Week<span onclick="showPanelHelp('panel-heatmap')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
+        <div class="m-sub">How many people you reached each day.</div>
         <div id="mHeatHost"></div>
-        <div class="m-section-h" style="margin-top:26px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"></path></svg> People You&rsquo;re Chasing<span onclick="showPanelHelp('panel-tracks')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
-        <div id="mChasingHost"></div>
-        <button class="m-showmore" id="mMoreBtn" onclick="mToggleMore()">Show more on my dashboard &darr;</button>
-        <div id="mMoreWrap" style="display:none">
-          <div class="m-section-h"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path></svg> Tasks<span onclick="showPanelHelp('panel-tasks')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
-          <div class="m-sub">Follow-ups, promises, plans.</div>
-          <div id="mTasksHost"></div>
-          <div class="m-section-h" style="margin-top:24px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg> Recent Interactions<span onclick="showPanelHelp('panel-activity')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
-          <div class="m-sub">Everything you&rsquo;ve logged lately.</div>
-          <div id="mRecentHost" style="max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:2px"></div>
-        </div>
+        <div class="m-section-h" style="margin-top:24px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg> Recent Interactions<span onclick="showPanelHelp('panel-activity')" style="margin-left:auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);color:var(--txt3);font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)">?</span></div>
+        <div class="m-sub">Everything you&rsquo;ve logged lately.</div>
+        <div id="mRecentHost" style="max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:2px"></div>
       </div>
     </div>
 
@@ -22485,13 +22191,12 @@ function isMobile(){ return MOBILE_MQ.matches; }
 /* ---- Tab navigation ---- */
 function mNav(tab){
   _mActiveTab=tab;
-  if(tab!=='dash') _daasArmBack();
   document.querySelectorAll('#mobileShell .m-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
   document.querySelectorAll('.m-navbtn').forEach(b=>b.classList.toggle('active', b.dataset.nav===tab));
   // If switching AWAY from chat/capture, close their overlays so they don't linger
   if(tab!=='chat'){ try{ const g=document.getElementById('globalAskPanel'); if(g&&g.style.display!=='none'){ if(typeof closeGlobalAsk==='function')closeGlobalAsk(); else g.style.display='none'; } }catch(e){} }
   if(tab!=='capture'){ try{ const c=document.getElementById('captureOverlay'); if(c&&c.style.display!=='none'){ if(typeof closeCapture==='function')closeCapture(); else c.style.display='none'; } }catch(e){} }
-  if(tab==='dash'){ mRenderD5(); try{ mRenderMHeat(); }catch(e){} try{ mRenderChasing(); }catch(e){} try{ mRenderTasks(); }catch(e){} try{ mRenderRecent(); }catch(e){} }
+  if(tab==='dash'){ mRenderD5(); try{ mRenderTasks(); }catch(e){} try{ mRenderMHeat(); }catch(e){} try{ mRenderRecent(); }catch(e){} }
   else if(tab==='contacts') mRenderRoster();
   else if(tab==='map') mInitMap();
   else if(tab==='capture'){ try{ openCapture(); _mWireCaptureClose(); }catch(e){} }
@@ -22564,7 +22269,6 @@ async function mBoot(){
   try{ mRenderD5(); }catch(e){ console.error('mRenderD5',e); }
   try{ mRenderTasks(); }catch(e){ console.error('mRenderTasks',e); }
   try{ mRenderMHeat(); }catch(e){ console.error('mRenderMHeat',e); }
-  try{ mRenderChasing(); }catch(e){ console.error('mRenderChasing',e); }
   try{ mRenderRecent(); }catch(e){ console.error('mRenderRecent',e); }
   // enrich count hint
   try{
@@ -22637,60 +22341,50 @@ function _mRegisterSW(){
 /* ===================== ACTIVITY HEATMAP (mobile) — one week, hover shows count ===================== */
 async function mRenderMHeat(){
   const el=document.getElementById('mHeatHost'); if(!el) return;
-  const since=localDateStr(new Date(Date.now()-15*24*60*60*1000));
+  const since=localDateStr(new Date(Date.now()-8*24*60*60*1000));
   let rows=[];
   try{ rows=await sbAll('interactions?date=gte.'+since+'&type=neq.Note&select=date&order=id.asc')||[]; }catch(e){}
   const counts={}; rows.forEach(r=>{ if(r.date)counts[r.date]=(counts[r.date]||0)+1; });
-  const today=_localDate(localToday());
+  const today=_localDate(localToday()); // Eastern "today", not the device clock
   const _p2=n=>String(n).padStart(2,'0');
-  const _fmt=x=>x.getFullYear()+'-'+_p2(x.getMonth()+1)+'-'+_p2(x.getDate());
-  const todayStr=_fmt(today);
-  const thisStart=new Date(today); thisStart.setDate(today.getDate()-today.getDay());
-  const lastStart=new Date(thisStart); lastStart.setDate(thisStart.getDate()-7);
-  const row=(start,label)=>{
-    let cells='';
-    for(let d=0;d<7;d++){
-      const date=new Date(start); date.setDate(start.getDate()+d);
-      const dow=date.getDay(); const ds=_fmt(date);
-      const ytName=_yomTovName(date);
-      const isNA=dow===6||!!ytName;
-      const isFuture=date>today;
-      const count=counts[ds]||0;
-      const threshold=(dow===0)?ENGINE.heatSundayFull:ENGINE.heatWeekdayFull;
-      let intensity=0;
-      if(!isNA&&!isFuture&&count>0){ if(count>=threshold)intensity=4; else if(count>=threshold*.6)intensity=3; else if(count>=threshold*.3)intensity=2; else intensity=1; }
-      const cls=isNA?'heat-na':(isFuture?'heat-0':'heat-'+intensity);
-      const isToday=ds===todayStr;
-      const tip=isNA?(ds+': n/a'):(isFuture?ds:(ds+': '+count+' interaction'+(count!==1?'s':'')));
-      cells+='<div class="heat-cell '+cls+'" data-tip="'+tip+'" style="flex:1;height:22px;border-radius:6px;'+(isToday?'box-shadow:0 0 0 2px var(--accent);':'')+(isFuture&&!isNA?'opacity:.4':'')+'"></div>';
+  const _fmtLocal=x=>x.getFullYear()+'-'+_p2(x.getMonth()+1)+'-'+_p2(x.getDate());
+  const todayStr=_fmtLocal(today);
+  const weekStart=new Date(today); weekStart.setDate(today.getDate()-today.getDay());
+  const DAY_LABELS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let cells='';
+  for(let d=0; d<7; d++){
+    const date=new Date(weekStart); date.setDate(weekStart.getDate()+d);
+    const dow=date.getDay();
+    const dateStr=_fmtLocal(date); // cell's own Eastern calendar day (tz-independent)
+    const isShabbos=dow===6;
+    const ytName=_yomTovName(date);
+    const isNA=isShabbos||!!ytName;
+    const count=counts[dateStr]||0;
+    const isFuture=date>today;
+    const threshold=(dow===0)?ENGINE.heatSundayFull:ENGINE.heatWeekdayFull;
+    let intensity=0;
+    if(!isNA&&!isFuture&&count>0){
+      if(count>=threshold)intensity=4;
+      else if(count>=threshold*.6)intensity=3;
+      else if(count>=threshold*.3)intensity=2;
+      else intensity=1;
     }
-    return '<div style="display:flex;gap:5px;align-items:center;margin-bottom:6px"><div style="width:40px;color:var(--txt3);font-size:.62rem;flex-shrink:0">'+label+'</div>'+cells+'</div>';
-  };
+    const isToday=dateStr===todayStr;
+    const naLabel=isShabbos&&ytName?(ytName+' · Shabbos'):(ytName||'Shabbos');
+    const tip=isNA?(dateStr+': '+naLabel+' (n/a)'):(isFuture?dateStr:(dateStr+': '+count+' interaction'+(count!==1?'s':'')));
+    cells+='<div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1">'
+      +'<div class="heat-cell '+(isNA?'heat-na':'heat-'+(isFuture?'0':intensity))+'" data-tip="'+tip+'" style="width:100%;height:36px;'+(isToday?'box-shadow:0 0 0 2px var(--accent);':'')+(isFuture&&!isNA?'opacity:.3':'')+'"></div>'
+      +'<div style="font-family:var(--font-ui);font-size:.58rem;color:'+(isToday?'var(--accent)':'var(--txt3)')+';font-weight:'+(isToday?'700':'400')+'">'+DAY_LABELS[dow]+'</div>'
+      +'<div style="font-family:var(--font-ui);font-size:.66rem;color:var(--txt2);font-weight:600">'+(isNA?'':(isFuture?'':count))+'</div>'
+    +'</div>';
+  }
   el.innerHTML='<div class="m-card m-card-pad">'
-    +row(lastStart,'Last wk')
-    +row(thisStart,'This wk')
-    +'<div style="display:flex;align-items:center;gap:6px;color:var(--txt3);font-size:.62rem;margin-top:11px">Fewer <span class="heat-cell heat-1" style="width:14px;height:14px;border-radius:4px"></span><span class="heat-cell heat-2" style="width:14px;height:14px;border-radius:4px"></span><span class="heat-cell heat-3" style="width:14px;height:14px;border-radius:4px"></span><span class="heat-cell heat-4" style="width:14px;height:14px;border-radius:4px"></span> More</div>'
-  +'</div>';
-}
-
-/* ===================== PEOPLE YOU'RE CHASING (mobile) — active outreach tracks ===================== */
-function mRenderChasing(){
-  const el=document.getElementById('mChasingHost'); if(!el) return;
-  const active=(typeof outreachTracks!=='undefined'?outreachTracks:[]).filter(t=>t.status==='active');
-  if(!active.length){ el.innerHTML='<div class="m-card m-card-pad"><div class="m-empty">Nobody being chased right now. Start a follow-up from a contact or the Daily Five.</div></div>'; return; }
-  const todayStr=localToday();
-  const hhMap={}; households.forEach(h=>{ hhMap[h.id]=h; });
-  const rows=active.map(t=>{
-    const h=hhMap[t.household_id]; if(!h) return '';
-    const overdue=t.next_due&&t.next_due<todayStr;
-    const daysLate=overdue?(typeof _daysSince==='function'?(_daysSince(t.next_due)||0):0):0;
-    const pill=overdue
-      ? '<span class="m-chase-st late">'+daysLate+'d late</span>'
-      : '<span class="m-chase-st">Step '+(t.step||1)+' of 3</span>';
-    const sub='Follow-up'+(t.attempts?(' · try '+(t.attempts+1)):'');
-    return '<div class="m-chase-row" onclick="mOpenSheetById(\''+h.id+'\')"><div style="flex:1;min-width:0"><div class="m-chase-nm">'+_escHtml(h.displayName||'Household')+'</div><div class="m-chase-m">'+sub+'</div></div>'+pill+'</div>';
-  }).join('');
-  el.innerHTML='<div class="m-card" style="padding:4px 16px">'+rows+'</div>';
+    +'<div style="display:flex;gap:7px;align-items:flex-end">'+cells+'</div>'
+    +'<div style="display:flex;align-items:center;gap:6px;margin-top:12px;justify-content:flex-end">'
+      +'<span style="font-family:var(--font-ui);font-size:.55rem;color:var(--txt3)">Less</span>'
+      +[0,1,2,3,4].map(i=>'<div class="heat-cell heat-'+i+'" style="width:13px;height:13px"></div>').join('')
+      +'<span style="font-family:var(--font-ui);font-size:.55rem;color:var(--txt3)">More</span>'
+    +'</div></div>';
 }
 
 /* ===================== RECENT INTERACTIONS (mobile) — 15 newest =====================
@@ -22736,61 +22430,7 @@ async function mRenderD5(){
   }catch(e){ host.innerHTML='<div class="m-empty">Couldn\u2019t load today\u2019s list. Pull down to try again.</div>'; return; }
   _mD5Pos=0;
   if(!_mD5Cards.length){ host.innerHTML='<div class="m-card m-card-pad"><div class="m-empty">You\u2019re all caught up. No more outreach flagged for today.</div></div>'; return; }
-  host.innerHTML=_mD5Cards.map((c,i)=>_mD5CardHtml(c,i)).join('');
-}
-
-// \u2500\u2500 MOBILE DAILY FIVE \u2014 scrollable list of compact cards (matches desktop +
-//    the mockup). Tap Log to expand the logging drawer in place. \u2500\u2500
-function _mD5CardHtml(card,pos){
-  const h=card.item.h;
-  const agc=getAGCScore(h);
-  const label={keepwarm:'Reconnect',newcontact:'New',icebreaker:'Prospect',activetrack:'Follow-up',pinned:'Pinned',carryover:'Carried over'}[card.type]||'';
-  const badgeColor={keepwarm:'#c2410c',newcontact:'#0d7d70',icebreaker:'#8a7a5c',activetrack:'#9c7b3a',pinned:'#7c3aed',carryover:'#a16207'}[card.type]||'#9c7b3a';
-  const reason=(typeof _whyReason==='function')?_whyReason(card):'';
-  const why=(typeof _whyHTML==='function')?_whyHTML(card):'';
-  const initials=(h.displayName||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
-  let avColor='#a97a2e';try{const _t=_tierWithUnrated(h);avColor={close:'#3f7d4e',regular:'#a97a2e',thin:'#3b82f6',unrated:'#9c8f7d'}[_t]||avColor;}catch(e){}
-  const call=_mD5CallTarget(h);
-  const first=_escHtml((call&&call.name)||(h.displayName||'').split(/[\s&]/)[0]||'');
-  const callPhone=call?(call.phone||'').replace(/[^0-9+]/g,''):'';
-  return `<div class="d5c" id="md5c-${pos}">
-    <div class="d5c-face">
-      <div class="d5c-av" style="background:${avColor}">${initials}</div>
-      <div class="d5c-body">
-        <div class="d5c-name">${_escHtml(h.displayName||'Household')} <span class="d5c-tag" style="background:${badgeColor}1e;color:${badgeColor}">${label}</span></div>
-        <div class="d5c-why">${reason}</div>
-      </div>
-      <button class="d5c-log" onclick="mToggleD5(${pos})"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Log</button>
-    </div>
-    <div class="d5c-drawer" id="md5drawer-${pos}">
-      <div class="d5c-drawer-in">
-        ${call?`<a class="d5c-call" style="display:flex;justify-content:center;margin:12px 0 4px" href="tel:${callPhone}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c1 .3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg> Call ${first}</a>`:''}
-        <div class="d5c-lbl">How did it go?</div>
-        <div class="d5c-otypes">
-          <button class="d5c-otype" onclick="mOutcome('Connected')">We talked</button>
-          <button class="d5c-otype" onclick="mOutcome('Phone call')">Phone call</button>
-          <button class="d5c-otype" onclick="mOutcome('Email / Text')">Emailed / texted</button>
-          <button class="d5c-otype" onclick="mOutcome('Left VM')">Left a message</button>
-          <button class="d5c-otype" onclick="mOutcome('Meeting in person')">Saw them</button>
-        </div>
-        <div class="d5c-sec">
-          <button onclick="mOpenContactFromD5('${h.id}')">Profile</button>
-          <button onclick="var w=document.getElementById('mwhy-${pos}');w.style.display=w.style.display==='none'?'block':'none'">Why this name?</button>
-          ${card.type==='pinned'
-            ?`<button onclick="mUnpinCurrent('${h.id}')">Unpin</button>`
-            :`<button onclick="mSnoozeD5(7)">Snooze 7d</button><button onclick="mSnoozeD5(30)">30d</button><button onclick="mSnoozeD5(90)">90d</button>`}
-        </div>
-        <div id="mwhy-${pos}" style="display:none;margin-top:10px;padding:10px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:9px;font-size:.72rem;line-height:1.55">${why}</div>
-      </div>
-    </div>
-  </div>`;
-}
-function mToggleD5(pos){
-  _mD5Pos=pos;
-  const c=document.getElementById('md5c-'+pos);
-  const wasOpen=c&&c.classList.contains('open');
-  document.querySelectorAll('#mD5host .d5c.open').forEach(x=>x.classList.remove('open'));
-  if(c&&!wasOpen)c.classList.add('open');
+  mShowD5Card();
 }
 
 function _mD5CallTarget(h){
@@ -22886,7 +22526,7 @@ async function mSnoozeD5(days){
   _mD5Cards.splice(_mD5Pos,1);
   if(_mD5Pos>=_mD5Cards.length)_mD5Pos=Math.max(0,_mD5Cards.length-1);
   if(_mD5Cards.length===0){ document.getElementById('mD5host').innerHTML='<div class="m-card m-card-pad"><div class="m-empty">You’re all caught up. No more outreach flagged for today.</div></div>'; }
-  else mRenderD5();
+  else mShowD5Card();
   _journalPush(undo);
 }
 async function mUnpinCurrent(hid){
@@ -23001,7 +22641,7 @@ async function mSaveOutcome(btn){
   _mD5Cards.splice(_mD5Pos,1);
   if(_mD5Pos>=_mD5Cards.length) _mD5Pos=Math.max(0,_mD5Cards.length-1);
   if(_mD5Cards.length===0){ document.getElementById('mD5host').innerHTML='<div class="m-card m-card-pad"><div class="m-empty">You’re all caught up. No more outreach flagged for today.</div></div>'; }
-  else mRenderD5();
+  else mShowD5Card();
   // One toast: Undo + complete-a-matching-open-task shortcut.
   if(res){
     const acts=[];
@@ -23461,7 +23101,7 @@ function mInitMap(){
   if(_mMapBuilt){ _mSyncMapPins(); setTimeout(()=>{ if(_mMapObj) _mMapObj.invalidateSize(); },80); return; }
   if(typeof L==='undefined'){ return; }
   _mMapObj=L.map('mMap',{zoomControl:true,attributionControl:false}).setView([39.5,-98.35],4);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(_mMapObj);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(_mMapObj);
   _mMapObj.on('click',_mMapTap);
   _mSyncMapPins();
   _mMapBuilt=true;
@@ -23649,18 +23289,11 @@ function _initViewMode(){ let pref='0'; try{ pref=localStorage.getItem('daas_for
 let _mFindDebounce=null;
 function mFindOpen(){
   document.getElementById('mFindOverlay').classList.add('open');
-  if(typeof _daasArmBack==='function')_daasArmBack();
   const inp=document.getElementById('mFindInput');
   if(inp){ inp.value=''; setTimeout(()=>inp.focus(),80); }
   document.getElementById('mFindBody').innerHTML='<div class="m-empty">Type a name, phone, note, or anything from a profile.</div>';
 }
 function mFindClose(){ document.getElementById('mFindOverlay').classList.remove('open'); }
-function mToggleMore(){
-  const w=document.getElementById('mMoreWrap'), b=document.getElementById('mMoreBtn'); if(!w)return;
-  const show=(w.style.display==='none'||!w.style.display);
-  w.style.display=show?'block':'none';
-  if(b)b.innerHTML=show?'Hide extra &uarr;':'Show more on my dashboard &darr;';
-}
 function mFindRun(){
   clearTimeout(_mFindDebounce);
   _mFindDebounce=setTimeout(_mFindRender,140);
@@ -24241,7 +23874,7 @@ function _mTaskRowHtml(t){
   const due=_taskDueBadge(t.due_date,done,t.completed_at);
   const meta=(chip||due)?('<div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap">'+chip+due+'</div>'):'';
   const editBtn=done?'':'<button onclick="editTaskStart(\''+t.id+'\')" title="Edit text or date" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:.85rem;flex-shrink:0;padding:2px 6px;line-height:1"><svg class="ic" viewBox="0 0 24 24" width="1em" height="1em" style="display:inline-block;vertical-align:-0.13em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>';
-  return '<div id="m-task-row-'+t.id+'" style="display:flex;align-items:flex-start;gap:11px;padding:13px 15px;background:var(--surf);border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-sm);margin-bottom:9px">'
+  return '<div id="m-task-row-'+t.id+'" style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">'
     +'<input type="checkbox" '+(done?'checked':'')+' onchange="mToggleTask(\''+t.id+'\')" style="margin-top:2px;width:19px;height:19px;accent-color:var(--accent);cursor:pointer;flex-shrink:0">'
     +'<div style="flex:1;min-width:0"><div style="font-size:.86rem;line-height:1.35;color:'+(done?'var(--txt3)':'var(--txt)')+';'+(done?'text-decoration:line-through':'')+'">'+_escHtml(t.text)+'</div>'+meta+'</div>'
     +editBtn
