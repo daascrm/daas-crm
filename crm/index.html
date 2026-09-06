@@ -551,6 +551,13 @@ html.force-desktop #mobileShell{display:none!important}
 
 /* Mobile map */
 #mMap{position:absolute;inset:0}
+/* Contain the map tab in its own stacking context. Leaflet's panes and
+   controls (and the floating map-search bar, z-index 1200) otherwise sit
+   in the root stacking context and paint OVER the bottom nav's raised Log
+   disc (which overhangs upward by 16px) and over an open hamburger menu.
+   Giving the tab z-index:0 keeps all of that below the nav (z 20) and the
+   menu (z 40). */
+#mtab-map{z-index:0}
 .m-map-tray{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));background:var(--surf);border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-lg);padding:14px 16px;z-index:500;display:none}
 .m-map-tray.open{display:block}
 .m-map-tray .mt-name{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--txt)}
@@ -22343,7 +22350,6 @@ function _asExecuteSearch(sentence){
   </div>
   <div class="m-menu-bd" id="mMenuBd" onclick="mMenuClose()"></div>
   <div class="m-menu" id="mMenu">
-    <button onclick="mMenuGo('prospects')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5 5-2z"></path></svg><span class="m-menu-txt"><b>Prospect Finder</b><span>Who to intentionally invest in</span></span></button>
     <button onclick="mMenuGo('assistant')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg><span class="m-menu-txt"><b>DAAS Assistant</b><span>Say it — email, event, or list</span></span></button>
     <button onclick="mMenuGo('email')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 6L2 7"></path></svg><span class="m-menu-txt"><b>Emails</b><span>Drafts, templates, build &amp; send</span></span></button>
     <button onclick="mMenuGo('contact')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM19 8v6M22 11h-6"></path></svg><span class="m-menu-txt"><b>New Contact</b><span>Add a person you just met</span></span></button>
@@ -23614,10 +23620,6 @@ function mMenuClose(){
 }
 function mMenuGo(what){
   mMenuClose();
-  if(what==='prospects'){ // Prospect Finder is a "sit down and think" desktop-layout page; open it in the wider desktop view like the menu's own "Desktop view" action.
-    try{ _applyViewMode(true); switchView('prospects'); }catch(e){ _ebToastMsg('Could not open Prospect Finder.'); }
-    return;
-  }
   if(what==='assistant'){ try{ openAssistant(); setTimeout(()=>{ const ta=document.getElementById('as-text'); if(ta)ta.placeholder='e.g. \u201cSend an email to the Hebrew school parents about the schedule change next week\u201d \u00b7 \u201cCreate a Purim dinner event on March 3, $36 adults $18 kids\u201d \u00b7 \u201cWho gave last year but not this year?\u201d'; const go=document.getElementById('as-go'); if(go)go.textContent='Make it \u2192'; },60); }catch(e){ _ebToastMsg('Could not open the Assistant.'); } }
   else if(what==='email'){ mEmailHome(); }
   else if(what==='contact'){ try{ showAddContact(); }catch(e){ _ebToastMsg('Could not open Add Contact.'); } }
