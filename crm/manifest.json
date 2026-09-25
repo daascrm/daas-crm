@@ -40,7 +40,18 @@
         {
           "name": "image",
           "accept": [
-            "image/*"
+            "image/*",
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+            "image/gif",
+            "image/heic",
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".webp",
+            ".gif",
+            ".heic"
           ]
         }
       ]
