@@ -1,13 +1,13 @@
 {
-  "name": "DAAS — Constituent Intelligence",
+  "name": "DAAS",
   "short_name": "DAAS",
-  "description": "Constituent relationship CRM — Daily Five, Quick Capture, Contacts, Map.",
+  "description": "Your community, one conversation at a time — Today’s Five, Log something, People, Map.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0f1e33",
-  "theme_color": "#f4f1ea",
+  "background_color": "#FAF8F4",
+  "theme_color": "#FAF8F4",
   "icons": [
     {
       "src": "icon-192.png",
