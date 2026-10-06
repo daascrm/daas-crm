@@ -97,7 +97,7 @@ a{color:inherit}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:clamp(32px,4vw,52px)}
 .card{background:rgba(255,253,249,.82);border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(90,45,20,.55)}
 .card .ph{aspect-ratio:16/10;overflow:hidden;background:#fff}
-.card .ph img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.card .ph img,.card .ph video{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
 .card .t{padding:22px 24px 26px}
 .card h4{font:400 clamp(24px,2.4vw,30px)/1.1 var(--serif);letter-spacing:-.01em;margin:0 0 8px}
 .card p{margin:0;color:var(--plum2);font-size:16px}
@@ -174,11 +174,12 @@ a{color:inherit}
 .remember{background:linear-gradient(180deg,var(--sky),#E3EBEE)}
 .split p+p{margin-top:14px}
 .shot{border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 30px 60px -38px rgba(30,40,70,.5);border:1px solid rgba(42,34,48,.06)}
-.shot img{width:100%}
+.shot img,.shot video{display:block;width:100%;height:auto}
+.car-wrap .vn video{display:block;width:100%;height:auto}
 .shot-stack{position:relative;padding-bottom:12%}
 .shot-stack .small{position:absolute;right:-4%;bottom:0;width:62%}
 .capture{background:linear-gradient(180deg,#E3EBEE,#E8EDE7)}
-.capture .shot.wide{max-width:720px;margin:clamp(40px,5vw,64px) auto 0}
+.capture .shot.wide{max-width:560px;margin:clamp(40px,5vw,64px) auto 0}
 .promise{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--plum)!important;margin-top:18px!important}
 .promise svg{width:18px;height:18px;color:var(--ember);flex:none}
 .ask{background:linear-gradient(180deg,#E8EDE7,#F0EDDF)}
@@ -389,22 +390,22 @@ a{color:inherit}
       <svg class="orn" aria-hidden="true"><use href="#m-mezuzah"/></svg>
       <span class="label">Daily Five</span>
       <h3>Every morning, five people to reach out to.</h3>
-      <p>Open DAAS and your list is waiting: five names, and the reason each one is on it. Call, text or stop by, then tap once to log how it went. Tomorrow’s list already knows.</p>
+      <p>Open DAAS and your list is waiting: five names, and the reason each one is on it. Call, text or stop by, then log how it went in two taps. Tomorrow’s list already knows.</p>
       <ul class="reasons">
         <li><b>Follow-up</b><span>You tried and didn’t connect. DAAS brings them back on a schedule until you do.</span></li>
-        <li><b>Reconnect</b><span>It has been longer than usual since you spoke. DAAS learns each family’s own rhythm.</span></li>
-        <li><b>New</b><span>Joined your community recently and hasn’t had a personal hello yet.</span></li>
+        <li><b>Gone quiet</b><span>It has been longer than usual since you spoke. DAAS learns each family’s own rhythm.</span></li>
+        <li><b>New face</b><span>Joined your community recently and hasn’t had a personal hello yet.</span></li>
         <li><b>Prospect</b><span>Someone in your area you haven’t gotten to know.</span></li>
       </ul>
       <p class="note">A connection list, not a fundraising list: no giving requirement, and no money in the ordering.</p>
     </div>
-    <div class="phone-col"><div class="phone"><img src="media/mobile-dashboard-clean.png" alt="The DAAS Daily Five on a phone, with a follow-up card for a fictional contact and one-tap outcome buttons" loading="lazy" width="390" height="773"></div></div>
+    <div class="phone-col"><div class="phone"><img src="media/daily-five-phone.webp" alt="Today’s Five on a phone: a follow-up card for a fictional contact, a Call button and the How did it go? outcomes" loading="lazy" width="780" height="1546"></div></div>
   </div>
 </section>
 
 <section class="band remember" data-seen>
   <div class="in split flip">
-    <div class="shot"><img src="media/profile-builder-clean.png" alt="A DAAS household profile with its Prospect Score, home value and notes" loading="lazy" width="1280" height="650"></div>
+    <div class="shot"><img src="media/household.webp" alt="A fictional household in DAAS: contact details, a birthday and yahrzeit reminder, What to know, and the timeline of every call, visit and donation" loading="lazy" width="1600" height="956"></div>
     <div>
       <svg class="orn" aria-hidden="true"><use href="#m-seforim"/></svg>
       <span class="label">Every interaction, remembered</span>
@@ -429,17 +430,17 @@ a{color:inherit}
           </g>
           <g class="fig"><path d="M150 131c0-17 26-17 28 0z"/><path d="M144 132q20-9 40-2q-20 6-40 2z"/><path class="beard" d="M172 142c7 5 8 16 1 22c-4 3-8 2-9-2c2-6 2-13 1-19z"/><path d="M146 162c0-13 6-20 14-22l4 2c-6 4-8 12-8 20z"/></g>
         </svg>
-        <div class="vn"><img src="media/voice-note.gif" alt="Recording a voice note in DAAS" loading="lazy" width="760" height="249"></div>
+        <div class="vn"><video src="media/voice-note.mp4" poster="media/voice-note-poster.webp" width="760" height="232" autoplay muted loop playsinline aria-label="Recording a voice note in DAAS"></video></div>
       </div>
       <div>
         <svg class="orn" aria-hidden="true"><use href="#m-tefillin"/></svg>
-      <span class="label">Quick Capture</span>
+      <span class="label">Log something</span>
         <h3>Talk for thirty seconds. DAAS does the data entry.</h3>
         <p>Leaving a visit? Record a voice note from the car. Forward an email chain, snap the note on your desk, or screenshot a conversation. DAAS works out who it is about, what happened and what should happen next, then shows you exactly what it wants to save.</p>
         <p class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Nothing sends or saves until you approve it.</p>
       </div>
     </div>
-    <div class="shot wide"><img src="media/quick-capture-review.png" alt="DAAS Quick Capture showing what it proposes to log, waiting for approval" loading="lazy" width="700" height="388"></div>
+    <div class="shot wide"><video src="media/log-something.mp4" poster="media/log-something-poster.webp" width="1100" height="1134" autoplay muted loop playsinline aria-label="Log something in DAAS: a typed note about a visit becomes three proposed entries, a visit, a household note and a to-do, each waiting for approval"></video></div>
   </div>
 </section>
 
@@ -447,12 +448,12 @@ a{color:inherit}
   <div class="in split">
     <div>
       <svg class="orn" aria-hidden="true"><use href="#m-torah"/></svg>
-      <span class="label">Research Chat &amp; DAAS Assistant</span>
+      <span class="label">Ask DAAS &amp; the Assistant</span>
       <h3>Ask anything about your community.</h3>
-      <p>Who should I invite for Shabbos? Who hasn’t been in touch since Pesach? Which families should get a challah this Friday? Research Chat answers from your own records: your people, their history, your notes.</p>
-      <p>Or just say what you need. “Email the Hebrew school families about registration” opens the email tool with the audience and the draft ready for you to review.</p>
+      <p>Who should I invite for Shabbos? Who hasn’t been in touch since Pesach? Which families should get a challah this Friday? Ask DAAS answers from your own records: your people, their history, your notes.</p>
+      <p>Or tell the Assistant what you need. “Email the Hebrew school families about registration” comes back as a draft with the audience already picked, ready for you to review and open in Email.</p>
     </div>
-    <div class="shot"><img src="media/research-chat-preview.png" alt="DAAS Research Chat planning a Friday challah route from the community’s own records" loading="lazy" width="1280" height="650"></div>
+    <div class="shot"><img src="media/ask-daas.webp" alt="Ask DAAS planning a Friday challah route from the community’s own records, with the families listed underneath and ways to act on them" loading="lazy" width="1600" height="1044"></div>
   </div>
 </section>
 
@@ -461,10 +462,10 @@ a{color:inherit}
     <svg class="orn" aria-hidden="true"><use href="#m-tzedakah"/></svg>
       <span class="label">Prospect Finder &amp; Community map</span>
     <h3 class="sec-h">See where a relationship can grow.</h3>
-    <p class="sec-p">Every household gets a Prospect Score, closeness, generosity and capacity in one number, with the reasons shown. Prospect Finder sorts your community into Get to Know, Invite to Give and Stay Connected.</p>
+    <p class="sec-p">Every household gets a Prospect Score, closeness, generosity and capacity in one number, with the reasons shown. Prospect Finder sorts your community into Get to know, Invite to give and Stay connected.</p>
     <div class="cards">
-      <article class="card"><div class="ph"><img src="media/prospect-finder-clean.png" alt="DAAS Prospect Finder listing fictional households by score" loading="lazy" width="1280" height="650"></div><div class="t"><h4>Uncover the prospects hiding in plain sight.</h4><p>See which relationships deserve stewardship, where someone’s giving may not reflect their capacity, and who is worth getting to know better.</p></div></article>
-      <article class="card"><div class="ph"><img src="media/map-browse.gif" alt="The DAAS community map with household pins" loading="lazy" width="600" height="380"></div><div class="t"><h4>See the people behind the pins.</h4><p>Browse your community on a map, open a household, and see the history before you knock on the door.</p></div></article>
+      <article class="card"><div class="ph"><img src="media/prospect-finder.webp" alt="DAAS Prospect Finder showing fictional households in Get to know, each with a reason and Add to today" loading="lazy" width="1600" height="900"></div><div class="t"><h4>Uncover the prospects hiding in plain sight.</h4><p>See which relationships deserve stewardship, where someone’s giving may not reflect their capacity, and who is worth getting to know better.</p></div></article>
+      <article class="card"><div class="ph"><img src="media/community-map.webp" alt="The DAAS community map with household pins and one fictional household open, with Call, Log and Go" loading="lazy" width="1178" height="663"></div><div class="t"><h4>See the people behind the pins.</h4><p>Browse your community on a map, open a household, and see the history before you knock on the door.</p></div></article>
     </div>
   </div>
 </section>
@@ -478,7 +479,7 @@ a{color:inherit}
       <div><h4>Email</h4><p>Send to the whole community or one group, from your own address, with opens, clicks and unsubscribes handled.</p></div>
       <div><h4>Events &amp; RSVPs</h4><p>Registration forms for your website. Every signup lands in DAAS and counts toward the relationship.</p></div>
       <div><h4>Donations</h4><p>Donation forms connected to your Stripe. Every gift is recorded with the family it came from.</p></div>
-      <div><h4>Tasks &amp; follow-ups</h4><p>Promise to call back after Sukkos? Set it and DAAS brings it up when it is due.</p></div>
+      <div><h4>To-dos &amp; follow-ups</h4><p>Promise to call back after Sukkos? Set it and DAAS brings it up when it is due.</p></div>
       <div><h4>Reports</h4><p>See who came, who gave, and who has gone quiet, without building a spreadsheet.</p></div>
       <div><h4>On your phone</h4><p>Add DAAS to your home screen. Your list, your calls and the map go wherever you go.</p></div>
     </div>
@@ -516,7 +517,7 @@ a{color:inherit}
     </div>
     <div class="qs">
       <details open><summary>Who owns my data?</summary><p>You do. Your CRM lives in your own Supabase account, an online database you create and control, and you can open it whenever you like. DAAS gives you simple screens for everyday work, but DAAS cannot access or read your data.</p></details>
-      <details><summary>Who pays for the AI?</summary><p>You do, directly, and only for what you use. You add your own OpenAI key, the technology behind ChatGPT, and OpenAI bills you. It powers Quick Capture, Research Chat, Profile Builder and the DAAS Assistant. Choosing who to call doesn’t use AI, so that part costs nothing.</p></details>
+      <details><summary>Who pays for the AI?</summary><p>You do, directly, and only for what you use. You add your own OpenAI key, the technology behind ChatGPT, and OpenAI bills you. It powers Log something, Ask DAAS, Build profile and the Assistant. Choosing who to call doesn’t use AI, so that part costs nothing.</p></details>
       <details><summary>What about email?</summary><p>Email is included. DAAS sends through Amazon SES, and we help you set up your own domain, so every message comes from your own address, with opens and clicks tracked for your community.</p></details>
       <details><summary>Can DAAS process donations and handle events?</summary><p>Yes. Build donation, registration and event forms and put them on your website. Every signup goes straight into DAAS, and donations run through your own Stripe account, so each gift is recorded with the family who gave it.</p></details>
       <details><summary>How do I get started?</summary><p>Request DAAS below and we will send you an access code. The setup wizard builds your private CRM in a few minutes, then you sign in. Your AI and payment keys can be added then or later.</p></details>
@@ -561,6 +562,7 @@ a{color:inherit}
 <script>
 (function(){
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ [].forEach.call(document.querySelectorAll('video[autoplay]'),function(v){ v.removeAttribute('autoplay'); v.pause(); }); }
   var nav=document.getElementById('nav');
   function onScroll(){ nav.classList.toggle('scrolled', window.scrollY>20); }
   window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
