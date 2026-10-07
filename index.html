@@ -348,7 +348,7 @@ a{color:inherit}
             <path class="draw" d="M305 256v28M266 290q0-5 5-5h68q5 0 5 5"/>
             <path class="draw" d="M436 300v-9h58v9M440 291v-8h50v8M444 283v-7h42v7"/>
             <path class="draw" d="M398 300v-22h18v22M416 283q8 2 0 12"/>
-            <path class="draw" d="M254 324l6-10h134l6 10z" stroke-opacity=".75"/>
+            <path class="draw" d="M38 324l6-10h172l6 10z" stroke-opacity=".75"/>
             <path class="draw" d="M362 322l18-4 4 8-18 4z" stroke-opacity=".6"/>
           </g>
         </g>
@@ -359,19 +359,30 @@ a{color:inherit}
         <div class="scr-body"><div class="q" aria-hidden="true"><span><span id="typed"></span><span class="caret"></span></span></div>
           <p class="sr">Preview examples: Who are we reaching today? Draft an email to Hebrew school families. Who should I invite for Shabbos? Draft my High Holidays email. Send out an email about Hebrew school registration.</p></div>
       </div>
-      <svg class="art fg" viewBox="0 0 520 420" aria-hidden="true"><g transform="translate(-48 18)">
-          <path d="M44 402C44 324 66 288 110 274L96 266C82 250 78 232 80 214L62 208C60 198 206 196 206 206L184 210C188 230 184 256 172 276C208 292 226 340 230 402ZM82 206C80 166 94 148 134 148C174 148 188 166 186 206Z" fill="#F7E3CF"/>
-          <g class="sk">
-          <path class="draw" d="M44 402c0-78 22-114 66-128c20-6 44-6 62 2c36 16 54 62 58 126"/>
-          <path class="draw" d="M104 276l18 22l16-22"/>
-          <path class="draw" d="M86 262c-8-12-10-30-6-44"/>
-          <path class="draw" d="M84 232c-8 10-10 26-2 38c2 4 6 6 10 6M176 238c6 14 4 28-4 38"/>
-          <path class="draw" d="M170 222c10 16 12 38 2 58"/>
-          <path class="draw" d="M176 230q9 3 5 15"/>
-          <path class="draw" d="M62 206c10-10 124-14 144-2c-8 12-132 14-144 2z"/>
-          <path class="draw" d="M82 206c-2-40 12-58 52-58s54 18 52 56M98 160q36 18 72 0M83 194q51 10 102 0"/>
-          </g>
-        </g></svg>
+      <svg class="art fg" viewBox="0 0 520 420" aria-hidden="true"><g transform="translate(-8 18)">
+ <g id="armL">
+  <path d="M84 284C62 292 46 316 38 340C34 352 40 362 52 360L70 312L80 300Z" fill="#F7E3CF"/>
+  <g class="sk"><path class="draw" d="M80 286C60 296 46 318 39 340C35 352 41 361 52 359"/><path class="draw" d="M52 359L66 318"/><path class="draw" d="M48 336L58 310" stroke-opacity=".5"/>
+   <path d="M54 312c-2-6 2-11 8-11c6 0 9 5 7 10l-3 4" fill="#F7E3CF" class="draw"/></g>
+ </g>
+ <g id="armR">
+  <path d="M186 280C210 290 226 314 234 338C238 352 232 362 220 360L202 312L190 298Z" fill="#F7E3CF"/>
+  <g class="sk"><path class="draw" d="M190 282C212 292 226 316 233 338C237 352 231 361 220 359"/><path class="draw" d="M220 359L206 318"/><path class="draw" d="M224 336L214 310" stroke-opacity=".5"/>
+   <path d="M218 312c2-6-2-11-8-11c-6 0-9 5-7 10l3 4" fill="#F7E3CF" class="draw"/></g>
+ </g>
+ <path d="M44 402C44 324 66 288 110 274L96 266C82 250 78 232 80 214L62 208C60 198 206 196 206 206L184 210C188 230 184 256 172 276C208 292 226 340 230 402ZM82 206C80 166 94 148 134 148C174 148 188 166 186 206Z" fill="#F7E3CF"/>
+ <g class="sk">
+  <path class="draw" d="M44 402c0-78 22-114 66-128c20-6 44-6 62 2c36 16 54 62 58 126"/>
+  <path class="draw" d="M104 276l18 22l16-22"/>
+  <path class="draw" d="M86 262c-8-12-10-30-6-44"/>
+  <path class="draw" d="M84 232c-8 10-10 26-2 38c2 4 6 6 10 6M176 238c6 14 4 28-4 38"/>
+  <path class="draw" d="M170 222c10 16 12 38 2 58"/>
+  <path class="draw" d="M176 230q9 3 5 15"/>
+  <path class="draw" d="M62 206c10-10 124-14 144-2c-8 12-132 14-144 2z"/>
+  <path class="draw" d="M82 206c-2-40 12-58 52-58s54 18 52 56M98 160q36 18 72 0M83 194q51 10 102 0"/>
+ </g>
+</g>
+</svg>
     </div>
   </div>
 </section>
@@ -567,15 +578,21 @@ a{color:inherit}
   function onScroll(){ nav.classList.toggle('scrolled', window.scrollY>20); }
   window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 
+
+  // the rabbi: both hands on the keys while the line is typed
+  var arms=[document.getElementById('armL'),document.getElementById('armR')], hit=0;
+  function tap(soft){ hit++; var a=arms[hit%2]; if(!a) return; var up=soft?.6:(.9+Math.random()*.8);
+    a.setAttribute('transform','translate('+((hit%2?1:-1)*Math.random()*.4).toFixed(2)+' '+(-up).toFixed(2)+')');
+    clearTimeout(a._t); a._t=setTimeout(function(){ a.setAttribute('transform',''); },60); }
   // the screen: one line, typed and deleted, forever
   var lines=['Who are we reaching today?','Draft an email to Hebrew school families.','Who should I invite for Shabbos?','Draft my High Holidays email.','Send out an email about Hebrew school registration.'];
   var out=document.getElementById('typed'), li=0, ci=0, dir=1, t=null, running=false;
   function step(){
     var txt=lines[li];
-    if(dir===1){ ci++; out.textContent=txt.slice(0,ci);
+    if(dir===1){ ci++; out.textContent=txt.slice(0,ci); tap();
       if(ci>=txt.length){ dir=-1; t=setTimeout(step,2000); return; }
       t=setTimeout(step,52+Math.random()*45);
-    } else { ci--; out.textContent=txt.slice(0,ci);
+    } else { ci--; out.textContent=txt.slice(0,ci); if(ci%3===0) tap(true);
       if(ci<=0){ dir=1; li=(li+1)%lines.length; t=setTimeout(step,500); return; }
       t=setTimeout(step,22);
     }
