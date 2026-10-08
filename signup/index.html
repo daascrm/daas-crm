@@ -125,6 +125,47 @@ footer .heb{font-size:.9rem}
 .howbox ol{margin:0;padding-left:18px}
 .howbox li{margin:4px 0}
 .sep{border:none;border-top:1px solid rgba(255,255,255,.12);margin:20px 0 10px}
+/* ── Guided setup (?k= link from DAAS Control) — build 2026-10-07 ───────── */
+.su{margin-top:22px}
+.su-head{margin:4px 2px 12px}
+.su-head .eyebrow{margin-bottom:6px}
+.su-head h2{font-size:1.3rem}
+.su-head p{color:var(--txt2);font-size:.92rem;margin:6px 0 0}
+.su-bar{height:5px;background:var(--line);border-radius:5px;overflow:hidden;margin-top:12px}
+.su-bar i{display:block;height:100%;background:var(--gold);border-radius:5px;transition:width .5s}
+.su-step{background:linear-gradient(180deg,var(--panel),var(--navy));border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}
+.su-step.done{background:rgba(255,255,255,.02)}
+.su-sh{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;user-select:none}
+.su-num{flex:0 0 28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;border:1.5px solid var(--line-gold);color:var(--gold)}
+.su-step.done .su-num{background:var(--ok);border-color:var(--ok);color:#fff}
+.su-step.wait .su-num{border-style:dashed;color:var(--txt3);border-color:var(--line)}
+.su-sh .t{flex:1}.su-sh h3{font-size:1.02rem}.su-sh .s{color:var(--txt3);font-size:.82rem;margin-top:1px}
+.su-chev{color:var(--txt3);transition:transform .2s}.su-step.open .su-chev{transform:rotate(90deg)}
+.su-sb{display:none;padding:0 18px 18px 58px;color:var(--txt2);font-size:.92rem}
+@media(max-width:560px){.su-sb{padding:0 14px 16px 14px}}
+.su-step.open .su-sb{display:block}
+.su-sb ol,.su-sb ul{padding-left:20px;margin:8px 0}.su-sb li{margin:5px 0}.su-sb b{color:var(--txt)}
+.su-ok{background:#e5f3ec;border:1px solid #b9dcc8;border-radius:12px;padding:12px 14px;font-size:.9rem;margin:0 0 12px;color:#0b5535}
+.su-warn{overflow-wrap:anywhere;background:#fbf0d8;border:1px solid #edd49c;border-radius:10px;padding:8px 12px;font-size:.82rem;margin-top:6px;color:#6b4500;font-family:var(--font-ui)}
+.su-recs{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:8px}
+.su-recs th{text-align:left;color:var(--txt3);font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:7px 5px;border-bottom:1px solid var(--line)}
+.su-recs th:nth-child(3),.su-recs th:nth-child(4){width:40%}
+.su-recs td{padding:9px 5px;border-bottom:1px solid var(--line-2);vertical-align:top}
+.su-mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;overflow-wrap:anywhere;color:var(--txt)}
+.su-cp{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt2);font-size:.7rem;padding:2px 8px;border-radius:6px;cursor:pointer;margin-left:6px;font-family:var(--font-ui)}
+.su-cp:hover{border-color:var(--gold);color:var(--txt)}
+.su-pill{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.su-pill.ok{background:#e5f3ec;color:#127a4b}.su-pill.no{background:rgba(0,0,0,.05);color:var(--txt3)}.su-pill.req{background:#f6ecd2;color:#7a5a00}
+@media(max-width:620px){.su-recs thead{display:none}.su-recs tr{display:block;border-bottom:1px solid var(--line);padding:7px 0}.su-recs td{display:block;border:0;padding:2px 0}
+  .su-recs td[data-l]::before{content:attr(data-l) ": ";color:var(--txt3);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}}
+details.su-hosts{margin-top:10px}details.su-hosts summary{cursor:pointer;color:var(--gold);font-size:.88rem}
+details.su-hosts .h{margin:8px 0 0;padding:8px 12px;border-left:2px solid var(--line-gold);font-size:.86rem}
+.su-foot{text-align:center;margin-top:14px}.su-foot .ts{font-size:.78rem;color:var(--txt3);margin-top:6px}
+.su-pre{background:rgba(212,168,67,.06);border:1px solid var(--line-gold);border-radius:12px;padding:12px 14px;font-size:.88rem;margin:0 0 18px;color:var(--txt2)}
+.su-pre b{color:var(--txt)}
+.su-prompt{background:rgba(0,0,0,.035);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0}
+.su-prompt pre{white-space:pre-wrap;font-family:var(--font-ui);font-size:.82rem;line-height:1.5;color:var(--txt2);margin:0 0 10px;max-height:220px;overflow:auto}
+.su-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#16202e;color:#fff;padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:99}
 </style>
 </head>
 <body>
@@ -207,11 +248,11 @@ footer .heb{font-size:.9rem}
     <section class="screen" id="s3">
       <div class="eyebrow">Step 3 of 3</div>
       <h1 class="title">Connect your keys</h1>
-      <p class="lede">These switch on AI features and online donations. <b>Every field here is optional — skip anything and add it later</b> in your workspace. Your CRM is built either way.</p>
+      <p class="lede">These switch on AI features and online donations. <b>The OpenAI key is required</b> — DAAS needs it to work. The other keys are optional; skip them and add them later in your workspace.</p>
       <div class="msg error" id="s3msg"></div>
 
-      <div class="field optional">
-        <label for="openai">OpenAI API key <span class="opt">— optional</span></label>
+      <div class="field">
+        <label for="openai">OpenAI API key <span class="opt">— required</span></label>
         <input id="openai" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" maxlength="200">
         <p class="hint">Powers Search and Research Chat. Installed privately in your own workspace; DAAS does not keep it. <a class="how" data-how="how-openai">How do I get this?</a></p>
         <div class="howbox" id="how-openai" hidden>
@@ -403,7 +444,10 @@ async function startBuild(){
   clearErr("s3msg");
   const openai = val("openai"), anthropic = val("anthropic");
   const stripePk = val("stripe_pk"), stripeSecret = val("stripe_secret");
-  // Every key here is optional; they can be added later under Settings -> Setup.
+  // OpenAI is required (DAAS needs it); the rest are optional and can be added later.
+  if (!/^sk-[A-Za-z0-9_\-]{20,}$/.test(openai)) {
+    return err("s3msg", "Please add your OpenAI API key.", "DAAS needs it to work. Tap \u201cHow do I get this?\u201d under the box — it takes about 3 minutes. The key starts with sk-.");
+  }
 
   const btn = document.getElementById("build");
   btn.disabled = true; btn.textContent = "Starting…";
@@ -545,6 +589,158 @@ document.querySelectorAll(".how").forEach(a => a.onclick = () => { const b=docum
   } else {
     show(1);
   }
+})();
+</script>
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  Guided setup — build 2026-10-07.1
+//  When this page is opened from the personal link DAAS sends a shul
+//  (/signup/?k=…), the code is filled in for them and a checklist below the
+//  wizard walks them through everything after the build: sign-in, email DNS
+//  records (with live checks), forms address, Stripe and AI. Without ?k= the
+//  page behaves exactly as before. Reads only; talks to daas-control `admin`
+//  in customer mode (token-gated, sanitized).
+// ════════════════════════════════════════════════════════════════════════
+(function(){
+  "use strict";
+  const K = new URLSearchParams(location.search).get("k") || "";
+  if (!/^[A-Za-z0-9_-]{20,64}$/.test(K)) return;
+  const FN = "https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/admin";
+  const PUB = "sb_publishable_hOeP4MzV04l1PAGzSjRHJg__EEi6PJm";
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  let D = null, OPEN = {}, prefilled = false;
+  const SU_PROMPT = "I'm setting up DAAS, a relationship CRM for my Chabad house. Its AI reads two short settings before it answers questions or researches people in my community, and I'd like you to write both for me from everything you know about me and my work. If something important is missing, ask me before you write.\n\n1. ABOUT OUR COMMUNITY (3-4 paragraphs, written in first person as me):\n- Who I am, my role, and who works with me (my wife, staff, family members involved)\n- Our Chabad house: name, city, when we started, where we're based\n- The community we serve: towns/neighborhoods, rough size, who our people are, how connected or unaffiliated most of them are\n- Our main programs and yearly events (holidays, classes, Hebrew school, camp, youth, women's programs, etc.)\n- What we're working on now: current projects, campaigns, building plans, upcoming events\n- How I like to talk with people: tone, warmth, formality, and any Hebrew or Yiddish terms I naturally use\n\n2. WHEN DAAS LOOKS SOMEONE UP (1-2 paragraphs), guidance for an AI that researches a household online:\n- The exact area we serve (towns, counties, zip codes)\n- Local sources worth checking: Jewish news sites, our regional Jewish Federation, local synagogues and Jewish organizations, local newspapers and business journals\n- What signals matter to us: Jewish involvement, board seats, philanthropy, business ownership, profession, family connections, interests that connect to our programs\n- Anything to ignore or be careful about\n\nWrite it as plain text under those two headings so I can paste each one into DAAS. Don't invent facts. Where you're not sure, leave a [bracketed placeholder] for me to fill in.";
+
+  const card = document.querySelector("main .wrap .card");
+  const panel = document.createElement("div");
+  panel.className = "su"; panel.id = "suPanel";
+  card.insertAdjacentElement("afterend", panel);
+
+  function toast(m){ const t=document.createElement("div"); t.className="su-toast"; t.textContent=m; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+  document.addEventListener("click", e=>{ const b=e.target.closest("[data-su-copy]"); if(b){ e.preventDefault(); e.stopPropagation(); navigator.clipboard.writeText(b.dataset.suCopy).then(()=>toast("Copied"),()=>toast("Select and copy it by hand")); } });
+
+  async function call(action){
+    const r = await fetch(FN,{ method:"POST", headers:{ "content-type":"application/json", apikey:PUB }, body: JSON.stringify({ action, token:K }) });
+    const j = await r.json().catch(()=>({error:"Something went wrong."}));
+    if(!r.ok) throw new Error(j.error || "Something went wrong.");
+    return j;
+  }
+
+  function prefill(){
+    if (prefilled || !D) return; prefilled = true;
+    if (D.code && !$("code").value) $("code").value = D.code;
+    if (D.org_name && !$("org").value) $("org").value = D.org_name;
+    if (D.forms_domain && $("fweb") && !$("fweb").value) $("fweb").value = D.forms_domain;
+    const s1 = $("s1");
+    if (s1 && !D.progress.claimed) {
+      const pre = document.createElement("div");
+      pre.className = "su-pre";
+      pre.innerHTML = `<b>Before you continue:</b> make a free account at <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a> (Google or email). When it asks, create an <b>organization</b> — any name, <b>Free</b> plan. <b>Don't create a project</b> — DAAS builds it for you. Then come back here and click Continue.`
+        + (D.code ? `<br><br>Your access code is already filled in below.` : "");
+      const lede = s1.querySelector(".lede");
+      (lede || s1.firstElementChild).insertAdjacentElement("afterend", pre);
+    }
+  }
+
+  const cp = v => `<button class="su-cp" data-su-copy="${esc(v)}">Copy</button>`;
+  function recRows(rs){
+    return `<table class="su-recs"><thead><tr><th>Status</th><th>Type</th><th>Host / Name</th><th>Value / Points to</th></tr></thead><tbody>`+
+      rs.map(r=>`<tr>
+        <td data-l="Status">${r.ok?'<span class="su-pill ok">✓ Found</span>':'<span class="su-pill no">Not yet</span>'}</td>
+        <td data-l="Type"><b>${esc(r.type)}</b>${r.priority?`<br><span style="font-size:.76rem">Priority ${r.priority}</span>`:""}</td>
+        <td data-l="Host"><span class="su-mono">${esc(r.host)}</span>${cp(r.host)}</td>
+        <td data-l="Value"><span class="su-mono">${esc(r.value)}</span>${cp(r.value)}${r.hint?`<div class="su-warn">${esc(r.hint)}</div>`:""}</td></tr>`).join("")+
+      `</tbody></table>`;
+  }
+  const HOSTS = `<details class="su-hosts"><summary>Where do I add these? (GoDaddy, Squarespace, Cloudflare…)</summary>
+    <div class="h"><b>GoDaddy:</b> My Products → your domain → <b>DNS</b> → <b>Add New Record</b>. Host goes in <b>Name</b>; for MX the value goes in <b>Points to</b>, priority 10.</div>
+    <div class="h"><b>Squarespace Domains</b> (including former Google Domains): Settings → Domains → your domain → <b>DNS</b> → <b>Custom records</b> → <b>Add record</b>.</div>
+    <div class="h"><b>Cloudflare:</b> your domain → <b>DNS</b> → <b>Records</b> → <b>Add record</b>. For CNAME records turn the orange cloud <b>off</b> (<b>DNS only</b>).</div>
+    <div class="h"><b>Namecheap:</b> Domain List → Manage → <b>Advanced DNS</b> → <b>Add new record</b>.</div>
+    <div class="h"><b>Wix:</b> Domains → ⋯ next to your domain → <b>Manage DNS records</b>.</div>
+    <div class="h"><b>Not sure?</b> DNS is usually wherever you bought the domain. If a web person manages it, forward them this page.</div>
+    <div class="h"><b>Tip:</b> enter only the short <b>Host</b> shown above. If a record says "added the domain twice", remove your domain from the end of the Host box.</div>
+  </details>`;
+
+  function render(){
+    const p = D.progress || {};
+    const recs = D.records || [];
+    const dkim = recs.filter(r=>r.key.startsWith("dkim")), mailfrom = recs.filter(r=>r.key==="mx"||r.key==="spf"),
+          dmarc = recs.filter(r=>r.key==="dmarc"&&!r.ok), forms = recs.filter(r=>r.key==="forms");
+    const emailDone = p.email_verified || (dkim.length && dkim.every(r=>r.ok));
+    const formsDone = p.forms_live || (forms.length && forms.every(r=>r.ok));
+    if (p.claimed) card.style.display = "none";
+    const S = [
+      { id:"signin", title:"Sign in to DAAS", sub:"With your email and temporary password", done:p.signed_in, wait:!p.claimed,
+        body:`<ol><li>Go to <a href="${esc(D.crm_url)}" target="_blank" rel="noopener">daascrm.app/crm</a> and sign in with your email and the temporary password from the build.</li>
+        <li>On your phone, open the same page and choose <b>Share → Add to Home Screen</b> (iPhone) or <b>⋮ → Add to Home screen</b> (Android).</li></ol>
+        <div class="actions" style="margin-top:12px"><a class="btn btn-gold btn-sm" href="${esc(D.crm_url)}" target="_blank" rel="noopener">Open DAAS →</a></div>` },
+      { id:"context", title:"Tell DAAS about your community", sub: (p.context_about && p.context_search) ? "Done" : "Inside DAAS — about 10 minutes with ChatGPT or Claude", done:(p.context_about && p.context_search), wait:!p.claimed,
+        body:`<p>DAAS's AI reads two short notes before it answers you or researches a household. The better they are, the better every chat answer and profile will be.</p>
+        <ol><li>Open <b>ChatGPT or Claude</b> — whichever one already knows the most about you and your Chabad work — and paste in the prompt below.</li>
+        <li>Read what it writes — fix anything that's wrong and fill in any [placeholders].</li>
+        <li>In DAAS go to <b>Settings → Your Chabad house</b>. Paste the first section into <b>About your community</b> → Save. ${p.context_about?'<span class="su-pill ok">✓ Done</span>':""}</li>
+        <li>Paste the second section into <b>When DAAS looks someone up</b> → Save. ${p.context_search?'<span class="su-pill ok">✓ Done</span>':""}</li>
+</ol>
+        <div class="su-prompt"><pre>${esc(SU_PROMPT)}</pre><button class="btn btn-gold btn-sm" data-su-copy="${esc(SU_PROMPT)}">Copy the prompt</button></div>
+        <p class="hint">You can update both notes any time as things change — new programs, new staff, a building campaign.</p>` },
+      { id:"email", title:"Send email from your own domain", sub: emailDone ? "Verified" : (D.sending_domain ? `Add a few records to ${D.sending_domain}` : "We'll set this up with you"), done:emailDone, wait:!D.email_ready,
+        body: !D.email_ready ? `<p>We're preparing your email records${D.sending_domain?` for <b>${esc(D.sending_domain)}</b>`:""}. They'll appear right here.</p>` : `
+        <p>So your emails arrive from <b>${esc(D.sending_domain)}</b> and land in the inbox, add these where your domain's DNS is managed. They're <b>new</b> records — they don't change your existing email or website.</p>
+        <p style="margin-bottom:0"><span class="su-pill req">Required</span> These 3 records:</p>${recRows(dkim)}
+        ${mailfrom.length?`<p style="margin:16px 0 0"><span class="su-pill no">Recommended</span> These 2 records:</p>${recRows(mailfrom)}`:""}
+        ${dmarc.length?`<p style="margin:16px 0 0"><span class="su-pill no">Optional</span> Only if you don't already have one:</p>${recRows(dmarc)}`:""}
+        ${HOSTS}<p class="hint" style="margin-top:10px">Changes take a few minutes to a few hours. Each record turns green here once it's live.</p>` },
+      { id:"forms", title:"Your forms web address", sub: formsDone ? "Live" : (D.forms_domain ? `Point ${D.forms_domain} at DAAS` : "We'll set this up with you"), done:formsDone, wait:!forms.length,
+        body: !forms.length ? `<p>We'll add your forms address here shortly.</p>` : `
+        <p>Your event sign-up and donation pages will live at <b>${esc(D.forms_domain)}</b>. Add this one record:</p>${recRows(forms)}${HOSTS}
+        <p class="hint" style="margin-top:10px">Once it's live, the secure certificate is issued automatically (usually within 15 minutes).</p>` },
+      { id:"stripe", title:"Connect Stripe for online donations", sub: p.stripe ? "Connected" : "Inside DAAS — about 3 minutes", done:p.stripe, wait:!p.claimed,
+        body:`<p>Donations go straight into <b>your own Stripe account</b>. Add your keys yourself inside DAAS — <b>never send keys by WhatsApp or email</b>.</p>
+        <ol><li>Sign in at <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener">dashboard.stripe.com</a> → <b>Developers</b> → <b>API keys</b>.</li>
+        <li><b>Secret key</b> (<span class="su-mono">sk_live_…</span>): Reveal → copy → in DAAS <b>Settings → Connections → Stripe</b> → paste → <b>Save</b> → <b>Test</b>. ${p.stripe_key?'<span class="su-pill ok">✓ Done</span>':""}</li>
+        <li><b>Publishable key</b> (<span class="su-mono">pk_live_…</span>): copy → in DAAS <b>Settings → Email and forms</b> → Stripe publishable key → <b>Save</b>. ${p.stripe_pk?'<span class="su-pill ok">✓ Done</span>':""}</li></ol>
+        <p class="hint">Saving the secret key also connects one-time and monthly gifts automatically.</p>` },
+      { id:"ai", title:"Connect your OpenAI key", sub: p.ai ? "Connected" : "Required — DAAS needs it to work", done:p.ai, wait:!p.claimed,
+        body:`<ol><li><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a> → <b>API keys</b> → <b>Create new secret key</b> → copy.</li>
+        <li>Under <b>Billing</b>, add a little credit.</li>
+        <li>In DAAS: <b>Settings → Connections → OpenAI</b> → paste → <b>Save</b> → <b>Test</b>.</li></ol>
+        <p class="hint">If you added it during setup, this is already done.</p>` },
+    ];
+    const req = S.filter(s=>!s.optional), doneN = req.filter(s=>s.done).length;
+    const first = S.find(s=>!s.done && !s.wait);
+    let h = `<div class="su-head"><div class="eyebrow">${p.claimed?"Your DAAS setup":"After your workspace is built"}</div>
+      <h2>${p.claimed ? (D.contact_name?`Welcome, ${esc(D.contact_name)}`:"Welcome to DAAS") : "Then finish these"}</h2>
+      <p>${p.claimed ? `<b>${esc(D.org_name)}</b> is built and yours. Finish the steps below — each turns green as it's done. You can close this page and come back to this same link any time.` : `Once you've claimed your workspace above, these steps unlock. Keep this link — you can come back to it any time.`}</p>
+      ${p.claimed?`<div class="su-bar"><i style="width:${Math.round(doneN*100/req.length)}%"></i></div>`:""}</div>`;
+    if (p.claimed && doneN===req.length) h += `<div class="su-ok"><b>You're all set.</b> Everything is connected. Welcome to DAAS!</div>`;
+    S.forEach((s,i)=>{
+      const open = OPEN[s.id] ?? (s===first);
+      h += `<div class="su-step ${s.done?"done":""} ${s.wait&&!s.done?"wait":""} ${open?"open":""}" data-s="${s.id}">
+        <div class="su-sh"><div class="su-num">${s.done?"✓":i+1}</div><div class="t"><h3>${esc(s.title)}</h3><div class="s">${esc(s.sub)}</div></div><div class="su-chev">›</div></div>
+        <div class="su-sb">${s.body}</div></div>`;
+    });
+    h += `<div class="su-foot"><button class="btn btn-ghost btn-sm" id="suAgain">Check again</button>
+      <div class="ts">Last checked ${D.checked_at?new Date(D.checked_at).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}):"—"}</div></div>`;
+    panel.innerHTML = h;
+    panel.querySelectorAll(".su-sh").forEach(el=> el.onclick = () => { const s=el.parentElement; s.classList.toggle("open"); OPEN[s.dataset.s]=s.classList.contains("open"); });
+    $("suAgain").onclick = check;
+  }
+
+  async function check(){
+    const b = $("suAgain"); if(b){ b.disabled=true; b.textContent="Checking…"; }
+    try{ D = await call("c_check"); render(); toast("Updated"); }
+    catch(e){ toast(e.message); if(b){ b.disabled=false; b.textContent="Check again"; } }
+  }
+
+  (async()=>{
+    try{ D = await call("c_status"); prefill(); render(); }
+    catch(e){ panel.innerHTML = `<div class="su-pre">${esc(e.message)} Ask for a new setup link, or enter your access code above.</div>`; return; }
+    // After they claim (in a new tab), recheck when they come back to this tab.
+    document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") call("c_check").then(d=>{ D=d; render(); }).catch(()=>{}); });
+    setInterval(()=>{ if(document.visibilityState==="visible") call("c_check").then(d=>{ D=d; render(); }).catch(()=>{}); }, 120000);
+  })();
 })();
 </script>
 </body>

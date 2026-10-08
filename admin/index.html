@@ -13,28 +13,35 @@
     --navy:#0a1f44; --navy-2:#12294f; --ink:#0d1b34; --paper:#f6f7fb;
     --card:#ffffff; --line:#e4e8f1; --muted:#5b6b86; --gold:#c9a227; --gold-2:#b8911d;
     --ok:#127a4b; --ok-bg:#e5f3ec; --warn:#8a5a00; --warn-bg:#fbf0d8;
-    --bad:#b3261e; --bad-bg:#fbe7e6; --chip:#eef1f7;
+    --bad:#b3261e; --bad-bg:#fbe7e6; --chip:#eef1f7; --info:#1d4f91; --info-bg:#e6eefa;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;color:var(--ink);
     background:var(--paper);line-height:1.5}
   h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0}
   a{color:var(--navy)}
-  .wrap{max-width:1060px;margin:0 auto;padding:20px}
+  .wrap{max-width:1240px;margin:0 auto;padding:20px}
   header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:16px 20px;background:var(--navy);color:#fff}
+    padding:14px 20px;background:var(--navy);color:#fff;flex-wrap:wrap}
   header.top .brand{display:flex;align-items:baseline;gap:10px}
   header.top h1{color:#fff;font-size:20px}
   header.top .tag{color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
-  header.top .who{font-size:13px;color:#c7d2e6}
+  header.top .whoami{font-size:13px;color:#c7d2e6}
+  nav.tabs{display:flex;gap:4px;background:var(--navy-2);padding:0 16px;overflow-x:auto}
+  nav.tabs button{background:transparent;border:0;border-bottom:3px solid transparent;border-radius:0;color:#c7d2e6;
+    padding:11px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+  nav.tabs button.on{color:#fff;border-bottom-color:var(--gold)}
+  nav.tabs .count{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:#2c4677;color:#fff;font-size:11px}
   button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);
     background:#fff;padding:7px 12px;color:var(--ink)}
   button:hover{border-color:#c9d2e2}
   button.primary{background:var(--gold);border-color:var(--gold-2);color:#3a2c00;font-weight:600}
   button.primary:hover{background:var(--gold-2)}
+  button.navy{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:600}
   button.ghost{background:transparent}
   button.danger{color:var(--bad);border-color:#f0c8c5}
   button.danger:hover{background:var(--bad-bg)}
+  button.small,.small button{font-size:12px;padding:4px 9px}
   button:disabled{opacity:.5;cursor:default}
   input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
   input:focus,select:focus,textarea:focus{outline:2px solid #cbd7ee;border-color:#a9bce0}
@@ -47,27 +54,84 @@
   th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
   th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
   td.mono,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
-  .chip{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:11px;font-weight:600}
+  .chip{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:11px;font-weight:600;white-space:nowrap}
   .chip.ok{background:var(--ok-bg);color:var(--ok)}
   .chip.warn{background:var(--warn-bg);color:var(--warn)}
   .chip.bad{background:var(--bad-bg);color:var(--bad)}
+  .chip.info{background:var(--info-bg);color:var(--info)}
   .chip.lock{background:#eef1f7;color:var(--navy)}
   .muted{color:var(--muted)}
   .hide{display:none!important}
-  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;z-index:99;
     padding:11px 16px;border-radius:10px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:90vw}
   .toast.bad{background:var(--bad)}
   .toast.ok{background:var(--ok)}
+  .toast.warn{background:var(--warn)}
   /* login */
-  .login{max-width:380px;margin:8vh auto}
+  .login{max-width:380px;margin:8vh auto;padding:0 16px}
   .login .card{padding:26px}
   .login label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
   .login input{width:100%}
   .err{color:var(--bad);font-size:13px;margin-top:10px;min-height:18px}
   .codebox{font-family:ui-monospace,monospace;font-size:16px;font-weight:600;background:#f2f4f9;
-    border:1px dashed #b9c4da;border-radius:8px;padding:10px 14px;display:inline-block}
+    border:1px dashed #b9c4da;border-radius:8px;padding:6px 12px;display:inline-block}
   details summary{cursor:pointer;font-size:13px;color:var(--muted)}
   .small{font-size:12px}
+
+  /* onboarding */
+  .ob{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+  @media (max-width:900px){.ob{grid-template-columns:1fr}}
+  .clist{display:flex;flex-direction:column;gap:8px}
+  .citem{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;width:100%}
+  .citem:hover{border-color:#c3cde0}
+  .citem.on{border-color:var(--navy);box-shadow:0 0 0 2px #cbd7ee}
+  .citem .nm{font-weight:600;font-size:14px}
+  .citem .nx{font-size:12px;color:var(--muted);margin-top:4px}
+  .bar{height:6px;background:#eef1f7;border-radius:6px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;background:var(--ok);border-radius:6px}
+  .dhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+  .dhead h2{font-size:22px}
+  .kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 16px;margin-top:12px}
+  .kv label{display:block;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+  .kv input{width:100%}
+  .stage{margin-top:18px}
+  .stage>h3{font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    margin:0 0 6px;display:flex;align-items:center;gap:8px}
+  .step{border:1px solid var(--line);border-radius:10px;margin-bottom:6px;background:#fff}
+  .step>.sh{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer}
+  .step .ic{width:22px;height:22px;border-radius:50%;flex:0 0 22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+  .ic.done{background:var(--ok)} .ic.todo{background:#fff;border:2px solid #c3cde0}
+  .ic.wait{background:#7d8ca8} .ic.warn{background:#d39b1c} .ic.bad{background:var(--bad)} .ic.na{background:#e4e8f1;color:#8592a8}
+  .step .tt{flex:1;font-weight:600;font-size:14px}
+  .step .tt .s{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+  .who{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;white-space:nowrap}
+  .who.you{background:#e6eefa;color:var(--info)} .who.shul{background:#f6ecd2;color:#7a5a00} .who.auto{background:#e5f3ec;color:var(--ok)}
+  .step .sb{padding:0 12px 12px 44px;font-size:13px;display:none}
+  .step.open .sb{display:block}
+  .how{background:#f8f9fc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px}
+  .how ol,.how ul{margin:4px 0;padding-left:20px}
+  .how li{margin:3px 0}
+  .how b{color:var(--ink)}
+  .recs td{font-size:12px}
+  .recs .val{font-family:ui-monospace,monospace;font-size:12px;word-break:break-all}
+  .copy{border:0;background:#eef1f7;padding:2px 7px;font-size:11px;border-radius:5px;margin-left:4px}
+  .logbox{background:#0d1b34;color:#d8e2f4;border-radius:8px;padding:10px 12px;font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap;margin-top:10px}
+  .modal{position:fixed;inset:0;background:rgba(10,20,40,.45);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;z-index:50;overflow:auto}
+  .modal .card{max-width:620px;width:100%;margin:0}
+  .modal label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}
+  .modal input,.modal textarea{width:100%}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  @media (max-width:600px){.grid2{grid-template-columns:1fr}}
+  .warnbox{overflow-wrap:anywhere;background:var(--warn-bg);color:#5c3d00;border-radius:8px;padding:9px 12px;font-size:13px;margin-top:8px}
+  .badbox{background:var(--bad-bg);color:#7a1a14;border-radius:8px;padding:9px 12px;font-size:13px;margin-top:8px}
+  .okbox{background:var(--ok-bg);color:#0b5535;border-radius:8px;padding:9px 12px;font-size:13px;margin-top:8px}
+  @media (max-width:640px){
+    .step .sb{padding:0 12px 12px 12px}
+    .recs thead{display:none} .recs tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
+    .recs td{display:block;border:0;padding:2px 0}
+  }
+  .sys td:first-child{font-family:ui-monospace,monospace;font-size:12px}
+  .tablewrap{overflow-x:auto}
 </style>
 </head>
 <body>
@@ -94,40 +158,77 @@
   <header class="top">
     <div class="brand"><span class="tag">DAAS</span><h1>Control room</h1></div>
     <div class="row">
-      <span class="who" id="whoami"></span>
+      <span class="whoami" id="whoami"></span>
       <button class="ghost" id="refreshBtn" style="color:#fff;border-color:#38507e">Refresh</button>
       <button class="ghost" id="logoutBtn" style="color:#fff;border-color:#38507e">Sign out</button>
     </div>
   </header>
+  <nav class="tabs" id="tabs">
+    <button data-tab="onboarding" class="on">Onboarding<span class="count" id="cntOnb">0</span></button>
+    <button data-tab="shuls">Shuls<span class="count" id="cntShuls">0</span></button>
+    <button data-tab="codes">Signup codes</button>
+    <button data-tab="jobs">Build jobs &amp; tools</button>
+    <button data-tab="system">System<span class="count hide" id="sysWarn">!</span></button>
+  </nav>
 
   <div class="wrap">
 
+    <!-- ONBOARDING -->
+    <section data-pane="onboarding">
+      <div class="ob">
+        <div>
+          <div class="row" style="margin-bottom:10px;justify-content:space-between">
+            <h2 style="font-size:18px">Customers</h2>
+            <button class="primary" id="newOnbBtn">+ New customer</button>
+          </div>
+          <div class="clist" id="onbList"><div class="muted small">Loading…</div></div>
+          <label class="small muted" style="display:block;margin-top:10px"><input type="checkbox" id="showArchived"> Show archived</label>
+        </div>
+        <div id="onbDetail">
+          <div class="card"><p class="muted">Pick a customer on the left, or click <b>+ New customer</b> to start one. Each customer gets a checklist that updates itself, one-click setup for email and forms, and a private setup link you send them.</p></div>
+        </div>
+      </div>
+    </section>
+
     <!-- SHULS -->
+    <section data-pane="shuls" class="hide">
     <div class="card">
       <h2>Shuls</h2>
       <div class="sub">Every account in the tenant directory. Status is what a Stripe subscription will drive later.</div>
-      <table>
+      <div class="tablewrap"><table>
         <thead><tr><th>Organization</th><th>Owner(s)</th><th>Status</th><th>Project</th><th>Created</th><th></th></tr></thead>
         <tbody id="shulRows"><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
-      </table>
+      </table></div>
     </div>
+    </section>
 
     <!-- CODES -->
+    <section data-pane="codes" class="hide">
     <div class="card">
       <h2>Signup codes</h2>
-      <div class="sub">A code is the gate for one signup. (Later, a paid Stripe checkout writes one of these automatically.)</div>
+      <div class="sub">A code is the gate for one signup. (Later, a paid Stripe checkout writes one of these automatically.) Tip: <b>+ New customer</b> on the Onboarding tab issues a code for you.</div>
       <div class="row" style="margin-bottom:12px">
         <input id="codeNote" placeholder="Note (e.g. Rabbi Cohen, Temple Beth El)" style="flex:1;min-width:220px" />
         <button class="primary" id="issueBtn">Issue new code</button>
       </div>
       <div id="newCode" class="hide" style="margin-bottom:12px"></div>
-      <table>
+      <div class="tablewrap"><table>
         <thead><tr><th>Code</th><th>Status</th><th>Note</th><th>Created</th><th></th></tr></thead>
         <tbody id="codeRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
-      </table>
+      </table></div>
     </div>
+    </section>
 
-    <!-- TOOLS -->
+    <!-- JOBS + TOOLS -->
+    <section data-pane="jobs" class="hide">
+    <div class="card">
+      <h2>Recent build jobs</h2>
+      <div class="sub">The last 30 provisioning runs — handy for spotting a stuck or failed build.</div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Org / email</th><th>Status</th><th>Step</th><th>Project</th><th>When</th></tr></thead>
+        <tbody id="jobRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
     <div class="card">
       <h2>Account tools</h2>
       <div class="sub">Free up an owner email so it can sign up again, or scan the provisioning org for leftover projects.</div>
@@ -140,17 +241,72 @@
       </div>
       <div id="projRows" class="hide" style="margin-top:12px"></div>
     </div>
+    </section>
 
-    <!-- JOBS -->
-    <div class="card">
-      <h2>Recent build jobs</h2>
-      <div class="sub">The last 30 provisioning runs — handy for spotting a stuck or failed build.</div>
-      <table>
-        <thead><tr><th>Org / email</th><th>Status</th><th>Step</th><th>Project</th><th>When</th></tr></thead>
-        <tbody id="jobRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
-      </table>
+    <!-- SYSTEM -->
+    <section data-pane="system" class="hide">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div><h2>System readiness</h2><div class="sub" style="margin:0">Run this before every onboarding. Green across the board means the automations will work.</div></div>
+          <button class="navy" id="sysBtn">Run checks</button>
+        </div>
+        <div id="sysOut" style="margin-top:14px" class="muted small">Not run yet.</div>
+      </div>
+      <div class="card">
+        <h2>One-time setup: unlock the automations</h2>
+        <div class="sub">Do these once. They let the console set up email and forms for a shul in one click. Every secret goes in <b>Supabase → daas-control → Edge Functions → Secrets</b> (never in chat).</div>
+        <div class="how">
+          <b>1. AWS key for email setup (about 5 minutes)</b>
+          <ol>
+            <li>Sign in to the DAAS AWS account → search <b>IAM</b> → <b>Users</b> → <b>Create user</b>. Name it <code>daas-onboarding</code>. Leave console access off. Click <b>Next</b>.</li>
+            <li>Choose <b>Attach policies directly</b> → <b>Create policy</b> (opens a new tab) → switch to <b>JSON</b> and paste the policy below → <b>Next</b> → name it <code>daas-onboarding</code> → <b>Create policy</b>.</li>
+            <li>Back on the user tab, click the refresh icon, tick <code>daas-onboarding</code> → <b>Next</b> → <b>Create user</b>.</li>
+            <li>Open the user → <b>Security credentials</b> → <b>Create access key</b> → choose <b>Application running outside AWS</b> → <b>Create</b>.</li>
+            <li>In Supabase daas-control secrets add <code>AWS_ADMIN_ACCESS_KEY_ID</code> and <code>AWS_ADMIN_SECRET_ACCESS_KEY</code> with those two values.</li>
+          </ol>
+          <details><summary>IAM policy JSON (click to show)</summary>
+            <div class="logbox" id="iamPolicy"></div>
+            <button class="small" data-copy-el="iamPolicy" style="margin-top:6px">Copy policy</button>
+          </details>
+          <br><b>2. Cloudflare token for the forms address (about 3 minutes)</b>
+          <ol>
+            <li>Cloudflare dashboard → profile icon (top right) → <b>My Profile</b> → <b>API Tokens</b> → <b>Create Token</b> → <b>Create Custom Token</b>.</li>
+            <li>Name it <code>daas-onboarding</code>. Permissions: <b>Account</b> · <b>Cloudflare Pages</b> · <b>Edit</b>. Account resources: your account. → <b>Continue</b> → <b>Create Token</b>.</li>
+            <li>Copy the token into the Supabase secret <code>CLOUDFLARE_API_TOKEN</code>.</li>
+            <li>Your <b>Account ID</b> is on the right side of any domain's Overview page in Cloudflare (or in the URL after <code>dash.cloudflare.com/</code>). Save it as <code>CLOUDFLARE_ACCOUNT_ID</code>.</li>
+          </ol>
+          <b>3. Check it</b>
+          <ul><li>Come back here and click <b>Run checks</b>. AWS, SNS, SES and Cloudflare should all say <span class="chip ok">ok</span>.</li></ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- NEW CUSTOMER MODAL -->
+<div class="modal hide" id="newModal">
+  <div class="card">
+    <h2>New customer</h2>
+    <div class="sub">This issues their access code and creates their checklist and private setup link. You can change anything later.</div>
+    <div class="grid2">
+      <div><label>Organization name *</label><input id="nOrg" placeholder="Chabad of Yourtown"></div>
+      <div><label>Contact name</label><input id="nContact" placeholder="Rabbi Mendel Cohen"></div>
+      <div><label>Owner email (the login)</label><input id="nEmail" type="email" placeholder="rabbi@chabadyourtown.org"></div>
+      <div><label>Phone / WhatsApp</label><input id="nPhone" placeholder="+1 216 555 0100"></div>
+      <div><label>Website domain (email sends from here)</label><input id="nDomain" placeholder="chabadyourtown.org"></div>
+      <div><label>Forms address</label><input id="nForms" placeholder="forms.chabadyourtown.org"></div>
+      <div><label>From address <span class="muted">(optional)</span></label><input id="nFrom" placeholder="no-reply@chabadyourtown.org"></div>
+      <div><label>Reply-to <span class="muted">(optional)</span></label><input id="nReply" placeholder="office@chabadyourtown.org"></div>
     </div>
-
+    <label>Use an existing unused code <span class="muted">(optional; leave blank to issue a new one)</span></label>
+    <select id="nCode" style="width:100%"><option value="">Issue a new code</option></select>
+    <label>Notes</label><textarea id="nNotes" rows="2" placeholder="Anything to remember about this shul"></textarea>
+    <div id="nWarn"></div>
+    <div class="row" style="margin-top:14px;justify-content:flex-end">
+      <button id="nCancel">Cancel</button>
+      <button class="primary" id="nSave">Create customer</button>
+    </div>
   </div>
 </div>
 
@@ -159,23 +315,34 @@
 const SUPABASE_URL = "https://ipazpeybzzacmsxzwksz.supabase.co";
 const PUBLISHABLE_KEY = "sb_publishable_hOeP4MzV04l1PAGzSjRHJg__EEi6PJm";
 const FN = SUPABASE_URL + "/functions/v1/admin";
+const SITE = "https://daascrm.app";
+const CTX_PROMPT = "I'm setting up DAAS, a relationship CRM for my Chabad house. Its AI reads two short settings before it answers questions or researches people in my community, and I'd like you to write both for me from everything you know about me and my work. If something important is missing, ask me before you write.\n\n1. ABOUT OUR COMMUNITY (3-4 paragraphs, written in first person as me):\n- Who I am, my role, and who works with me (my wife, staff, family members involved)\n- Our Chabad house: name, city, when we started, where we're based\n- The community we serve: towns/neighborhoods, rough size, who our people are, how connected or unaffiliated most of them are\n- Our main programs and yearly events (holidays, classes, Hebrew school, camp, youth, women's programs, etc.)\n- What we're working on now: current projects, campaigns, building plans, upcoming events\n- How I like to talk with people: tone, warmth, formality, and any Hebrew or Yiddish terms I naturally use\n\n2. WHEN DAAS LOOKS SOMEONE UP (1-2 paragraphs), guidance for an AI that researches a household online:\n- The exact area we serve (towns, counties, zip codes)\n- Local sources worth checking: Jewish news sites, our regional Jewish Federation, local synagogues and Jewish organizations, local newspapers and business journals\n- What signals matter to us: Jewish involvement, board seats, philanthropy, business ownership, profession, family connections, interests that connect to our programs\n- Anything to ignore or be careful about\n\nWrite it as plain text under those two headings so I can paste each one into DAAS. Don't invent facts. Where you're not sure, leave a [bracketed placeholder] for me to fill in.";
+const FREEMAIL = /^(gmail|googlemail|yahoo|ymail|hotmail|outlook|live|msn|aol|icloud|me|mac|proton|protonmail|gmx|mail|comcast|verizon|att|sbcglobal)\./i;
 
 const sb = window.supabase.createClient(SUPABASE_URL, PUBLISHABLE_KEY);
 const $ = (id) => document.getElementById(id);
+let STATE = { shuls:[], codes:[], jobs:[], onbs:[], sel:null, open:{} };
 
 function toast(msg, kind){
   const t = document.createElement("div");
   t.className = "toast " + (kind||"");
   t.textContent = msg;
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(), kind==="bad" ? 5200 : 3200);
+  setTimeout(()=>t.remove(), kind==="bad" ? 6000 : 3200);
 }
-function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 function fmtDate(s){ if(!s) return "—"; const d=new Date(s); return isNaN(d)?"—":d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+function fmtWhen(s){ if(!s) return "—"; const d=new Date(s); if(isNaN(d)) return "—"; const m=Math.round((Date.now()-d)/60000);
+  if(m<1) return "just now"; if(m<60) return m+" min ago"; if(m<1440) return Math.round(m/60)+" h ago"; return fmtDate(s); }
 function statusChip(s){
   const cls = s==="active" ? "ok" : (s==="suspended" ? "warn" : (s==="closed" ? "bad" : ""));
   return `<span class="chip ${cls}">${esc(s)}</span>`;
 }
+function copyText(t){ navigator.clipboard.writeText(t).then(()=>toast("Copied","ok"),()=>toast("Copy failed — select and copy by hand","bad")); }
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-copy]"); if(b){ e.stopPropagation(); copyText(b.dataset.copy); return; }
+  const c = e.target.closest("[data-copy-el]"); if(c){ copyText($(c.dataset.copyEl).textContent); }
+});
 
 // Call the admin function with the logged-in user's JWT.
 async function api(action, payload){
@@ -211,16 +378,32 @@ $("loginBtn").onclick = async () => {
 };
 $("password").addEventListener("keydown", e=>{ if(e.key==="Enter") $("loginBtn").click(); });
 $("logoutBtn").onclick = async () => { await sb.auth.signOut(); showLogin(); };
-$("refreshBtn").onclick = () => loadOverview();
+$("refreshBtn").onclick = async () => { await loadOverview(); if(STATE.sel) refreshOnb(STATE.sel, true); };
+
+// ---- Tabs ----
+function setTab(name){
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on", b.dataset.tab===name));
+  document.querySelectorAll("[data-pane]").forEach(p=>p.classList.toggle("hide", p.dataset.pane!==name));
+  try{ localStorage.setItem("daas_admin_tab", name); }catch(e){}
+  if(name==="system" && !STATE.sysRan) runSystem();
+}
+document.querySelectorAll("#tabs button").forEach(b=> b.onclick = () => setTab(b.dataset.tab));
 
 // ---- Data render ----
 async function loadOverview(){
   try{
     const d = await api("overview");
-    renderShuls(d.shuls||[]);
-    renderCodes(d.codes||[]);
-    renderJobs(d.jobs||[]);
+    applyOverview(d);
   }catch(e){ toast(e.message,"bad"); }
+}
+function applyOverview(d){
+  STATE.shuls = d.shuls||[]; STATE.codes = d.codes||[]; STATE.jobs = d.jobs||[]; STATE.onbs = d.onboardings||[];
+  renderShuls(STATE.shuls); renderCodes(STATE.codes); renderJobs(STATE.jobs);
+  $("cntShuls").textContent = STATE.shuls.length;
+  $("cntOnb").textContent = STATE.onbs.filter(o=>!o.archived).length;
+  if(d.onboardings_error) toast("Onboarding table: "+d.onboardings_error,"bad");
+  renderOnbList();
+  if(STATE.sel){ const o = STATE.onbs.find(x=>x.id===STATE.sel); if(o) renderDetail(o); }
 }
 
 function renderShuls(shuls){
@@ -235,13 +418,15 @@ function renderShuls(shuls){
       </select>`;
     const del = s.protected ? "" :
       `<button class="danger" data-del="${s.id}" data-name="${esc(s.organization_name)}" data-ref="${esc(s.supabase_project_ref)}">Delete</button>`;
+    const tracked = STATE.onbs.some(o=>o.tenant_id===s.id);
+    const track = tracked ? "" : ` <button class="small ghost" data-track="${s.id}" data-name="${esc(s.organization_name)}" data-forms="${esc(s.form_domain||"")}">Track onboarding</button>`;
     return `<tr>
       <td><strong>${esc(s.organization_name)}</strong>${lock}<br><span class="muted mono">${esc(s.slug)}</span></td>
       <td>${owners}</td>
       <td>${statusSel}</td>
-      <td class="mono">${esc(s.supabase_project_ref)}</td>
+      <td class="mono">${esc(s.supabase_project_ref)}${s.form_domain?`<br><span class="muted">${esc(s.form_domain)}</span>`:""}</td>
       <td>${fmtDate(s.created_at)}</td>
-      <td>${del}</td>
+      <td>${del}${track}</td>
     </tr>`;
   }).join("");
 
@@ -254,6 +439,15 @@ function renderShuls(shuls){
   });
   tb.querySelectorAll("button[data-del]").forEach(b=>{
     b.onclick = () => confirmDeleteTenant(b.dataset.del, b.dataset.name, b.dataset.ref);
+  });
+  tb.querySelectorAll("button[data-track]").forEach(b=>{
+    b.onclick = async () => {
+      try{
+        const r = await api("onb_create",{ org_name:b.dataset.name, tenant_id:b.dataset.track, forms_domain:b.dataset.forms||undefined });
+        toast("Now tracking "+b.dataset.name,"ok");
+        STATE.sel = r.onboarding.id; await loadOverview(); setTab("onboarding");
+      }catch(e){ toast(e.message,"bad"); }
+    };
   });
 }
 
@@ -292,7 +486,7 @@ function renderJobs(jobs){
   }).join("");
 }
 
-// ---- Actions ----
+// ---- Actions (codes/tools) ----
 $("issueBtn").onclick = async () => {
   $("issueBtn").disabled = true;
   try{
@@ -302,7 +496,7 @@ $("issueBtn").onclick = async () => {
     box.classList.remove("hide");
     box.innerHTML = `New code: <span class="codebox" id="cc">${esc(r.code)}</span>
       <button class="ghost small" id="copyCode">Copy</button>`;
-    $("copyCode").onclick = () => { navigator.clipboard.writeText(r.code); toast("Copied","ok"); };
+    $("copyCode").onclick = () => copyText(r.code);
     loadOverview();
   }catch(e){ toast(e.message,"bad"); }
   finally{ $("issueBtn").disabled = false; }
@@ -323,7 +517,6 @@ function confirmDeleteTenant(id, name, ref){
   const alsoProj = confirm(
     `Delete the shul "${name}"?\n\nThis removes its rows from the control room (build jobs, membership, tenant, retained tokens).\n\nClick OK to also DELETE its Supabase project (${ref}) if DAAS still owns it, or Cancel to keep the project and only remove the rows.`
   );
-  // Two-step: first a hard confirm that we're deleting at all.
   const go = confirm(`Are you sure? This cannot be undone.\n\nShul: ${name}\nProject: ${ref}\nAlso delete project: ${alsoProj ? "YES" : "no"}`);
   if(!go) return;
   api("delete_tenant",{ tenant_id:id, delete_project:alsoProj })
@@ -365,6 +558,424 @@ $("scanBtn").onclick = async () => {
   finally{ $("scanBtn").disabled = false; }
 };
 
+// =====================================================================
+// ONBOARDING
+// =====================================================================
+const linkFor = (o) => `${SITE}/signup/?k=${encodeURIComponent(o.customer_token||"")}`;
+const codeOf = (o) => (o.auto && o.auto.code && o.auto.code.code) || (STATE.codes.find(c=>c.id===o.code_id)||{}).code || null;
+
+function rec(o,key){ return ((o.auto||{}).dns||[]).find(r=>r.key===key); }
+function recsOk(o,prefix){ const rs=((o.auto||{}).dns||[]).filter(r=>r.key.startsWith(prefix)); return rs.length && rs.every(r=>r.ok); }
+function chk(o,k){ return !!(o.checks||{})[k]; }
+
+// Each step: id, stage, who, title, sub, status(o) -> done|todo|wait|warn|bad|na, body(o) html, manual: check key
+function steps(){
+  return [
+  // ---------- 1. Start
+  { id:"code", stage:"Get started", who:"auto", title:"Access code issued",
+    status:o=> !o.code_id ? (o.tenant_id?"na":"todo") : "done",
+    sub:o=> codeOf(o) ? `${codeOf(o)} · ${(o.auto.code||{}).status||""}` : (o.tenant_id?"Not needed — already a shul":"No code yet"),
+    body:o=> `${codeOf(o)?`<span class="codebox">${esc(codeOf(o))}</span> <button class="small" data-copy="${esc(codeOf(o))}">Copy</button>`:""}
+      <button class="small" data-act="new_code">Issue a fresh code</button>
+      <div class="how">Codes are single-use. If the shul's build failed and you need them to retry, issue a fresh code here — the setup link picks it up automatically.</div>` },
+  { id:"send", stage:"Get started", who:"you", title:"Send the customer their setup link", manual:"link_sent",
+    status:o=> chk(o,"link_sent") || (o.auto||{}).job ? "done" : "todo",
+    sub:o=> chk(o,"link_sent") ? "Sent "+fmtWhen(o.checks.link_sent) : "One link has everything: their code, steps, and DNS records",
+    body:o=> `<div class="row"><input readonly value="${esc(linkFor(o))}" style="flex:1;min-width:260px;font-size:12px">
+        <button class="small" data-copy="${esc(linkFor(o))}">Copy link</button>
+        <button class="small" data-copy="${esc(waMsg(o))}">Copy WhatsApp message</button>
+        <a class="small" href="${esc(linkFor(o))}" target="_blank" rel="noopener">Open as customer ↗</a></div>
+      <div class="how">This is the normal signup page with their code already filled in. Below the wizard it shows a checklist for everything after the build: sign-in, their exact DNS records with live green checks, forms address, OpenAI and Stripe. They can reopen the same link any time. <b>Don't send keys over WhatsApp</b> — they paste keys into DAAS themselves.</div>` },
+  { id:"supa", stage:"Get started", who:"shul", title:"Shul creates a free Supabase account", manual:"supabase_account",
+    status:o=> chk(o,"supabase_account") || (o.auto||{}).job ? "done" : "todo",
+    sub:()=> "Organization only — no project",
+    body:()=> `<div class="how"><ol><li>Go to <b>supabase.com</b> → <b>Start your project</b> → sign up with Google or email.</li>
+      <li>When asked, create an <b>organization</b> (any name, <b>Free</b> plan).</li>
+      <li><b>Do NOT create a project.</b> DAAS hands them a ready-made one.</li></ol>
+      This step can't be detected until they start the wizard — tick it when they confirm.</div>` },
+
+  // ---------- 2. Build
+  { id:"wizard", stage:"Build their DAAS", who:"shul", title:"Shul runs the signup wizard",
+    status:o=>{ const j=(o.auto||{}).job; if(!j) return "todo"; if(j.status==="failed") return "bad"; if(j.status==="running") return "wait"; return "done"; },
+    sub:o=>{ const j=(o.auto||{}).job; if(!j) return "Waiting for them to enter the code at daascrm.app/signup/";
+      return `${j.status} · ${j.progress||j.step} · ${fmtWhen(j.updated_at)}`; },
+    body:o=>{ const j=(o.auto||{}).job||{};
+      let h = "";
+      if(j.status==="failed") h += `<div class="badbox"><b>Build failed:</b> ${esc(j.error||"unknown")}<br>Keep this error. The build is resumable — have them reopen the signup page on the same browser. Don't issue a new code until you know why it failed.</div>`;
+      if(j.owner_email) h += `<p>Owner email entered: <b>${esc(j.owner_email)}</b>${j.form_url?` · forms: ${esc(j.form_url)}`:""}</p>`;
+      if(j.owner_email && o.sending_domain && !j.owner_email.endsWith("@"+o.sending_domain)) h += `<div class="warnbox">The build set their sending domain to <b>${esc(j.owner_email.split("@")[1])}</b> (from the owner email). Step <b>Set up email</b> below overrides it with <b>${esc(o.sending_domain)}</b> once they've claimed.</div>`;
+      return h + `<div class="how"><ol><li>At <b>daascrm.app/signup/</b>, enter the access code, org name, owner email, city, state, time zone.</li>
+        <li>Forms address: <b>${esc(o.forms_domain||"forms.theirdomain.org")}</b> (pre-filled from their link). <b>OpenAI key is required</b>; Stripe keys are optional here — they can add them later in the app.</li>
+        <li>The build takes 2–4 minutes. <b>They must write down the temporary password</b> — it's shown once.</li></ol></div>`; } },
+  { id:"claim", stage:"Build their DAAS", who:"shul", title:"Shul claims the project",
+    status:o=> (o.auto||{}).tenant ? "done" : (((o.auto||{}).job||{}).status==="awaiting_claim" ? "wait" : "todo"),
+    sub:o=> (o.auto||{}).tenant ? `Project ${o.auto.tenant.ref}` : "They approve the transfer into their Supabase organization",
+    body:o=> `<div class="how">After the build, the wizard sends them to Supabase to <b>approve the transfer</b>. They pick the organization they made in step 3. Then they land on daascrm.app/crm/.</div>
+      ${(o.auto||{}).tenant?`<p class="small muted">Project: <span class="mono">${esc(o.auto.tenant.ref)}</span> · <a href="https://supabase.com/dashboard/project/${esc(o.auto.tenant.ref)}" target="_blank" rel="noopener">open in Supabase ↗</a> (only works if you're in their org)</p>`:""}` },
+  { id:"signin", stage:"Build their DAAS", who:"shul", title:"Owner signs in to DAAS", manual:"signed_in",
+    status:o=> ((o.auto||{}).owner||{}).signed_in || chk(o,"signed_in") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"),
+    sub:o=>{ const w=(o.auto||{}).owner; return w&&w.last_sign_in_at ? "Last sign-in "+fmtWhen(w.last_sign_in_at) : "At daascrm.app/crm/ with the temporary password"; },
+    body:()=> `<div class="how"><ol><li>Go to <b>daascrm.app/crm/</b>, sign in with their email + the temporary password.</li>
+      <li>On a phone: Share → <b>Add to Home Screen</b> for the app version.</li>
+      <li>If they lost the temp password: in their Supabase project → <b>Authentication → Users</b> → their row → <b>Send password recovery</b>.</li></ol></div>` },
+  { id:"access", stage:"Build their DAAS", who:"auto", title:"Console can reach their project",
+    status:o=>{ const a=(o.auto||{}).tenant_access; if(!(o.auto||{}).tenant) return "wait"; if(!a) return "todo"; return a.ok ? "done" : "warn"; },
+    sub:o=>{ const a=(o.auto||{}).tenant_access; return !a ? "Checked after claim" : a.ok ? `Connected (${a.via==="oauth"?"handover token":"DAAS token"})` : "Not reachable — you'll do a few steps by hand"; },
+    body:o=>{ const a=(o.auto||{}).tenant_access||{};
+      return (a.error?`<div class="warnbox">${esc(a.error)}</div>`:"") + `<div class="how">The console uses the access the shul granted at claim to read their sign-in status and keys, and to set their From address and forms address. If this is yellow, those steps still work — they just need to be done by hand (each step says how), and the status here won't update on its own.</div>`; } },
+
+  // ---------- 3. Email
+  { id:"domain", stage:"Email from their domain", who:"you", title:"Confirm the sending domain",
+    status:o=> !o.sending_domain ? "todo" : FREEMAIL.test(o.sending_domain) ? "bad" : "done",
+    sub:o=> o.sending_domain ? `${o.sending_domain} → From: ${o.from_address||"no-reply@"+o.sending_domain}${o.reply_to?" · Reply-to: "+o.reply_to:""}` : "Their website domain",
+    body:o=> (o.sending_domain && FREEMAIL.test(o.sending_domain) ? `<div class="badbox">${esc(o.sending_domain)} is a free email provider — you can't send from it. Use the shul's own website domain.</div>` : "") +
+      `<div class="how">Edit the domain, From and Reply-to in the details box at the top. They must <b>own</b> this domain and be able to edit its DNS (GoDaddy, Squarespace, Google, Cloudflare, Wix…).</div>` },
+  { id:"ses", stage:"Email from their domain", who:"auto", title:"Set up the domain in Amazon SES",
+    status:o=>{ const s=(o.auto||{}).ses; if((o.auto||{}).errors&&o.auto.errors.ses&&!s) return "warn"; if(!s||!s.exists) return "todo"; return s.mail_from ? "done" : "warn"; },
+    sub:o=>{ const s=(o.auto||{}).ses; return !s ? "Creates DKIM keys + MAIL FROM" : !s.exists ? "Not created yet" : `Identity created · MAIL FROM ${s.mail_from||"not set"}`; },
+    body:o=> `<button class="navy small" data-act="email">Set up email</button>
+      <span class="small muted">Safe to click again — it skips what's already done. After they claim, click once more to connect tracking and set their From address.</span>
+      ${errLine(o,"ses")}
+      <details style="margin-top:8px"><summary>Manual fallback (if automation is off)</summary><div class="how"><ol>
+        <li>AWS → <b>SES</b> (us-east-1) → <b>Identities</b> → <b>Create identity</b> → <b>Domain</b> → <b>${esc(o.sending_domain||"their domain")}</b>. Keep Easy DKIM, RSA 2048 → <b>Create</b>.</li>
+        <li>Open the identity → <b>Custom MAIL FROM domain</b> → Edit → <b>mail.${esc(o.sending_domain||"domain")}</b>, behavior <b>Use default MAIL FROM</b> → Save.</li></ol></div></details>` },
+  { id:"dkim", stage:"Email from their domain", who:"shul", title:"Shul adds the 3 DKIM records",
+    status:o=>{ const rs=((o.auto||{}).dns||[]).filter(r=>r.key.startsWith("dkim")); if(!rs.length) return "wait"; return rs.every(r=>r.ok) ? "done" : (rs.some(r=>r.hint&&/twice/.test(r.hint)) ? "bad" : "todo"); },
+    sub:o=>{ const rs=((o.auto||{}).dns||[]).filter(r=>r.key.startsWith("dkim")); return rs.length ? `${rs.filter(r=>r.ok).length} of ${rs.length} found in DNS` : "Appears after SES setup"; },
+    body:o=> recTable(o, r=>r.key.startsWith("dkim")) + dnsHowTo() },
+  { id:"mailfrom", stage:"Email from their domain", who:"shul", title:"Shul adds the bounce MX + SPF records",
+    status:o=>{ const a=rec(o,"mx"), b=rec(o,"spf"); if(!a) return "wait"; return a.ok&&b.ok ? "done" : "todo"; },
+    sub:()=> "Recommended — fixes the 'MAIL FROM not aligned' note",
+    body:o=> recTable(o, r=>r.key==="mx"||r.key==="spf") + `<div class="how">These go on a new <b>mail.</b> subdomain, so they never touch the shul's existing email.</div>` },
+  { id:"dmarc", stage:"Email from their domain", who:"shul", title:"DMARC record (optional)",
+    status:o=>{ const a=rec(o,"dmarc"); if(!a) return "na"; return a.ok ? "done" : "na"; },
+    sub:o=>{ const a=rec(o,"dmarc"); return a&&a.ok ? "Already has one" : "Optional — helps Gmail/Yahoo trust their mail"; },
+    body:o=> recTable(o, r=>r.key==="dmarc") + `<div class="how">Only add if they <b>don't already have</b> a DMARC record. If one exists, leave it.</div>` },
+  { id:"verified", stage:"Email from their domain", who:"auto", title:"Amazon verifies the domain",
+    status:o=>{ const s=(o.auto||{}).ses; if(!s||!s.exists) return "wait"; if(s.verified) return (s.mail_from_status==="SUCCESS"||!s.mail_from) ? "done" : "warn"; return s.dkim_status==="FAILED" ? "bad" : "wait"; },
+    sub:o=>{ const s=(o.auto||{}).ses; return !s||!s.exists ? "After the DKIM records are live" : `DKIM ${s.dkim_status||"—"} · MAIL FROM ${s.mail_from_status||"—"}`; },
+    body:o=>{ const s=(o.auto||{}).ses||{};
+      return `<div class="how">Minutes to a few hours after the records are live. Click <b>Refresh</b> to recheck.
+      ${s.dkim_status==="FAILED"?"<br><b>FAILED</b> means AWS gave up after 72 hours without seeing the records. Fix the DNS, then in SES open the identity and use <b>Retry DKIM verification</b>.":""}
+      ${s.verified&&s.mail_from_status&&s.mail_from_status!=="SUCCESS"?"<br>Sending works now. MAIL FROM is still pending — that clears once the MX + SPF records are live.":""}</div>`; } },
+  { id:"sns", stage:"Email from their domain", who:"auto", title:"Open/click/bounce tracking connected",
+    status:o=>{ const s=(o.auto||{}).sns; if(!(o.auto||{}).tenant) return "wait"; if(!s) return (o.auto||{}).errors&&o.auto.errors.sns ? "warn" : "todo"; return s.confirmed ? "done" : (s.subscribed ? "wait" : "todo"); },
+    sub:o=>{ const s=(o.auto||{}).sns; return !s ? "Subscribes their email-webhook to daas-email-events" : s.confirmed ? "Confirmed" : s.subscribed ? "Pending confirmation (auto-confirms in seconds)" : "Not subscribed"; },
+    body:o=> `<button class="small" data-act="email">Connect now</button> ${errLine(o,"sns")}
+      <details style="margin-top:8px"><summary>Manual fallback</summary><div class="how">AWS → <b>SNS</b> → Topics → <b>daas-email-events</b> → Create subscription → Protocol <b>HTTPS</b>, Endpoint <span class="mono">https://${esc(((o.auto||{}).tenant||{}).ref||"&lt;ref&gt;")}.supabase.co/functions/v1/email-webhook</span>. It confirms itself.</div></details>` },
+  { id:"from", stage:"Email from their domain", who:"auto", title:"Their From address is set in DAAS", manual:"from_set",
+    status:o=> chk(o,"_from_pushed")||chk(o,"from_set") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"),
+    sub:o=> chk(o,"_from_pushed") ? "Set to "+o.checks._from_pushed : "SENDING_DOMAIN + SES_FROM_ADDRESS on their project",
+    body:o=> `<button class="small" data-act="email">Set it now</button>
+      <details style="margin-top:8px"><summary>Manual fallback (if the console can't reach their project)</summary><div class="how">
+      Have the shul open <b>supabase.com → their project → Edge Functions → Secrets</b> and add/update:
+      <ul><li><span class="mono">SENDING_DOMAIN</span> = <span class="mono">${esc(o.sending_domain||"")}</span></li>
+      <li><span class="mono">SES_FROM_ADDRESS</span> = <span class="mono">${esc(o.from_address||("no-reply@"+(o.sending_domain||"")))}</span></li>
+      ${o.reply_to?`<li><span class="mono">REPLY_TO_ADDRESS</span> = <span class="mono">${esc(o.reply_to)}</span></li>`:""}</ul>
+      Then tick this step.</div></details>` },
+
+  // ---------- 4. Forms
+  { id:"cf", stage:"Forms address", who:"auto", title:"Add their forms address in Cloudflare",
+    status:o=>{ if(!o.forms_domain) return "todo"; const c=(o.auto||{}).cf; if(!c) return (o.auto||{}).errors&&o.auto.errors.cf ? "warn" : "todo"; return c.exists ? "done" : "todo"; },
+    sub:o=> o.forms_domain ? `${o.forms_domain} on daas-forms` : "Set the forms address in the details box",
+    body:o=> `<button class="navy small" data-act="forms">Set up forms address</button> ${errLine(o,"cf")}
+      <details style="margin-top:8px"><summary>Manual fallback</summary><div class="how">Cloudflare → <b>Workers &amp; Pages</b> → <b>daas-forms</b> → <b>Custom domains</b> → <b>Set up a custom domain</b> → <b>${esc(o.forms_domain||"forms.theirdomain.org")}</b> → Continue.</div></details>` },
+  { id:"formsdns", stage:"Forms address", who:"shul", title:"Shul adds the forms CNAME",
+    status:o=>{ const c=(o.auto||{}).cf||{}; const r=rec(o,"forms"); if(c.status==="active") return "done"; if(!r) return "wait"; return r.ok ? "wait" : "todo"; },
+    sub:o=>{ const c=(o.auto||{}).cf||{}; const r=rec(o,"forms"); return c.status ? `Cloudflare: ${c.status}${r&&r.ok?" · CNAME found":""}` : (r&&r.ok ? "CNAME found" : "One CNAME record"); },
+    body:o=> recTable(o, r=>r.key==="forms") + (((o.auto||{}).cf||{}).error?`<div class="warnbox">Cloudflare says: ${esc(o.auto.cf.error)}</div>`:"") +
+      `<div class="how">After the CNAME is live, Cloudflare issues the certificate on its own (usually under 15 minutes). Status goes <b>pending → active</b>.</div>` },
+  { id:"formslink", stage:"Forms address", who:"auto", title:"Their event & donation links use it",
+    status:o=>{ const t=(o.auto||{}).tenant; if(!t) return "wait"; const s=(o.auto||{}).settings;
+      const ok1 = t.form_domain===o.forms_domain; const ok2 = s ? s.form_origin===("https://"+o.forms_domain) : null;
+      return ok1 && ok2!==false ? "done" : "todo"; },
+    sub:o=>{ const t=(o.auto||{}).tenant||{}; const s=(o.auto||{}).settings||{}; return `control: ${t.form_domain||"—"} · app: ${s.form_origin||"—"}`; },
+    body:o=> `<button class="small" data-act="forms">Fix now</button>
+      <div class="how">Two settings must match: <b>form_domain</b> in the control room (routes visitors to their data) and <b>form_origin</b> in their app (Settings → Email and forms) so their links point at it.</div>` },
+
+  // ---------- 5. Money + AI
+  { id:"context", stage:"Donations, AI & context", who:"shul", title:"Community context filled in", manual:"context_done",
+    status:o=>{ const st=(o.auto||{}).settings; if(st && st.about_len!==undefined) return (st.about_len>=80 && st.search_len>=40) ? "done" : "todo"; return chk(o,"context_done") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
+    sub:o=>{ const st=(o.auto||{}).settings; return st && st.about_len!==undefined ? `About your community ${st.about_len>=80?"✓":"empty"} · When DAAS looks someone up ${st.search_len>=40?"✓":"empty"}` : "Settings → Your Chabad house (2 notes the AI reads)"; },
+    body:()=> `<div class="how">These two notes power chat answers and profile building — empty notes mean generic results. The shul's link walks them through it with this prompt:<ol>
+      <li>Paste the prompt into <b>ChatGPT or Claude</b> — whichever knows the most about their Chabad work.</li>
+      <li>Read it over and fix any [placeholders].</li>
+      <li>DAAS → <b>Settings → Your Chabad house</b> → <b>About your community</b> (section 1) and <b>When DAAS looks someone up</b> (section 2) → Save each.</li></ol></div>
+      <div class="logbox" style="background:#f8f9fc;color:var(--ink);border:1px solid var(--line);max-height:220px;overflow:auto">${esc(CTX_PROMPT)}</div>
+      <button class="small" data-copy="${esc(CTX_PROMPT)}" style="margin-top:6px">Copy prompt</button>` },
+  { id:"stripe", stage:"Donations, AI & context", who:"shul", title:"Shul connects Stripe (secret key)", manual:"stripe_key",
+    status:o=>{ const k=(o.auto||{}).keys; if(k) return k.stripe&&k.stripe_webhook ? "done" : (k.stripe ? "warn" : "todo"); return chk(o,"stripe_key") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
+    sub:o=>{ const k=(o.auto||{}).keys; return k ? `Secret key ${k.stripe?"✓":"missing"} · webhook ${k.stripe_webhook?"✓":"missing"}` : "In DAAS: Settings → Connections"; },
+    body:o=> `<div class="how"><b>The shul does this themselves in DAAS — keys never go through you.</b><ol>
+      <li><b>dashboard.stripe.com</b> → <b>Developers</b> → <b>API keys</b>. Copy the <b>Secret key</b> (<span class="mono">sk_live_…</span>).</li>
+      <li>In DAAS: <b>Settings → Connections → Stripe</b> → paste → Save → <b>Test</b>. DAAS registers the Stripe webhook automatically (including monthly renewals).</li>
+      <li>If they use a <b>restricted key</b> (<span class="mono">rk_…</span>): set <b>Write</b> on Customers, Products, Prices, Subscriptions, Invoices, PaymentIntents, Webhook Endpoints.</li></ol></div>` },
+  { id:"stripepk", stage:"Donations, AI & context", who:"shul", title:"Shul adds the Stripe publishable key", manual:"stripe_pk",
+    status:o=>{ const s=(o.auto||{}).settings; if(s) return s.stripe_pk ? (s.stripe_pk==="test"?"warn":"done") : "todo"; return chk(o,"stripe_pk") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
+    sub:o=>{ const s=(o.auto||{}).settings; return s ? (s.stripe_pk ? `Set (${s.stripe_pk} mode)` : "Not set") : "In DAAS: Settings → Email and forms"; },
+    body:()=> `<div class="how">Stripe → Developers → API keys → <b>Publishable key</b> (<span class="mono">pk_live_…</span>) → DAAS <b>Settings → Email and forms</b> → Stripe publishable key → Save.
+      <br>Test mode (<span class="mono">pk_test_</span>) is fine for the test donation — switch both keys to live before announcing.</div>` },
+  { id:"ai", stage:"Donations, AI & context", who:"shul", title:"OpenAI key (required)", manual:"ai_key",
+    status:o=>{ const k=(o.auto||{}).keys; if(k) return k.openai ? "done" : "todo"; return chk(o,"ai_key") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
+    sub:o=>{ const k=(o.auto||{}).keys; return k ? (k.openai?"Connected":"Missing — DAAS needs it")+(k.anthropic?" · Anthropic ✓":"") : "Entered at signup, or Settings → Connections"; },
+    body:()=> `<div class="how"><b>platform.openai.com</b> → API keys → <b>Create new secret key</b> → add a few dollars of credit under Billing → DAAS <b>Settings → Connections → OpenAI</b> → paste → Save → Test.</div>` },
+
+  // ---------- 6. Acceptance
+  ...[
+    ["acc_data","Data entry works","Add a test household, log an interaction; Prospect Score and Daily Five load."],
+    ["acc_ai","Chat + profile build work","Run one chat and build one profile."],
+    ["acc_zillow","Home-value lookup saves","Run one addressed-household Zillow lookup."],
+    ["acc_links","Event & donation links are theirs","Links open on their forms address and their own forms."],
+    ["acc_event","Event registration + confirmation email","One registration records and the confirmation email arrives."],
+    ["acc_donation","Stripe test donation records once","One test-mode gift records exactly once; email + phone push fire. Then a recurring one."],
+    ["acc_email","CRM email sends right","One ordinary email: right From / Reply-To, unsubscribe works, delivers to inbox."],
+    ["acc_push","Phone notifications work","From a real form submission."],
+    ["acc_owned","They own the project","Supabase project sits in their org, on the plan you intended."],
+  ].map(([k,t,s])=>({ id:k, stage:"Final acceptance", who:"you", title:t, manual:k, status:o=>chk(o,k)?"done":"todo", sub:()=>s, body:null })),
+  ];
+}
+
+function errLine(o,k){ const e=((o.auto||{}).errors||{})[k]; return e ? `<div class="warnbox">${esc(e)}</div>` : ""; }
+function recTable(o, filter){
+  const rs = ((o.auto||{}).dns||[]).filter(filter);
+  if(!rs.length) return `<p class="muted small">Records appear here once the step above is done.</p>`;
+  return `<div class="tablewrap"><table class="recs"><thead><tr><th></th><th>Type</th><th>Host / Name</th><th>Value</th></tr></thead><tbody>`+
+    rs.map(r=>`<tr><td>${r.ok?'<span class="chip ok">live</span>':'<span class="chip warn">not yet</span>'}</td>
+      <td>${esc(r.type)}${r.priority?` <span class="muted">pri ${r.priority}</span>`:""}</td>
+      <td class="val">${esc(r.host)}<button class="copy" data-copy="${esc(r.host)}">copy</button><br><span class="muted">${esc(r.name)}</span></td>
+      <td class="val">${esc(r.value)}<button class="copy" data-copy="${esc(r.value)}">copy</button>${r.hint?`<div class="warnbox" style="margin-top:4px">${esc(r.hint)}</div>`:""}</td></tr>`).join("")+
+    `</tbody></table></div>`;
+}
+function dnsHowTo(){
+  return `<div class="how"><b>Where they add these:</b> wherever their domain's DNS lives (GoDaddy, Squarespace Domains, Google/Squarespace, Cloudflare, Wix, Namecheap…). The setup link shows them the same table with copy buttons.
+    <ul><li><b>Host/Name:</b> most hosts want just the part before the domain (what's in the first line). If a record shows "added the domain twice", they typed the full name.</li>
+    <li><b>Cloudflare DNS:</b> set the cloud to <b>DNS only</b> (grey) for these CNAMEs.</li>
+    <li>Records are additive — they don't disturb existing email.</li></ul></div>`;
+}
+function waMsg(o){
+  const name = (o.contact_name||"").split(" ").filter(w=>!/^(rabbi|rav|mr|mrs|ms|dr)\.?$/i.test(w))[0] || "";
+  return `Hi${name?" "+name:""}! Welcome to DAAS. Here's your personal setup page. It walks you through everything step by step, has your access code, and checks your settings as you go:\n\n${linkFor(o)}\n\nIt takes about 15 minutes. I'm here if anything's unclear.`;
+}
+
+function progress(o){
+  const ss = steps().filter(s=>s.stage!=="Final acceptance");
+  let done=0, total=0, next=null;
+  for(const s of ss){ const st=s.status(o); if(st==="na") continue; total++; if(st==="done") done++; else if(!next) next=s; }
+  return { done, total, next, pct: total? Math.round(done*100/total) : 0 };
+}
+
+function renderOnbList(){
+  const showArch = $("showArchived").checked;
+  const list = STATE.onbs.filter(o=>showArch || !o.archived);
+  if(!list.length){ $("onbList").innerHTML = `<div class="muted small">No customers yet. Click <b>+ New customer</b>.</div>`; return; }
+  $("onbList").innerHTML = list.map(o=>{
+    const p = progress(o);
+    return `<button class="citem ${o.id===STATE.sel?"on":""}" data-onb="${o.id}">
+      <div class="nm">${esc(o.org_name)}${o.archived?' <span class="chip">archived</span>':""}</div>
+      <div class="nx">${p.next?("Next: "+esc(p.next.title)):"✓ All set — run final acceptance"}</div>
+      <div class="bar"><i style="width:${p.pct}%"></i></div>
+      <div class="nx">${p.done}/${p.total} · checked ${fmtWhen((o.auto||{}).checked_at)}</div></button>`;
+  }).join("");
+  $("onbList").querySelectorAll("[data-onb]").forEach(b=> b.onclick = () => { STATE.sel=b.dataset.onb; try{localStorage.setItem("daas_admin_sel",STATE.sel);}catch(e){} renderOnbList(); const o=STATE.onbs.find(x=>x.id===STATE.sel); renderDetail(o); refreshOnb(o.id); });
+}
+$("showArchived").onchange = renderOnbList;
+
+const ICON = { done:"✓", todo:"", wait:"…", warn:"!", bad:"✕", na:"–" };
+function renderDetail(o){
+  if(!o){ $("onbDetail").innerHTML = ""; return; }
+  const p = progress(o);
+  const a = o.auto||{};
+  const stages = {};
+  steps().forEach(s=>{ (stages[s.stage] ||= []).push(s); });
+  let html = `<div class="card">
+    <div class="dhead">
+      <div><h2>${esc(o.org_name)}</h2>
+        <div class="muted small">${p.done} of ${p.total} steps done · last checked ${fmtWhen(a.checked_at)} ${a.tenant?`· project <span class="mono">${esc(a.tenant.ref)}</span>`:""}</div>
+        <div class="bar" style="max-width:420px"><i style="width:${p.pct}%"></i></div></div>
+      <div class="row">
+        <button class="navy" data-act="run_all" title="Set up email + forms in one go (safe to repeat)">⚡ Run all automations</button>
+        <button data-act="refresh">Check now</button>
+      </div>
+    </div>
+    ${p.next?`<div class="okbox" style="background:var(--info-bg);color:var(--info)"><b>Next:</b> ${esc(p.next.title)} <span class="who ${p.next.who}">${p.next.who==="you"?"you":p.next.who==="shul"?"the shul":"automatic"}</span></div>`:`<div class="okbox"><b>Setup complete.</b> Run through Final acceptance below with the shul.</div>`}
+    <div id="actLog"></div>
+    <details style="margin-top:12px" ${o.sending_domain?"":"open"}><summary>Customer details</summary>
+    <div class="kv">
+      ${field(o,"org_name","Organization")}${field(o,"contact_name","Contact")}${field(o,"owner_email","Owner email")}${field(o,"phone","Phone / WhatsApp")}
+      ${field(o,"sending_domain","Sending domain")}${field(o,"from_address","From address","no-reply@"+(o.sending_domain||"domain"))}${field(o,"reply_to","Reply-to")}${field(o,"forms_domain","Forms address")}
+    </div>
+    <label class="small" style="display:block;margin-top:10px;font-weight:600">Notes</label>
+    <textarea data-f="notes" rows="2" style="width:100%">${esc(o.notes||"")}</textarea>
+    <div class="row" style="margin-top:8px;justify-content:space-between">
+      <button class="primary small" data-act="save">Save details</button>
+      <div class="row small">
+        <button class="small" data-act="rotate">New setup link</button>
+        <button class="small" data-act="toggle_link">${o.customer_link_enabled?"Disable setup link":"Enable setup link"}</button>
+        <button class="small" data-act="archive">${o.archived?"Unarchive":"Archive"}</button>
+        <button class="small danger" data-act="delete">Delete</button>
+      </div>
+    </div></details>
+  </div>`;
+  for(const [stage, ss] of Object.entries(stages)){
+    const d = ss.filter(s=>s.status(o)==="done").length;
+    html += `<div class="stage"><h3>${esc(stage)} <span class="chip ${d===ss.length?"ok":""}">${d}/${ss.length}</span></h3>`;
+    for(const s of ss){
+      const st = s.status(o);
+      const open = STATE.open[o.id+":"+s.id] ?? (!!p.next && s.id===p.next.id);
+      html += `<div class="step ${open?"open":""}" data-step="${s.id}">
+        <div class="sh"><span class="ic ${st}">${ICON[st]}</span>
+          <span class="tt">${esc(s.title)}<span class="s">${esc(s.sub?s.sub(o):"")}</span></span>
+          <span class="who ${s.who}">${s.who==="you"?"you":s.who==="shul"?"shul":"auto"}</span>
+          ${s.manual?`<label class="small" onclick="event.stopPropagation()" title="Mark done by hand"><input type="checkbox" data-check="${s.manual}" ${chk(o,s.manual)?"checked":""}> done</label>`:""}
+        </div>
+        ${s.body?`<div class="sb">${s.body(o)}</div>`:""}
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  $("onbDetail").innerHTML = html;
+  wireDetail(o);
+}
+function field(o,k,label,ph){ return `<div><label>${esc(label)}</label><input data-f="${k}" value="${esc(o[k]||"")}" placeholder="${esc(ph||"")}"></div>`; }
+
+function wireDetail(o){
+  const root = $("onbDetail");
+  root.querySelectorAll(".step .sh").forEach(h=> h.onclick = () => {
+    const el = h.parentElement; el.classList.toggle("open"); STATE.open[o.id+":"+el.dataset.step] = el.classList.contains("open");
+  });
+  root.querySelectorAll("[data-check]").forEach(cb=> cb.onchange = async () => {
+    try{ const r = await api("onb_update",{ id:o.id, checks:{ [cb.dataset.check]: cb.checked } }); mergeOnb(r.onboarding); }
+    catch(e){ toast(e.message,"bad"); cb.checked=!cb.checked; }
+  });
+  root.querySelectorAll("[data-act]").forEach(b=> b.onclick = (e) => { e.stopPropagation(); doAct(o, b.dataset.act, b); });
+}
+
+function mergeOnb(n){
+  const i = STATE.onbs.findIndex(x=>x.id===n.id);
+  if(i>=0) STATE.onbs[i] = Object.assign({}, STATE.onbs[i], n); else STATE.onbs.unshift(n);
+  renderOnbList();
+  if(STATE.sel===n.id) renderDetail(STATE.onbs.find(x=>x.id===n.id));
+}
+
+async function doAct(o, act, btn){
+  const busy = (on)=>{ if(btn){ btn.disabled=on; if(on){ btn.dataset.t=btn.textContent; btn.textContent="Working…"; } else if(btn.dataset.t) btn.textContent=btn.dataset.t; } };
+  try{
+    busy(true);
+    if(act==="refresh"){ await refreshOnb(o.id, true); return; }
+    if(act==="save"){
+      const fields = {};
+      $("onbDetail").querySelectorAll("[data-f]").forEach(i=> fields[i.dataset.f] = i.value.trim());
+      const r = await api("onb_update",{ id:o.id, fields });
+      mergeOnb(r.onboarding); toast("Saved","ok"); refreshOnb(o.id); return;
+    }
+    if(act==="email"||act==="forms"||act==="run_all"){
+      const r = await api(act==="email"?"onb_email_setup":act==="forms"?"onb_forms_setup":"onb_run_all",{ id:o.id });
+      mergeOnb(r.onboarding);
+      const lines = (r.log||[]).map(l=>"✓ "+l).concat((r.errors||[]).map(l=>"✕ "+l));
+      $("actLog").innerHTML = lines.length ? `<div class="logbox">${esc(lines.join("\n"))}</div>` : "";
+      toast(r.errors&&r.errors.length ? "Finished with issues — see the log" : "Done", r.errors&&r.errors.length ? "warn" : "ok");
+      return;
+    }
+    if(act==="new_code"){
+      if(codeOf(o) && (o.auto.code||{}).status==="unused" && !confirm("They still have an unused code. Issue a different one anyway?")) return;
+      const r = await api("onb_new_code",{ id:o.id }); toast("New code "+r.code,"ok"); await loadOverview(); refreshOnb(o.id); return;
+    }
+    if(act==="rotate"){ if(!confirm("Make a new setup link? The old link stops working.")) return; const r = await api("onb_rotate_link",{ id:o.id }); mergeOnb(r.onboarding); toast("New link ready — resend it","ok"); return; }
+    if(act==="toggle_link"){ const r = await api("onb_update",{ id:o.id, fields:{ customer_link_enabled: !o.customer_link_enabled } }); mergeOnb(r.onboarding); return; }
+    if(act==="archive"){ const r = await api("onb_update",{ id:o.id, fields:{ archived: !o.archived } }); mergeOnb(r.onboarding); return; }
+    if(act==="delete"){ if(!confirm(`Delete the onboarding checklist for ${o.org_name}? (Their shul, code and project are NOT touched.)`)) return;
+      await api("onb_delete",{ id:o.id }); STATE.onbs = STATE.onbs.filter(x=>x.id!==o.id); STATE.sel=null; renderOnbList(); $("onbDetail").innerHTML=""; toast("Deleted","ok"); return; }
+  }catch(e){ toast(e.message,"bad"); }
+  finally{ busy(false); }
+}
+
+let refreshing = {};
+async function refreshOnb(id, loud){
+  if(refreshing[id]) return; refreshing[id]=true;
+  try{ const r = await api("onb_refresh",{ id }); mergeOnb(r.onboarding); if(loud) toast("Status updated","ok"); }
+  catch(e){ if(loud) toast(e.message,"bad"); }
+  finally{ refreshing[id]=false; }
+}
+// Auto-recheck the open customer every 45s while the tab is visible.
+setInterval(()=>{ if(document.visibilityState==="visible" && STATE.sel && !$("app").classList.contains("hide")) refreshOnb(STATE.sel); }, 45000);
+
+// ---- New customer modal ----
+$("newOnbBtn").onclick = () => {
+  ["nOrg","nContact","nEmail","nPhone","nDomain","nForms","nFrom","nReply","nNotes"].forEach(i=>$(i).value="");
+  $("nDomain").dataset.guess = ""; $("nDomain").placeholder = "chabadyourtown.org"; $("nForms").placeholder = "forms.chabadyourtown.org";
+  $("nWarn").innerHTML="";
+  $("nCode").innerHTML = `<option value="">Issue a new code</option>` + STATE.codes.filter(c=>c.status==="unused" && !STATE.onbs.some(o=>o.code_id===c.id))
+    .map(c=>`<option value="${esc(c.code)}">${esc(c.code)}${c.note?" — "+esc(c.note):""}</option>`).join("");
+  $("newModal").classList.remove("hide"); $("nOrg").focus();
+};
+$("nCancel").onclick = () => $("newModal").classList.add("hide");
+$("newModal").onclick = (e) => { if(e.target.id==="newModal") $("newModal").classList.add("hide"); };
+$("nEmail").oninput = $("nDomain").oninput = () => {
+  const em = $("nEmail").value.trim().toLowerCase(), dm = $("nDomain").value.trim().toLowerCase();
+  const guess = (!dm && em.includes("@") && !FREEMAIL.test(em.split("@")[1]||"")) ? em.split("@")[1] : "";
+  $("nDomain").dataset.guess = guess; $("nDomain").placeholder = guess || "chabadyourtown.org";
+  if(dm && !$("nForms").value) $("nForms").placeholder = "forms."+dm.replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  let w = "";
+  if(em && FREEMAIL.test(em.split("@")[1]||"")) w += `<div class="warnbox">The owner email is a ${esc(em.split("@")[1])} address. That's fine for logging in, but email will send from the <b>website domain</b> above — make sure you fill it in.</div>`;
+  $("nWarn").innerHTML = w;
+};
+$("nSave").onclick = async () => {
+  const dm = ($("nDomain").value.trim() || $("nDomain").dataset.guess || "").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  const payload = { org_name:$("nOrg").value, contact_name:$("nContact").value, owner_email:$("nEmail").value, phone:$("nPhone").value,
+    sending_domain: dm, forms_domain: $("nForms").value.trim() || (dm ? "forms."+dm : ""), from_address:$("nFrom").value, reply_to:$("nReply").value,
+    notes:$("nNotes").value, code:$("nCode").value || undefined };
+  $("nSave").disabled = true;
+  try{
+    const r = await api("onb_create", payload);
+    $("newModal").classList.add("hide");
+    STATE.sel = r.onboarding.id;
+    await loadOverview();
+    toast("Customer created — copy their setup link","ok");
+  }catch(e){ toast(e.message,"bad"); }
+  finally{ $("nSave").disabled = false; }
+};
+
+// ---- System tab ----
+$("iamPolicy").textContent = JSON.stringify({
+  Version:"2012-10-17",
+  Statement:[
+    { Sid:"SesIdentities", Effect:"Allow", Action:["ses:CreateEmailIdentity","ses:GetEmailIdentity","ses:PutEmailIdentityMailFromAttributes"], Resource:"*" },
+    { Sid:"SesConfigSet", Effect:"Allow", Action:["ses:GetConfigurationSet"], Resource:"*" },
+    { Sid:"SnsTracking", Effect:"Allow", Action:["sns:Subscribe","sns:ListSubscriptionsByTopic"], Resource:"arn:aws:sns:us-east-1:*:daas-email-events" },
+    { Sid:"WhoAmI", Effect:"Allow", Action:["sts:GetCallerIdentity"], Resource:"*" }
+  ]
+}, null, 2);
+$("sysBtn").onclick = runSystem;
+async function runSystem(){
+  STATE.sysRan = true;
+  $("sysOut").innerHTML = `<span class="muted">Checking…</span>`;
+  try{
+    const d = await api("system_check");
+    const ok = (v)=> v ? `<span class="chip ok">ok</span>` : `<span class="chip bad">missing</span>`;
+    const res = (v)=> v==="ok" ? `<span class="chip ok">ok</span>` : `<span class="chip bad">${esc(v||"—")}</span>`;
+    const s = d.secrets||{};
+    const autoReady = s.AWS_ADMIN_ACCESS_KEY_ID && s.AWS_ADMIN_SECRET_ACCESS_KEY && d.aws&&d.aws.ok && d.aws.ses==="ok" && d.aws.sns==="ok" && d.cf&&d.cf.ok;
+    $("sysWarn").classList.toggle("hide", !!(autoReady && d.provisioning_enabled));
+    $("sysOut").innerHTML = `
+      ${autoReady && d.provisioning_enabled ? `<div class="okbox"><b>All green.</b> Signups are on and every automation is ready.</div>` : `<div class="warnbox"><b>Not everything is ready.</b> Anything red below means that part falls back to manual steps.</div>`}
+      <table class="sys" style="margin-top:10px">
+        <tr><td>Signups (PROVISIONING_ENABLED)</td><td>${d.provisioning_enabled?'<span class="chip ok">on</span>':'<span class="chip bad">off — new signups will wait</span>'}</td></tr>
+        <tr><td>Onboarding table</td><td>${res(d.onboardings_table)}</td></tr>
+        <tr><td>Admin function build</td><td class="mono">${esc(d.build)}</td></tr>
+        <tr><td>MANAGEMENT_API_TOKEN</td><td>${ok(s.MANAGEMENT_API_TOKEN)}</td></tr>
+        <tr><td>OAUTH_CLIENT_ID / SECRET</td><td>${ok(s.OAUTH_CLIENT_ID&&s.OAUTH_CLIENT_SECRET)}</td></tr>
+        <tr><td>SES send key (copied into each shul)</td><td>${ok(s.SES_ACCESS_KEY_ID)} config set ${ok(s.SES_CONFIG_SET)}</td></tr>
+        <tr><td>AWS_ADMIN_ACCESS_KEY_ID / SECRET</td><td>${ok(s.AWS_ADMIN_ACCESS_KEY_ID&&s.AWS_ADMIN_SECRET_ACCESS_KEY)}</td></tr>
+        <tr><td>AWS connection</td><td>${d.aws&&d.aws.ok?`<span class="chip ok">ok</span> <span class="mono small">${esc(d.aws.topic)}</span>`:`<span class="chip bad">${esc((d.aws||{}).error||"—")}</span>`}</td></tr>
+        <tr><td>SES permission</td><td>${d.aws&&d.aws.ok?res(d.aws.ses):"—"}</td></tr>
+        <tr><td>SNS permission</td><td>${d.aws&&d.aws.ok?res(d.aws.sns):"—"}</td></tr>
+        <tr><td>CLOUDFLARE_API_TOKEN / ACCOUNT_ID</td><td>${ok(s.CLOUDFLARE_API_TOKEN&&s.CLOUDFLARE_ACCOUNT_ID)}</td></tr>
+        <tr><td>Cloudflare (${esc(d.cf_project)})</td><td>${d.cf&&d.cf.ok?`<span class="chip ok">ok</span> <span class="mono small">${esc(d.cf.subdomain||"")}</span>`:`<span class="chip bad">${esc((d.cf||{}).error||"—")}</span>`}</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:10px">Also confirm by hand: <a href="${SITE}/signup/" target="_blank" rel="noopener">/signup/</a> and <a href="${SITE}/crm/" target="_blank" rel="noopener">/crm/</a> load the build you expect.</p>`;
+  }catch(e){ $("sysOut").innerHTML = `<div class="badbox">${esc(e.message)}</div>`; }
+}
+
 // ---- Boot ----
 async function boot(){
   const { data:{ session } } = await sb.auth.getSession();
@@ -372,7 +983,11 @@ async function boot(){
   try{
     const d = await api("overview");
     showApp(d.admin || session.user.email);
-    renderShuls(d.shuls||[]); renderCodes(d.codes||[]); renderJobs(d.jobs||[]);
+    try{ STATE.sel = localStorage.getItem("daas_admin_sel"); }catch(e){}
+    applyOverview(d);
+    let tab = "onboarding"; try{ tab = localStorage.getItem("daas_admin_tab") || tab; }catch(e){}
+    setTab(tab);
+    if(STATE.sel && STATE.onbs.some(o=>o.id===STATE.sel)) refreshOnb(STATE.sel); else STATE.sel = null;
   }catch(e){
     // Valid Supabase user but not an allow-listed admin, or token issue.
     if(/authoriz/i.test(e.message)){ await sb.auth.signOut(); showLogin(); $("loginErr").textContent = "That account is not a DAAS admin."; }
