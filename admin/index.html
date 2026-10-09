@@ -955,9 +955,9 @@ async function runSystem(){
     const res = (v)=> v==="ok" ? `<span class="chip ok">ok</span>` : `<span class="chip bad">${esc(v||"—")}</span>`;
     const s = d.secrets||{};
     const autoReady = s.AWS_ADMIN_ACCESS_KEY_ID && s.AWS_ADMIN_SECRET_ACCESS_KEY && d.aws&&d.aws.ok && d.aws.ses==="ok" && d.aws.sns==="ok" && d.cf&&d.cf.ok;
-    $("sysWarn").classList.toggle("hide", !!(autoReady && d.provisioning_enabled));
+    $("sysWarn").classList.toggle("hide", !!(autoReady && d.provisioning_enabled && d.onboardings_table==="ok"));
     $("sysOut").innerHTML = `
-      ${autoReady && d.provisioning_enabled ? `<div class="okbox"><b>All green.</b> Signups are on and every automation is ready.</div>` : `<div class="warnbox"><b>Not everything is ready.</b> Anything red below means that part falls back to manual steps.</div>`}
+      ${autoReady && d.provisioning_enabled && d.onboardings_table==="ok" ? `<div class="okbox"><b>All green.</b> Signups are on and every automation is ready.</div>` : `<div class="warnbox"><b>Not everything is ready.</b> Anything red below means that part falls back to manual steps.</div>`}
       <table class="sys" style="margin-top:10px">
         <tr><td>Signups (PROVISIONING_ENABLED)</td><td>${d.provisioning_enabled?'<span class="chip ok">on</span>':'<span class="chip bad">off — new signups will wait</span>'}</td></tr>
         <tr><td>Onboarding table</td><td>${res(d.onboardings_table)}</td></tr>
