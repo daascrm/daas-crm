@@ -442,11 +442,12 @@ function renderShuls(shuls){
   });
   tb.querySelectorAll("button[data-track]").forEach(b=>{
     b.onclick = async () => {
+      if (b.disabled) return; b.disabled = true;
       try{
         const r = await api("onb_create",{ org_name:b.dataset.name, tenant_id:b.dataset.track, forms_domain:b.dataset.forms||undefined });
         toast("Now tracking "+b.dataset.name,"ok");
         STATE.sel = r.onboarding.id; await loadOverview(); setTab("onboarding");
-      }catch(e){ toast(e.message,"bad"); }
+      }catch(e){ toast(e.message,"bad"); b.disabled = false; }
     };
   });
 }
