@@ -58,7 +58,6 @@ h1.title{font-size:1.6rem;margin-bottom:8px}
 .field{margin-bottom:18px}
 .field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px}
 .field .hint{color:var(--txt3);font-size:.82rem;margin:5px 0 0}
-.field.optional label::after{content:' — optional';color:var(--txt3);font-weight:400;font-size:.82rem}
 input,select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;color:var(--txt);font-family:var(--font-ui);font-size:1rem;padding:12px 14px;outline:none;transition:border-color .14s,background .14s}
 input:focus,select:focus{border-color:var(--gold);background:rgba(212,168,67,.05)}
 input::placeholder{color:var(--txt3)}
@@ -165,6 +164,19 @@ details.su-hosts .h{margin:8px 0 0;padding:8px 12px;border-left:2px solid var(--
 .su-pre b{color:var(--txt)}
 .su-prompt{background:rgba(0,0,0,.035);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0}
 .su-prompt pre{white-space:pre-wrap;font-family:var(--font-ui);font-size:.82rem;line-height:1.5;color:var(--txt2);margin:0 0 10px;max-height:220px;overflow:auto}
+.su-recs tr.su-hintrow td{padding-top:0}
+.su-recs tr:has(+ tr.su-hintrow) td{border-bottom:0}
+/* Light-theme readability (these rules were still using dark-theme colors) */
+:root{--txt3:#66727c;--gold:#8f6a1d;--gold-hi:#765716}
+.eyebrow{color:var(--txt3)}
+.opt{color:var(--txt3)}
+.subhead{color:var(--txt)}
+.how{color:var(--gold)}
+.howbox{background:#f7f8f8;border-color:var(--line);color:var(--txt2)}
+.howbox b{color:var(--txt)}
+.sep{border-top-color:var(--line)}
+input::placeholder{color:#a3acb3}
+.su-cp{background:#fff}
 .su-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#16202e;color:#fff;padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:99}
 </style>
 </head>
@@ -229,7 +241,7 @@ details.su-hosts .h{margin:8px 0 0;padding:8px 12px;border-left:2px solid var(--
         <p class="hint">Your dates and daily list follow this zone.</p>
       </div>
       <div class="field optional">
-        <label for="logo">Logo link</label>
+        <label for="logo">Logo link <span class="opt">— optional</span></label>
         <input id="logo" type="url" placeholder="https://…/logo.png" maxlength="500">
         <p class="hint">Paste a link to your logo, or skip and add it later.</p>
       </div>
@@ -650,7 +662,8 @@ document.querySelectorAll(".how").forEach(a => a.onclick = () => { const b=docum
         <td data-l="Status">${r.ok?'<span class="su-pill ok">✓ Found</span>':'<span class="su-pill no">Not yet</span>'}</td>
         <td data-l="Type"><b>${esc(r.type)}</b>${r.priority?`<br><span style="font-size:.76rem">Priority ${r.priority}</span>`:""}</td>
         <td data-l="Host"><span class="su-mono">${esc(r.host)}</span>${cp(r.host)}</td>
-        <td data-l="Value"><span class="su-mono">${esc(r.value)}</span>${cp(r.value)}${r.hint?`<div class="su-warn">${esc(r.hint)}</div>`:""}</td></tr>`).join("")+
+        <td data-l="Value"><span class="su-mono">${esc(r.value)}</span>${cp(r.value)}</td></tr>`+
+        (r.hint?`<tr class="su-hintrow"><td colspan="4"><div class="su-warn">${esc(r.hint)}</div></td></tr>`:"")).join("")+
       `</tbody></table>`;
   }
   const HOSTS = `<details class="su-hosts"><summary>Where do I add these? (GoDaddy, Squarespace, Cloudflare…)</summary>

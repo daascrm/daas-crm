@@ -604,9 +604,9 @@ function steps(){
       let h = "";
       if(j.status==="failed") h += `<div class="badbox"><b>Build failed:</b> ${esc(j.error||"unknown")}<br>Keep this error. The build is resumable — have them reopen the signup page on the same browser. Don't issue a new code until you know why it failed.</div>`;
       if(j.owner_email) h += `<p>Owner email entered: <b>${esc(j.owner_email)}</b>${j.form_url?` · forms: ${esc(j.form_url)}`:""}</p>`;
-      if(j.owner_email && o.sending_domain && !j.owner_email.endsWith("@"+o.sending_domain)) h += `<div class="warnbox">The build set their sending domain to <b>${esc(j.owner_email.split("@")[1])}</b> (from the owner email). Step <b>Set up email</b> below overrides it with <b>${esc(o.sending_domain)}</b> once they've claimed.</div>`;
+      if(j.status && j.status!=="running" && j.status!=="failed" && o.sending_domain && !chk(o,"_from_pushed")) h += `<div class="warnbox">This build ran before the sending domain was entered here, so their From address wasn't set. See <b>Their From address is set in DAAS</b> below.</div>`;
       return h + `<div class="how"><ol><li>At <b>daascrm.app/signup/</b>, enter the access code, org name, owner email, city, state, time zone.</li>
-        <li>Forms address: <b>${esc(o.forms_domain||"forms.theirdomain.org")}</b> (pre-filled from their link). <b>OpenAI key is required</b>; Stripe keys are optional here — they can add them later in the app.</li>
+        <li>Forms address: <b>${esc(o.forms_domain||"forms.theirdomain.org")}</b> (pre-filled from their link). The build also sets their From address, Reply-to and forms address from this page — fill those in before they build. <b>OpenAI key is required</b>; Stripe keys are optional here — they can add them later in the app.</li>
         <li>The build takes 2–4 minutes. <b>They must write down the temporary password</b> — it's shown once.</li></ol></div>`; } },
   { id:"claim", stage:"Build their DAAS", who:"shul", title:"Shul claims the project",
     status:o=> (o.auto||{}).tenant ? "done" : (((o.auto||{}).job||{}).status==="awaiting_claim" ? "wait" : "todo"),
@@ -615,15 +615,14 @@ function steps(){
       ${(o.auto||{}).tenant?`<p class="small muted">Project: <span class="mono">${esc(o.auto.tenant.ref)}</span> · <a href="https://supabase.com/dashboard/project/${esc(o.auto.tenant.ref)}" target="_blank" rel="noopener">open in Supabase ↗</a> (only works if you're in their org)</p>`:""}` },
   { id:"signin", stage:"Build their DAAS", who:"shul", title:"Owner signs in to DAAS", manual:"signed_in",
     status:o=> ((o.auto||{}).owner||{}).signed_in || chk(o,"signed_in") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"),
-    sub:o=>{ const w=(o.auto||{}).owner; return w&&w.last_sign_in_at ? "Last sign-in "+fmtWhen(w.last_sign_in_at) : "At daascrm.app/crm/ with the temporary password"; },
+    sub:o=>{ const w=(o.auto||{}).owner; return w&&w.last_sign_in_at ? "Last seen in DAAS "+fmtWhen(w.last_sign_in_at) : "At daascrm.app/crm/ with the temporary password"; },
     body:()=> `<div class="how"><ol><li>Go to <b>daascrm.app/crm/</b>, sign in with their email + the temporary password.</li>
       <li>On a phone: Share → <b>Add to Home Screen</b> for the app version.</li>
       <li>If they lost the temp password: in their Supabase project → <b>Authentication → Users</b> → their row → <b>Send password recovery</b>.</li></ol></div>` },
-  { id:"access", stage:"Build their DAAS", who:"auto", title:"Console can reach their project",
-    status:o=>{ const a=(o.auto||{}).tenant_access; if(!(o.auto||{}).tenant) return "wait"; if(!a) return "todo"; return a.ok ? "done" : "warn"; },
-    sub:o=>{ const a=(o.auto||{}).tenant_access; return !a ? "Checked after claim" : a.ok ? `Connected (${a.via==="oauth"?"handover token":"DAAS token"})` : "Not reachable — you'll do a few steps by hand"; },
-    body:o=>{ const a=(o.auto||{}).tenant_access||{};
-      return (a.error?`<div class="warnbox">${esc(a.error)}</div>`:"") + `<div class="how">The console uses the access the shul granted at claim to read their sign-in status and keys, and to set their From address and forms address. If this is yellow, those steps still work — they just need to be done by hand (each step says how), and the status here won't update on its own.</div>`; } },
+  { id:"access", stage:"Build their DAAS", who:"auto", title:"Their DAAS checks in",
+    status:o=>{ const a=(o.auto||{}).tenant_access; if(!(o.auto||{}).tenant) return "wait"; return a&&a.ok ? "done" : "todo"; },
+    sub:o=>{ const a=(o.auto||{}).tenant_access; return a&&a.ok ? "Last check-in "+fmtWhen(a.at) : "The first time someone signs in"; },
+    body:()=> `<div class="how">DAAS has no access to their project after the claim. Instead, while someone is signed in, their DAAS tells this console yes or no for each setup step: OpenAI, Stripe, the two community notes, and the forms address. No names, notes, keys or data are sent. The steps below update from it.</div>` },
 
   // ---------- 3. Email
   { id:"domain", stage:"Email from their domain", who:"you", title:"Confirm the sending domain",
@@ -635,7 +634,7 @@ function steps(){
     status:o=>{ const s=(o.auto||{}).ses; if((o.auto||{}).errors&&o.auto.errors.ses&&!s) return "warn"; if(!s||!s.exists) return "todo"; return s.mail_from ? "done" : "warn"; },
     sub:o=>{ const s=(o.auto||{}).ses; return !s ? "Creates DKIM keys + MAIL FROM" : !s.exists ? "Not created yet" : `Identity created · MAIL FROM ${s.mail_from||"not set"}`; },
     body:o=> `<button class="navy small" data-act="email">Set up email</button>
-      <span class="small muted">Safe to click again — it skips what's already done. After they claim, click once more to connect tracking and set their From address.</span>
+      <span class="small muted">Safe to click again — it skips what's already done. After their workspace is built, click once more to connect tracking.</span>
       ${errLine(o,"ses")}
       <details style="margin-top:8px"><summary>Manual fallback (if automation is off)</summary><div class="how"><ol>
         <li>AWS → <b>SES</b> (us-east-1) → <b>Identities</b> → <b>Create identity</b> → <b>Domain</b> → <b>${esc(o.sending_domain||"their domain")}</b>. Keep Easy DKIM, RSA 2048 → <b>Create</b>.</li>
@@ -660,15 +659,15 @@ function steps(){
       ${s.dkim_status==="FAILED"?"<br><b>FAILED</b> means AWS gave up after 72 hours without seeing the records. Fix the DNS, then in SES open the identity and use <b>Retry DKIM verification</b>.":""}
       ${s.verified&&s.mail_from_status&&s.mail_from_status!=="SUCCESS"?"<br>Sending works now. MAIL FROM is still pending — that clears once the MX + SPF records are live.":""}</div>`; } },
   { id:"sns", stage:"Email from their domain", who:"auto", title:"Open/click/bounce tracking connected",
-    status:o=>{ const s=(o.auto||{}).sns; if(!(o.auto||{}).tenant) return "wait"; if(!s) return (o.auto||{}).errors&&o.auto.errors.sns ? "warn" : "todo"; return s.confirmed ? "done" : (s.subscribed ? "wait" : "todo"); },
+    status:o=>{ const s=(o.auto||{}).sns; if(!(o.auto||{}).tenant && !((o.auto||{}).job||{}).project_ref) return "wait"; if(!s) return (o.auto||{}).errors&&o.auto.errors.sns ? "warn" : "todo"; return s.confirmed ? "done" : (s.subscribed ? "wait" : "todo"); },
     sub:o=>{ const s=(o.auto||{}).sns; return !s ? "Subscribes their email-webhook to daas-email-events" : s.confirmed ? "Confirmed" : s.subscribed ? "Pending confirmation (auto-confirms in seconds)" : "Not subscribed"; },
     body:o=> `<button class="small" data-act="email">Connect now</button> ${errLine(o,"sns")}
-      <details style="margin-top:8px"><summary>Manual fallback</summary><div class="how">AWS → <b>SNS</b> → Topics → <b>daas-email-events</b> → Create subscription → Protocol <b>HTTPS</b>, Endpoint <span class="mono">https://${esc(((o.auto||{}).tenant||{}).ref||"&lt;ref&gt;")}.supabase.co/functions/v1/email-webhook</span>. It confirms itself.</div></details>` },
+      <details style="margin-top:8px"><summary>Manual fallback</summary><div class="how">AWS → <b>SNS</b> → Topics → <b>daas-email-events</b> → Create subscription → Protocol <b>HTTPS</b>, Endpoint <span class="mono">https://${esc(((o.auto||{}).tenant||{}).ref||((o.auto||{}).job||{}).project_ref||"&lt;ref&gt;")}.supabase.co/functions/v1/email-webhook</span>. It confirms itself.</div></details>` },
   { id:"from", stage:"Email from their domain", who:"auto", title:"Their From address is set in DAAS", manual:"from_set",
-    status:o=> chk(o,"_from_pushed")||chk(o,"from_set") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"),
-    sub:o=> chk(o,"_from_pushed") ? "Set to "+o.checks._from_pushed : "SENDING_DOMAIN + SES_FROM_ADDRESS on their project",
-    body:o=> `<button class="small" data-act="email">Set it now</button>
-      <details style="margin-top:8px"><summary>Manual fallback (if the console can't reach their project)</summary><div class="how">
+    status:o=> chk(o,"_from_pushed")||chk(o,"from_set") ? "done" : ((o.auto||{}).job ? "todo" : "wait"),
+    sub:o=> chk(o,"_from_pushed") ? "Set by the build: "+o.checks._from_pushed : "Set by the build from this page",
+    body:o=> `<div class="how">The build sets these from the details at the top. If they built before you entered the domain, or you changed it since, the shul updates them by hand.</div>
+      <details style="margin-top:8px"><summary>Manual steps</summary><div class="how">
       Have the shul open <b>supabase.com → their project → Edge Functions → Secrets</b> and add/update:
       <ul><li><span class="mono">SENDING_DOMAIN</span> = <span class="mono">${esc(o.sending_domain||"")}</span></li>
       <li><span class="mono">SES_FROM_ADDRESS</span> = <span class="mono">${esc(o.from_address||("no-reply@"+(o.sending_domain||"")))}</span></li>
@@ -692,12 +691,12 @@ function steps(){
       return ok1 && ok2!==false ? "done" : "todo"; },
     sub:o=>{ const t=(o.auto||{}).tenant||{}; const s=(o.auto||{}).settings||{}; return `control: ${t.form_domain||"—"} · app: ${s.form_origin||"—"}`; },
     body:o=> `<button class="small" data-act="forms">Fix now</button>
-      <div class="how">Two settings must match: <b>form_domain</b> in the control room (routes visitors to their data) and <b>form_origin</b> in their app (Settings → Email and forms) so their links point at it.</div>` },
+      <div class="how">Two settings must match: <b>form_domain</b> in the control room (routes visitors to their data) and <b>form_origin</b> in their app, set by the build. If <b>app</b> shows something else, the shul changes it in Settings → Email and forms.</div>` },
 
   // ---------- 5. Money + AI
   { id:"context", stage:"Donations, AI & context", who:"shul", title:"Community context filled in", manual:"context_done",
-    status:o=>{ const st=(o.auto||{}).settings; if(st && st.about_len!==undefined) return (st.about_len>=80 && st.search_len>=40) ? "done" : "todo"; return chk(o,"context_done") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
-    sub:o=>{ const st=(o.auto||{}).settings; return st && st.about_len!==undefined ? `About your community ${st.about_len>=80?"✓":"empty"} · When DAAS looks someone up ${st.search_len>=40?"✓":"empty"}` : "Settings → Your Chabad house (2 notes the AI reads)"; },
+    status:o=>{ const st=(o.auto||{}).settings; if(st && st.about_ok!==undefined) return (st.about_ok && st.search_ok) ? "done" : "todo"; return chk(o,"context_done") ? "done" : ((o.auto||{}).tenant ? "todo" : "wait"); },
+    sub:o=>{ const st=(o.auto||{}).settings; return st && st.about_ok!==undefined ? `About your community ${st.about_ok?"✓":"empty"} · When DAAS looks someone up ${st.search_ok?"✓":"empty"}` : "Settings → Your Chabad house (2 notes the AI reads)"; },
     body:()=> `<div class="how">These two notes power chat answers and profile building — empty notes mean generic results. The shul's link walks them through it with this prompt:<ol>
       <li>Paste the prompt into <b>ChatGPT or Claude</b> — whichever knows the most about their Chabad work.</li>
       <li>Read it over and fix any [placeholders].</li>

@@ -5137,7 +5137,7 @@ async function _connSave(id,btn){
     const out=await _connCall({op:'set',service:id,key});
     if(inp)inp.value='';
     _connStatus=out.status||_connStatus;
-    _connRender();
+    _connRender(); _setupCheckinSoon();
     const r2=document.getElementById('conn-res-'+id);
     if(r2)r2.innerHTML='<span class="conn-good">Saved.</span>'+(id==='stripe'&&out.webhook==='failed'?' <span class="conn-bad">Payments will work, but donations won’t record automatically until the Stripe webhook is added.</span>':'');
     const tb=document.querySelector('#conn-'+id+' .conn-actions .btn-sec'); if(tb)_connTest(id,tb);
@@ -5153,10 +5153,46 @@ async function _connTest(id,btn){
   }catch(e){ if(res)res.innerHTML='<span class="conn-bad">Couldn’t test it. Check your connection and try again.</span>'; }
   if(btn)btn.disabled=false;
 }
+// ── Setup check-in (2026-10-09) ─────────────────────────────────────────
+// While someone is signed in, tell DAAS Control yes or no for each setup step
+// (OpenAI, Stripe, the two community notes, forms address) so the shul's setup
+// checklist turns green on its own. No names, notes, keys or data are sent —
+// DAAS has no access to this workspace after it is handed over.
+const SETUP_CHECKIN_URL='https://ipazpeybzzacmsxzwksz.supabase.co/functions/v1/admin';
+let _setupCheckinTimer=null, _setupCheckinLast=0;
+function _setupCheckinSoon(ms){
+  try{ if(_connDemo())return; }catch(e){}
+  clearTimeout(_setupCheckinTimer);
+  _setupCheckinTimer=setTimeout(()=>_setupCheckin(true),ms==null?2500:ms);
+}
+async function _setupCheckin(force){
+  try{
+    if(!_authToken||!SB_URL||!SB_KEY)return;
+    if(typeof DEMO_MODE!=='undefined'&&DEMO_MODE)return;
+    if(!force&&Date.now()-_setupCheckinLast<15*60*1000)return;
+    _setupCheckinLast=Date.now();
+    let st=null; try{ st=await _connCall({op:'status'}); }catch(e){}
+    let rows=[]; try{ rows=await sb('app_settings?key=in.(rabbi_context,search_context,stripe_pk,form_origin)&select=key,value')||[]; }catch(e){}
+    const v={}; rows.forEach(r=>{ v[r.key]=String(r.value||''); });
+    const pk=(v.stripe_pk||'').trim();
+    let host=''; try{ host=v.form_origin?new URL(v.form_origin).hostname:''; }catch(e){}
+    const report={
+      openai:!!(st&&st.openai), anthropic:!!(st&&st.anthropic), stripe:!!(st&&st.stripe), stripe_webhook:!!(st&&st.stripe_webhook),
+      stripe_pk: pk ? (pk.indexOf('pk_live')===0?'live':pk.indexOf('pk_test')===0?'test':'set') : null,
+      about_ok:(v.rabbi_context||'').trim().length>=80, search_ok:(v.search_context||'').trim().length>=40,
+      forms_host:host, version:(typeof DAAS_VERSION!=='undefined'?DAAS_VERSION:'')
+    };
+    if(!st)['openai','anthropic','stripe','stripe_webhook'].forEach(k=>delete report[k]);
+    await fetch(SETUP_CHECKIN_URL,{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({action:'t_report',url:SB_URL,apikey:SB_KEY,token:_authToken,report})});
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible')_setupCheckin(false); });
+setInterval(()=>{ if(document.visibilityState==='visible')_setupCheckin(false); },15*60*1000);
 async function _connRemove(id,btn){
   if(btn.dataset.armed!=='1'){ btn.dataset.armed='1'; btn.textContent='Remove for good?'; return; }
   btn.disabled=true;
-  try{ const out=await _connCall({op:'remove',service:id}); _connStatus=out.status||_connStatus; _connRender(); }
+  try{ const out=await _connCall({op:'remove',service:id}); _connStatus=out.status||_connStatus; _connRender(); _setupCheckinSoon(); }
   catch(e){ btn.disabled=false; const r=document.getElementById('conn-res-'+id); if(r)r.innerHTML='<span class="conn-bad">'+_escHtml(String(e&&e.message||e))+'</span>'; }
 }
 
@@ -5407,8 +5443,8 @@ function byId(fn,hid,renderIdx,...args){
 async function sbSetSetting(key,value){
   try{
     const updated=await sb('app_settings?key=eq.'+encodeURIComponent(key),{method:'PATCH',body:JSON.stringify({value})});
-    if(updated&&updated.length)return;
-    await sb('app_settings',{method:'POST',body:JSON.stringify({key,value})});
+    if(!(updated&&updated.length))await sb('app_settings',{method:'POST',body:JSON.stringify({key,value})});
+    if(/^(rabbi_context|search_context|stripe_pk|form_origin)$/.test(key))_setupCheckinSoon();
   }catch(e){console.warn('[DAAS] setting save failed for '+key,e);throw e;}
 }
 
@@ -5546,6 +5582,7 @@ function _bootLibsMissing(){
 }
 
 async function showApp(){
+  _setupCheckinSoon(8000);
   _bootShow();
   _bootStatus(_bootLoadingLine());
   document.getElementById('loginScreen').style.display='none';
